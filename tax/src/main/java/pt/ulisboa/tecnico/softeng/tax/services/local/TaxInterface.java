@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
@@ -21,6 +24,7 @@ import pt.ulisboa.tecnico.softeng.tax.services.local.dataobjects.TaxPayerData.Ty
 import pt.ulisboa.tecnico.softeng.tax.services.remote.dataobjects.RestInvoiceData;
 
 public class TaxInterface {
+	private static Logger logger = LoggerFactory.getLogger(TaxInterface.class);
 
 	@Atomic(mode = TxMode.READ)
 	public static List<ItemTypeData> getItemTypeDataList() {
@@ -120,8 +124,6 @@ public class TaxInterface {
 			return;
 		}
 
-		invoice = IRS.getIRSInstance().getInvoiceSet().stream().filter(i -> i.getReference().equals(reference))
-				.findFirst().orElseThrow(() -> new TaxException());
 		invoice.cancel();
 	}
 
@@ -132,7 +134,7 @@ public class TaxInterface {
 
 	private static Invoice getInvoiceByReference(String reference) {
 		return IRS.getIRSInstance().getInvoiceSet().stream().filter(i -> i.getReference().equals(reference)).findFirst()
-				.orElse(null);
+				.orElseThrow(() -> new TaxException());
 	}
 
 	private static Invoice getInvoiceByInvoiceData(RestInvoiceData invoiceData) {
