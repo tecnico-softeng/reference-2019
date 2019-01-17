@@ -71,10 +71,10 @@ public class HotelInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static String reserveRoom(RestRoomBookingData roomBookingData) {
+	public static RestRoomBookingData reserveRoom(RestRoomBookingData roomBookingData) {
 		Booking booking = getBooking4AdventureId(roomBookingData.getAdventureId());
 		if (booking != null) {
-			return booking.getReference();
+			return new RestRoomBookingData(booking);
 		}
 
 		Room.Type type = roomBookingData.getRoomType().equals("SINGLE") ? Room.Type.SINGLE : Room.Type.DOUBLE;
@@ -85,7 +85,7 @@ public class HotelInterface {
 				Booking newBooking = room.reserve(type, roomBookingData.getArrival(), roomBookingData.getDeparture(),
 						roomBookingData.getBuyerNif(), roomBookingData.getBuyerIban());
 				newBooking.setAdventureId(roomBookingData.getAdventureId());
-				return newBooking.getReference();
+				return new RestRoomBookingData(newBooking);
 			}
 		}
 		throw new HotelException();

@@ -56,10 +56,10 @@ public class ActivityInterfaceReserveActivityMethodTest extends RollbackTestAbst
 		activityBookingData.setIban(IBAN);
 		activityBookingData.setNif(NIF);
 
-		String act = ActivityInterface.reserveActivity(activityBookingData);
+		RestActivityBookingData bookingData = ActivityInterface.reserveActivity(activityBookingData);
 
-		Assert.assertTrue(act != null);
-		Assert.assertTrue(act.startsWith("XtremX"));
+		Assert.assertTrue(bookingData != null);
+		Assert.assertTrue(bookingData.getReference().startsWith("XtremX"));
 	}
 
 	@Test(expected = ActivityException.class)
@@ -71,8 +71,7 @@ public class ActivityInterfaceReserveActivityMethodTest extends RollbackTestAbst
 		activityBookingData.setIban(IBAN);
 		activityBookingData.setNif(NIF);
 
-		String act = ActivityInterface.reserveActivity(activityBookingData);
-
+		RestActivityBookingData bookingData = ActivityInterface.reserveActivity(activityBookingData);
 	}
 
 }

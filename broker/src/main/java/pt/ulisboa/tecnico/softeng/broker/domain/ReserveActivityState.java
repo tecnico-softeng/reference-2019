@@ -17,13 +17,13 @@ public class ReserveActivityState extends ReserveActivityState_Base {
 	@Override
 	public void process() {
 		try {
-			String reference = ActivityInterface.reserveActivity(new RestActivityBookingData(getAdventure().getBegin(),
-					getAdventure().getEnd(), getAdventure().getAge(), getAdventure().getBroker().getNifAsBuyer(),
-					getAdventure().getBroker().getIban(), getAdventure().getID()));
+			RestActivityBookingData result = ActivityInterface
+					.reserveActivity(new RestActivityBookingData(getAdventure().getBegin(), getAdventure().getEnd(),
+							getAdventure().getAge(), getAdventure().getBroker().getNifAsBuyer(),
+							getAdventure().getBroker().getIban(), getAdventure().getID()));
 
-			getAdventure().setActivityConfirmation(reference);
-
-			getAdventure().incAmountToPay(ActivityInterface.getActivityReservationData(reference).getPrice());
+			getAdventure().setActivityConfirmation(result.getReference());
+			getAdventure().incAmountToPay(result.getPrice());
 		} catch (ActivityException ae) {
 			getAdventure().setState(State.UNDO);
 			return;

@@ -22,12 +22,12 @@ public class HotelRestController {
 	private static Logger logger = LoggerFactory.getLogger(HotelRestController.class);
 
 	@RequestMapping(value = "/reserve", method = RequestMethod.POST)
-	public ResponseEntity<String> reserve(@RequestBody RestRoomBookingData roomBookingData) {
+	public ResponseEntity<RestRoomBookingData> reserve(@RequestBody RestRoomBookingData roomBookingData) {
 		logger.info("reserve type:{}, arrival:{}, departure:{}, nif:{}, iba:{}, adventureId:{}",
 				roomBookingData.getRoomType(), roomBookingData.getArrival(), roomBookingData.getDeparture(),
 				roomBookingData.getBuyerNif(), roomBookingData.getBuyerIban(), roomBookingData.getAdventureId());
 		try {
-			return new ResponseEntity<String>(HotelInterface.reserveRoom(roomBookingData), HttpStatus.OK);
+			return new ResponseEntity<RestRoomBookingData>(HotelInterface.reserveRoom(roomBookingData), HttpStatus.OK);
 		} catch (HotelException be) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

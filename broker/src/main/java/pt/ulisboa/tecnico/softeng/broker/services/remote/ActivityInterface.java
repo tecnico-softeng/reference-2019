@@ -14,14 +14,14 @@ public class ActivityInterface {
 
 	private static String ENDPOINT = "http://localhost:8081";
 
-	public static String reserveActivity(RestActivityBookingData activityBookingData) {
+	public static RestActivityBookingData reserveActivity(RestActivityBookingData activityBookingData) {
 		logger.info("reserveActivity begin:{}, end:{}, age:{}, nif:{}, iban:{}, adventureId:{}",
 				activityBookingData.getBegin(), activityBookingData.getEnd(), activityBookingData.getAge(),
 				activityBookingData.getNif(), activityBookingData.getIban(), activityBookingData.getAdventureId());
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-			String result = restTemplate.postForObject(ENDPOINT + "/rest/providers/reserve", activityBookingData,
-					String.class);
+			RestActivityBookingData result = restTemplate.postForObject(ENDPOINT + "/rest/providers/reserve",
+					activityBookingData, RestActivityBookingData.class);
 			return result;
 		} catch (HttpClientErrorException e) {
 			logger.info(

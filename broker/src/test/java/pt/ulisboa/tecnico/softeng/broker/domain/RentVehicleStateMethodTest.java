@@ -11,6 +11,7 @@ import mockit.integration.junit4.JMockit;
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure.State;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.CarInterface;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.TaxInterface;
+import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRentingData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.CarException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
 
@@ -19,11 +20,17 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 	@Mocked
 	private TaxInterface taxInterface;
 
+	private RestRentingData rentingData;
+
 	@Override
 	public void populate4Test() {
 		this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN);
 		this.client = new Client(this.broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
 		this.adventure = new Adventure(this.broker, this.begin, this.end, this.client, MARGIN);
+
+		this.rentingData = new RestRentingData();
+		this.rentingData.setReference(RENTING_CONFIRMATION);
+		this.rentingData.setPrice(76.78);
 
 		this.adventure.setState(State.RENT_VEHICLE);
 	}
@@ -34,7 +41,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 			{
 				CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
 						RentVehicleStateMethodTest.this.begin, RentVehicleStateMethodTest.this.end, this.anyString);
-				this.result = RENTING_CONFIRMATION;
+				this.result = RentVehicleStateMethodTest.this.rentingData;
 				this.times = 1;
 			}
 		};
@@ -121,12 +128,12 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 				this.result = new Delegate() {
 					int i = 0;
 
-					public String delegate() {
+					public RestRentingData delegate() {
 						if (this.i < 2) {
 							this.i++;
 							throw new RemoteAccessException();
 						} else {
-							return RENTING_CONFIRMATION;
+							return RentVehicleStateMethodTest.this.rentingData;
 						}
 					}
 				};

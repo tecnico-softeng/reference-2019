@@ -20,11 +20,16 @@ public class ReserveActivityStateProcessMethodTest extends RollbackTestAbstractC
 	@Mocked
 	private TaxInterface taxInterface;
 
+	private RestActivityBookingData bookingData;
+
 	@Override
 	public void populate4Test() {
 		this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN);
 		this.client = new Client(this.broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
 		this.adventure = new Adventure(this.broker, this.begin, this.end, this.client, MARGIN);
+		this.bookingData = new RestActivityBookingData();
+		this.bookingData.setReference(ACTIVITY_CONFIRMATION);
+		this.bookingData.setPrice(76.78);
 
 		this.adventure.setState(State.RESERVE_ACTIVITY);
 	}
@@ -37,7 +42,7 @@ public class ReserveActivityStateProcessMethodTest extends RollbackTestAbstractC
 		new Expectations() {
 			{
 				ActivityInterface.reserveActivity((RestActivityBookingData) this.any);
-				this.result = ACTIVITY_CONFIRMATION;
+				this.result = ReserveActivityStateProcessMethodTest.this.bookingData;
 			}
 		};
 
@@ -54,7 +59,7 @@ public class ReserveActivityStateProcessMethodTest extends RollbackTestAbstractC
 		new Expectations() {
 			{
 				ActivityInterface.reserveActivity((RestActivityBookingData) this.any);
-				this.result = ACTIVITY_CONFIRMATION;
+				this.result = ReserveActivityStateProcessMethodTest.this.bookingData;
 			}
 		};
 
@@ -68,7 +73,7 @@ public class ReserveActivityStateProcessMethodTest extends RollbackTestAbstractC
 		new Expectations() {
 			{
 				ActivityInterface.reserveActivity((RestActivityBookingData) this.any);
-				this.result = ACTIVITY_CONFIRMATION;
+				this.result = ReserveActivityStateProcessMethodTest.this.bookingData;
 			}
 		};
 
@@ -148,12 +153,12 @@ public class ReserveActivityStateProcessMethodTest extends RollbackTestAbstractC
 				this.result = new Delegate() {
 					int i = 0;
 
-					public String delegate() {
+					public RestActivityBookingData delegate() {
 						if (this.i < 2) {
 							this.i++;
 							throw new RemoteAccessException();
 						} else {
-							return ACTIVITY_CONFIRMATION;
+							return ReserveActivityStateProcessMethodTest.this.bookingData;
 						}
 					}
 				};

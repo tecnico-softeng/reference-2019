@@ -85,10 +85,10 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static String reserveActivity(RestActivityBookingData activityBookingData) {
+	public static RestActivityBookingData reserveActivity(RestActivityBookingData activityBookingData) {
 		Booking booking = getBookingByAdventureId(activityBookingData.getAdventureId());
 		if (booking != null) {
-			return booking.getReference();
+			return new RestActivityBookingData(booking);
 		}
 
 		List<ActivityOffer> offers;
@@ -99,7 +99,7 @@ public class ActivityInterface {
 				Booking newBooking = offers.get(0).book(provider, offers.get(0), activityBookingData.getAge(),
 						activityBookingData.getNif(), activityBookingData.getIban(),
 						activityBookingData.getAdventureId());
-				return newBooking.getReference();
+				return new RestActivityBookingData(newBooking);
 			}
 		}
 		throw new ActivityException();
