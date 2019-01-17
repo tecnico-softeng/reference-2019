@@ -38,9 +38,7 @@ public class RentACarCancelRentingMethodTest extends RollbackTestAbstractClass {
 		this.rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN);
 		this.car = new Car(PLATE_CAR, 10, 10, this.rentACar);
 
-		String reference = RentACar.rent(Car.class, DRIVING_LICENSE, NIF, IBAN_BUYER, BEGIN, END, ADVENTURE_ID);
-
-		this.renting = RentACar.getRenting(reference);
+		this.renting = RentACar.rent(Car.class, DRIVING_LICENSE, NIF, IBAN_BUYER, BEGIN, END, ADVENTURE_ID);
 	}
 
 	@Test

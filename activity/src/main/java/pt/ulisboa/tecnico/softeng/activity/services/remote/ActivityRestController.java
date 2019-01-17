@@ -20,12 +20,13 @@ public class ActivityRestController {
 	private static Logger logger = LoggerFactory.getLogger(ActivityRestController.class);
 
 	@RequestMapping(value = "/reserve", method = RequestMethod.POST)
-	public ResponseEntity<String> reserve(@RequestBody RestActivityBookingData activityBookingData) {
+	public ResponseEntity<RestActivityBookingData> reserve(@RequestBody RestActivityBookingData activityBookingData) {
 		logger.info("reserveActivity begin:{}, end:{}, age:{}, nif:{}, iban:{}, adventureId:{}",
 				activityBookingData.getBegin(), activityBookingData.getEnd(), activityBookingData.getAge(),
 				activityBookingData.getNif(), activityBookingData.getIban(), activityBookingData.getAdventureId());
 		try {
-			return new ResponseEntity<String>(ActivityInterface.reserveActivity(activityBookingData), HttpStatus.OK);
+			return new ResponseEntity<RestActivityBookingData>(ActivityInterface.reserveActivity(activityBookingData),
+					HttpStatus.OK);
 		} catch (ActivityException be) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

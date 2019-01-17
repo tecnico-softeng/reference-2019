@@ -19,15 +19,16 @@ public class CarInterface {
 		CAR, MOTORCYCLE
 	}
 
-	public static String rentCar(Type vehicleType, String drivingLicense, String nif, String iban, LocalDate begin,
-			LocalDate end, String adventureId) {
+	public static RestRentingData rentCar(Type vehicleType, String drivingLicense, String nif, String iban,
+			LocalDate begin, LocalDate end, String adventureId) {
 		logger.info("rentCar vehicleType:{}, drivingLicense:{}, nif:{}, iban:{}, begin:{}, end:{}, adventureId:{}",
 				vehicleType, drivingLicense, nif, iban, begin, end, adventureId);
 		RestTemplate restTemplate = new RestTemplate();
 		try {
 			RestRentingData rentingData = new RestRentingData(vehicleType.toString(), drivingLicense, nif, iban, begin,
 					end, adventureId);
-			String result = restTemplate.postForObject(ENDPOINT + "/rest/rentacars/rent", rentingData, String.class);
+			RestRentingData result = restTemplate.postForObject(ENDPOINT + "/rest/rentacars/rent", rentingData,
+					RestRentingData.class);
 			return result;
 		} catch (HttpClientErrorException e) {
 			logger.info(

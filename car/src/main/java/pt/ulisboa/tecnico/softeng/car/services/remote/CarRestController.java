@@ -20,12 +20,12 @@ public class CarRestController {
 	private static Logger logger = LoggerFactory.getLogger(CarRestController.class);
 
 	@RequestMapping(value = "/rent", method = RequestMethod.POST)
-	public ResponseEntity<String> rent(@RequestBody RestRentingData rentingData) {
+	public ResponseEntity<RestRentingData> rent(@RequestBody RestRentingData rentingData) {
 		logger.info("rent type:{}, license:{}, nif:{}, iban:{}, begin:{}, end:{}, adventureId:{}",
 				rentingData.getTypeValue(), rentingData.getDrivingLicense(), rentingData.getBuyerNIF(),
 				rentingData.getBuyerIBAN(), rentingData.getBegin(), rentingData.getEnd(), rentingData.getAdventureId());
 		try {
-			return new ResponseEntity<>(RentACarInterface.rent(rentingData.getTypeValue(),
+			return new ResponseEntity<RestRentingData>(RentACarInterface.rent(rentingData.getTypeValue(),
 					rentingData.getDrivingLicense(), rentingData.getBuyerNIF(), rentingData.getBuyerIBAN(),
 					rentingData.getBegin(), rentingData.getEnd(), rentingData.getAdventureId()), HttpStatus.OK);
 

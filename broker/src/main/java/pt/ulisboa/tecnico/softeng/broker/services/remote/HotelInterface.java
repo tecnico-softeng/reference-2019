@@ -23,14 +23,14 @@ public class HotelInterface {
 
 	private static String ENDPOINT = "http://localhost:8085";
 
-	public static String reserveRoom(RestRoomBookingData roomBookingData) {
+	public static RestRoomBookingData reserveRoom(RestRoomBookingData roomBookingData) {
 		logger.info("reserveRoom arrival:{}, departure:{}, nif:{}, iban:{}, adventureId:{}",
 				roomBookingData.getArrival(), roomBookingData.getDeparture(), roomBookingData.getBuyerNif(),
 				roomBookingData.getBuyerIban(), roomBookingData.getAdventureId());
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-			String result = restTemplate.postForObject(ENDPOINT + "/rest/hotels/reserve", roomBookingData,
-					String.class);
+			RestRoomBookingData result = restTemplate.postForObject(ENDPOINT + "/rest/hotels/reserve", roomBookingData,
+					RestRoomBookingData.class);
 			return result;
 		} catch (HttpClientErrorException e) {
 			logger.info("reserveRoom HttpClientErrorException arrival:{}, departure:{}, adventureId:{}",
@@ -65,8 +65,8 @@ public class HotelInterface {
 		logger.info("getRoomBookingData reference:{}", reference);
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-			RestRoomBookingData result = restTemplate.getForObject(ENDPOINT + "/rest/hotels/booking?reference=" + reference,
-					RestRoomBookingData.class);
+			RestRoomBookingData result = restTemplate
+					.getForObject(ENDPOINT + "/rest/hotels/booking?reference=" + reference, RestRoomBookingData.class);
 			return result;
 		} catch (HttpClientErrorException e) {
 			logger.info("getRoomBookingData HttpClientErrorException reference:{}", reference);

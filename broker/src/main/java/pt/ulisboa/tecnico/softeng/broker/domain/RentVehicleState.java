@@ -24,15 +24,12 @@ public class RentVehicleState extends RentVehicleState_Base {
 	public void process() {
 		try {
 			// For now we will only reserve cars
-			String reference = CarInterface.rentCar(Type.CAR, getAdventure().getClient().getDrivingLicense(),
+			RestRentingData rentingData = CarInterface.rentCar(Type.CAR, getAdventure().getClient().getDrivingLicense(),
 					getAdventure().getBroker().getNifAsBuyer(), getAdventure().getBroker().getIban(),
 					getAdventure().getBegin(), getAdventure().getEnd(), getAdventure().getID());
 
-			getAdventure().setRentingConfirmation(reference);
-
-			RestRentingData restRentingData = CarInterface.getRentingData(reference);
-
-			getAdventure().incAmountToPay(restRentingData.getPrice());
+			getAdventure().setRentingConfirmation(rentingData.getReference());
+			getAdventure().incAmountToPay(rentingData.getPrice());
 		} catch (CarException ce) {
 			getAdventure().setState(State.UNDO);
 			return;

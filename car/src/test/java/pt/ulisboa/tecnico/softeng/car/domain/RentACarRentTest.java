@@ -40,8 +40,8 @@ public class RentACarRentTest extends RollbackTestAbstractClass {
 
 	@Test
 	public void rentACarHasCarAvailable() {
-		String reference = RentACar.rent(Car.class, DRIVING_LICENSE, NIF, IBAN_BUYER, BEGIN, END, ADVENTURE_ID);
-		assertNotNull(reference);
+		Renting renting = RentACar.rent(Car.class, DRIVING_LICENSE, NIF, IBAN_BUYER, BEGIN, END, ADVENTURE_ID);
+		assertNotNull(renting);
 		assertFalse(this.car.isFree(BEGIN, END));
 	}
 
