@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.12.RELEASE</version>
+		<version>2.1.1.RELEASE</version>
 	</parent>
 
 	<properties>
@@ -204,6 +204,11 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
 		<!-- Spring Actuator -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -243,6 +248,13 @@
 			<groupId>pt.ist</groupId>
 			<artifactId>fenix-framework-backend-${fenix.framework.backend}-runtime</artifactId>
 			<version>${version.fenixframework}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<!-- use this version to be compatible with fenix mysql lib  -->
+			<version>5.1.47</version>
 		</dependency>
 
 		<!-- Tests -->
