@@ -335,6 +335,11 @@
 			<version>${version.org.jmockit.jmockit}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.jgroups</groupId>
+			<artifactId>jgroups</artifactId>
+			<version>4.0.0.Final</version>
+		</dependency>
 
 		<!-- Logging -->
 		<dependency>
