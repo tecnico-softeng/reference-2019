@@ -5,6 +5,7 @@ import pt.ulisboa.tecnico.softeng.car.exception.CarException
 
 
 class VehicleRentSpockTest extends SpockRollbackTestAbstractClass {
+    private static final String ADVENTURE_ID = "AdventureId";
     private static final String PLATE_CAR='22-33-HZ'
     private static final String RENT_A_CAR_NAME='Eartz'
     private static final String DRIVING_LICENSE='lx1423'
@@ -18,17 +19,18 @@ class VehicleRentSpockTest extends SpockRollbackTestAbstractClass {
 
     @Override
     def populate4Test() {
-        RentACar rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN);
-        car = new Car(PLATE_CAR, 10, 10, rentACar);
+        rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN);
     }
 
     def 'double rent'() {
         given:
-        def car = new Car(PLATE_CAR,10,10,rentACar)
-        car.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER)
+        car = new Car(PLATE_CAR,10,10,rentACar)
 
         when:
-        car.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER)
+        car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID);
+        car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID);
+
+
 
         then:
         thrown(CarException)
