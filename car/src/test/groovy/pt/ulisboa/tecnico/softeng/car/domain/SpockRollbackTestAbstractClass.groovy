@@ -12,7 +12,7 @@ abstract class SpockRollbackTestAbstractClass extends Specification {
 
 	def setup() throws Exception {
 		try {
-			FenixFramework.getTransactionManager().begin(false);
+			FenixFramework.getTransactionManager().begin(false)
 			populate4Test();
 		} catch (WriteOnReadError | NotSupportedException | SystemException e1) {
 			e1.printStackTrace();
@@ -27,6 +27,6 @@ abstract class SpockRollbackTestAbstractClass extends Specification {
 		}
 	}
 
-	public abstract void populate4Test();
+	abstract void populate4Test();
 
 }
