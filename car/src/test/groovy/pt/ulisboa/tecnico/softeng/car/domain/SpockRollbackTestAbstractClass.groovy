@@ -13,20 +13,20 @@ abstract class SpockRollbackTestAbstractClass extends Specification {
 	def setup() throws Exception {
 		try {
 			FenixFramework.getTransactionManager().begin(false)
-			populate4Test();
+			populate4Test()
 		} catch (WriteOnReadError | NotSupportedException | SystemException e1) {
-			e1.printStackTrace();
+			e1.printStackTrace()
 		}
 	}
 
 	def cleanup() {
 		try {
-			FenixFramework.getTransactionManager().rollback();
+			FenixFramework.getTransactionManager().rollback()
 		} catch (IllegalStateException | SecurityException | SystemException e) {
-			e.printStackTrace();
+			e.printStackTrace()
 		}
 	}
 
-	abstract def populate4Test();
+	abstract def populate4Test()
 
 }

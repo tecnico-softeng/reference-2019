@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.softeng.car.domain;
 
 import org.joda.time.LocalDate;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
