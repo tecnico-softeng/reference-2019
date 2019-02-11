@@ -95,7 +95,9 @@ public class HotelInterface {
 	public static String cancelBooking(String reference) {
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			Booking booking = hotel.getBooking(reference);
-			if (booking != null && booking.getCancellation() == null) {
+			if (booking != null && booking.getCancellation() != null) {
+				return booking.getCancellation();
+			} else if (booking != null && booking.getCancellation() == null) {
 				return booking.cancel();
 			}
 		}
