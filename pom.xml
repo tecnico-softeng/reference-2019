@@ -25,11 +25,12 @@
 
 		<version.spock>1.0-groovy-2.4</version.spock>
 		<version.groovy>2.4.7</version.groovy>
-		<version.powermock>1.6.6</version.powermock>
+		<version.powermock>1.7.4</version.powermock>
+		<version.mockito>2.8.9</version.mockito>
 
 		<gmaven-plugin.version>1.4</gmaven-plugin.version>
 
-		<version.org.jmockit.jmockit>1.38</version.org.jmockit.jmockit>
+		<version.org.jmockit.jmockit>1.39</version.org.jmockit.jmockit>
 
 		<version.com.lazerycode.jmeter>2.8.2</version.com.lazerycode.jmeter>
 
@@ -331,12 +332,12 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>2.23.4</version>
+			<version>${version.mockito}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
+			<artifactId>powermock-api-mockito2</artifactId>
 			<version>${version.powermock}</version>
 			<scope>test</scope>
 		</dependency>
