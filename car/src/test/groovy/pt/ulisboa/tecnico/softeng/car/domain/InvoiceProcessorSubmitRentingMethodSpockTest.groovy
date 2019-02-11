@@ -66,7 +66,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	def 'one tax failure on submit invoice'() {
 		setup:
 		mockStatic(BankInterface.class)
-		when(BankInterface.processPayment(IBAN, 10.0))
+		when(BankInterface.processPayment(Mockito.any(RestInvoiceData.class)))
 				.thenReturn(PAYMENT_REFERENCE)
 
 		mockStatic(TaxInterface.class)
@@ -112,7 +112,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	def 'one bank failure on process payment'() {
 		setup:
 		mockStatic(BankInterface.class)
-		when(BankInterface.processPayment(RestBankOperationData.class))
+		when(BankInterface.processPayment(Mockito.any(RestBankOperationData.class)))
 				.thenThrow(new BankException())
 				.thenReturn(PAYMENT_REFERENCE)
 
