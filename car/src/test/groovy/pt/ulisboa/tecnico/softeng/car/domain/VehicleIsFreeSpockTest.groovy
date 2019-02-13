@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
 import spock.lang.Shared
+import spock.lang.Unroll
 
 class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
     def ADVENTURE_ID = "AdventureId"
@@ -16,20 +17,21 @@ class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
     @Shared def date3= LocalDate.parse('2018-01-08')
     @Shared def date4= LocalDate.parse('2018-01-09')
 
-    RentACar rentACar
-    Car car
+    def car
 
     @Override
     def populate4Test() {
-        rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN)
+        RentACar rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN)
         car = new Car(PLATE_CAR,10,10,rentACar)
     }
 
+
+    @Unroll('#begin, #end')
     def 'no booking was made'() {
         expect:
         car.isFree(begin,end)
         
-	    where:
+        where:
         begin | end
         date1 | date2
         date1 | date3
@@ -37,6 +39,7 @@ class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
         date4 | date4
     }
 
+    @Unroll('#begin, #end')
     def 'bookings were made'() {
         given:
         car.rent(DRIVING_LICENSE, date2, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
@@ -55,6 +58,5 @@ class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
         date3 | date4
         date4 | date4
     }
-
 }
 

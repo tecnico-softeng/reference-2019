@@ -23,7 +23,7 @@ class RentingConflictSpockTest extends SpockRollbackTestAbstractClass {
 		car=new Car(PLATE_CAR,10,10,rentACar)
 	}
 
-	def 'reting is before dates'() {
+	def 'renting is before dates'() {
 		when:
         Renting renting=new Renting(DRIVING_LICENSE,date1,date2,car,NIF,IBAN_BUYER)
 
@@ -31,7 +31,7 @@ class RentingConflictSpockTest extends SpockRollbackTestAbstractClass {
 		!renting.conflict(date3,date4)
 	}
 
-	def 'reting is before dates same day interval'() {
+	def 'renting is before dates same day interval'() {
 		when:
         Renting renting=new Renting(DRIVING_LICENSE,date1,date2,car,NIF,IBAN_BUYER)
 
