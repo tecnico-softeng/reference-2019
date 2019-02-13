@@ -1,8 +1,6 @@
 package pt.ulisboa.tecnico.softeng.bank.domain
 
 import spock.lang.Shared
-import spock.lang.Specification
-import org.junit.Assert
 import pt.ulisboa.tecnico.softeng.bank.domain.Operation.Type
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
 import spock.lang.Unroll
@@ -36,7 +34,7 @@ class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	@Unroll('operation: #type, #acc, #value')
 	def 'exception'() {
 		when: 'when creating an invalid operation'
-		new Operation(typoe, account,value)
+		new Operation(type, acc, value)
 
 		then: 'throw an exception'
 		thrown(BankException)
