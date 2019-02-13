@@ -1,11 +1,11 @@
-package pt.ulisboa.tecnico.softeng.car.domain
-
-import javax.transaction.NotSupportedException
-import javax.transaction.SystemException
+package pt.ulisboa.tecnico.softeng.tax.domain
 
 import pt.ist.fenixframework.FenixFramework
 import pt.ist.fenixframework.core.WriteOnReadError
 import spock.lang.Specification
+
+import javax.transaction.NotSupportedException
+import javax.transaction.SystemException
 
 abstract class SpockPersistenceTestAbstractClass extends Specification {
 
@@ -64,7 +64,7 @@ abstract class SpockPersistenceTestAbstractClass extends Specification {
 			e1.printStackTrace()
 		}
 
-		deleteFromDatabase()
+		deleteFromDatabase();
 
 		try {
 			FenixFramework.getTransactionManager().commit()
@@ -73,7 +73,7 @@ abstract class SpockPersistenceTestAbstractClass extends Specification {
 		}
 	}
 
-	abstract def whenCreateInDatabase()
-	abstract def thenAssert()
-	abstract def deleteFromDatabase()
+	abstract def whenCreateInDatabase();
+	abstract def thenAssert();
+	abstract def deleteFromDatabase();
 }

@@ -27,7 +27,7 @@ class CarPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 	@Override
 	def thenAssert() {
-		assert FenixFramework.getDomainRoot().getRentACarSet().size() == 1;
+		assert FenixFramework.getDomainRoot().getRentACarSet().size() == 1
 
 		RentACar rentACar = new ArrayList<>(FenixFramework.getDomainRoot().getRentACarSet()).get(0)
 		assert rentACar.getVehicleSet().size() == 2
