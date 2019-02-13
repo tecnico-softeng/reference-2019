@@ -16,6 +16,7 @@ class AccountDepositMethodSpockTest extends SpockRollbackTestAbstractClass {
 		account = new Account(bank, client)
 	}
 
+	@Unroll('success deposit, #label: #amnt, #balance')
 	def 'success'() {
 		when:
 		String reference = account.deposit(50).getReference()
@@ -27,6 +28,11 @@ class AccountDepositMethodSpockTest extends SpockRollbackTestAbstractClass {
 		operation.getType() == Operation.Type.DEPOSIT
 		operation.getAccount() == account
 		50 == operation.getValue()
+
+		where:
+		label              | amnt | balance
+		'fifty'            | 50   | 50
+		'one amount'       | 1    | 1
 	}
 
 	@Unroll('Deposit: #label')
@@ -45,10 +51,7 @@ class AccountDepositMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 
 	def 'one amount'() {
-		when:
+		expect:
 		account.deposit(1)
-
-		then:
-		true
 	}
 }

@@ -18,17 +18,24 @@ class AccountWithdrawMethodSpockTest extends SpockRollbackTestAbstractClass {
 		account.deposit(100)
 	}
 
+	@Unroll('Withdraw: #label')
 	def 'success'() {
-		when:
-		String reference=this.account.withdraw(40).getReference()
+		when: 'when withdrawing 40'
+		def reference= account.withdraw(amnt).getReference()
 
-		then:
-		60 == this.account.getBalance()
-		Operation operation=this.bank.getOperation(reference)
+		then: 'success'
+		balance == account.getBalance()
+		Operation operation = bank.getOperation(reference)
 		operation != null
 		operation.getType() == Operation.Type.WITHDRAW
-		operation.getAccount() == this.account
-		40 == operation.getValue()
+		operation.getAccount() == account
+		amnt == operation.getValue()
+
+		where:
+		label              | amnt | balance
+		'forty'            | 40   | 60
+		'one amount'       | 1    | 99
+		'equal to balance' | 100  | 0
 	}
 
 	@Unroll('Withdraw: #label')
@@ -45,19 +52,5 @@ class AccountWithdrawMethodSpockTest extends SpockRollbackTestAbstractClass {
 		-20  | 'negative amount'
 		101  | 'equal to balance plus one'
 		150  | 'more than balance'
-	}
-
-	@Unroll('Withdraw: #label')
-	def 'all good'() {
-		when: 'when withdrawing an invalid amount'
-		account.deposit(amnt)
-
-		then: 'success'
-		true
-
-		where:
-		amnt | label
-		1    | 'one amount'
-		100  | 'equal to balance'
 	}
 }

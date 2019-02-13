@@ -14,7 +14,7 @@ class BankConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
 	def 'success'() {
 		when:
-		Bank bank = new Bank(BANK_NAME,BANK_CODE)
+		def bank = new Bank(BANK_NAME,BANK_CODE)
 
 		then:
 		bank.getName() == BANK_NAME
@@ -27,15 +27,15 @@ class BankConstructorSpockTest extends SpockRollbackTestAbstractClass {
 	@Unroll('creating bank: #label')
 	def 'exception'() {
 		when: 'when creating an invalid bank'
-		new Bank(null,BANK_CODE)
+		new Bank(name, code)
 
 		then: 'throw an exception'
 		thrown(BankException)
 
 		where:
-		name | code
-		null  | BANK_CODE
-		'   ' | BANK_CODE
+		name      | code
+		null      | BANK_CODE
+		'   '     | BANK_CODE
 		BANK_NAME | null
 		BANK_NAME | '    '
 		BANK_NAME | 'BK0'

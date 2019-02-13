@@ -14,9 +14,11 @@ class BankGetAccountMethodSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'success'() {
+		given:
+		def account = new Account(bank, client)
+
 		when:
-		Account account = new Account(bank, client)
-		Account result = bank.getAccount(account.getIBAN())
+		def result = bank.getAccount(account.getIBAN())
 
 		then:
 		result == account
@@ -46,10 +48,10 @@ class BankGetAccountMethodSpockTest extends SpockRollbackTestAbstractClass {
 		given:
 		new Account(bank, client)
 
-		when:
+		and:
 		new Account(bank, client)
 
-		then:
+		expect:
 		bank.getAccount('XPTO') == null
 	}
 

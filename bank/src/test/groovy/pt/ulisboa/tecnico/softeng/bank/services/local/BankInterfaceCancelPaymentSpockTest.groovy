@@ -31,7 +31,7 @@ class BankInterfaceCancelPaymentSpockTest extends SpockRollbackTestAbstractClass
 	@Unroll('Cancel: #label')
 	def 'problem cancel payment'() {
 		when:
-		BankInterface.cancelPayment(null)
+		BankInterface.cancelPayment(payConf)
 
 		then:
 		thrown(BankException)
