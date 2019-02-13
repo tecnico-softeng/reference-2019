@@ -7,40 +7,40 @@ import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.hotel.domain.Room.Type
 
 class RoomGetBookingMethodSpockTest extends SpockRollbackTestAbstractClass {
-	private final String NIF_BUYER = "123456789";
-	private final String IBAN_BUYER = "IBAN_BUYER";
-	private final LocalDate ARRIVAL = new LocalDate(2016, 12, 19)
-	private final LocalDate DEPARTURE = new LocalDate(2016, 12, 24)
+	def NIF_BUYER = '123456789';
+	def IBAN_BUYER = 'IBAN_BUYER';
+	def ARRIVAL = new LocalDate(2016, 12, 19)
+	def DEPARTURE = new LocalDate(2016, 12, 24)
 
-	private Hotel hotel
-	private Room room
-	private Booking booking
+	def hotel
+	def room
+	def booking
 
 	@Override
 	def populate4Test() {
-		this.hotel = new Hotel("XPTO123", "Lisboa", "NIF", "IBAN", 20.0, 30.0)
-		this.room = new Room(this.hotel, "01", Type.SINGLE)
+		hotel = new Hotel('XPTO123', 'Lisboa', 'NIF', 'IBAN', 20.0, 30.0)
+		room = new Room(hotel, '01', Type.SINGLE)
 	}
 
-	def "success"() {
-		given: "a booking"
-		this.booking = this.room.reserve(Type.SINGLE, ARRIVAL, DEPARTURE, NIF_BUYER, IBAN_BUYER)
+	def 'success'() {
+		given: 'a booking'
+		booking = room.reserve(Type.SINGLE, ARRIVAL, DEPARTURE, NIF_BUYER, IBAN_BUYER)
 
-		expect: "get booking using cancellation reference"
-		this.room.getBooking(this.booking.getReference()) == this.booking
+		expect: 'get booking using cancellation reference'
+		room.getBooking(booking.getReference()) == booking
 	}
 
-	def "success cancelled"() {
-		given: "booking is cancelled"
-		this.booking = this.room.reserve(Type.SINGLE, ARRIVAL, DEPARTURE, NIF_BUYER, IBAN_BUYER)
-		this.booking.cancel()
+	def 'success cancelled'() {
+		given: 'booking is cancelled'
+		booking = room.reserve(Type.SINGLE, ARRIVAL, DEPARTURE, NIF_BUYER, IBAN_BUYER)
+		booking.cancel()
 
-		expect: "get booking using cancellation reference"
-		this.room.getBooking(this.booking.getCancellation()) == this.booking
+		expect: 'get booking using cancellation reference'
+		room.getBooking(booking.getCancellation()) == booking
 	}
 
-	def "does not exist"() {
-		expect: "a null from a non existing reference"
-		this.room.getBooking("XPTO") == null
+	def 'does not exist'() {
+		expect: 'a null from a non existing reference'
+		room.getBooking('XPTO') == null
 	}
 }

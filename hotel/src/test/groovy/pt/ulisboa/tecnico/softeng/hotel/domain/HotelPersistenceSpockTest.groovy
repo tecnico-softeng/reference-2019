@@ -8,29 +8,29 @@ import pt.ist.fenixframework.FenixFramework
 import pt.ulisboa.tecnico.softeng.hotel.domain.Room.Type
 
 class HotelPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
-	private static final String HOTEL_NIF = "123456789"
-	private static final String HOTEL_IBAN = "IBAN"
-	private static final String HOTEL_NAME = "Berlin Plaza"
-	private final static String HOTEL_CODE = "H123456"
-	private static final String ROOM_NUMBER = "01"
-	private static final String CLIENT_NIF = "123458789"
-	private static final String CLIENT_IBAN = "IBANC"
+	def HOTEL_NIF = '123456789'
+	def HOTEL_IBAN = 'IBAN'
+	def HOTEL_NAME = 'Berlin Plaza'
+	def HOTEL_CODE = 'H123456'
+	def ROOM_NUMBER = '01'
+	def CLIENT_NIF = '123458789'
+	def CLIENT_IBAN = 'IBANC'
 
-	private final LocalDate arrival = new LocalDate(2017, 12, 15)
-	private final LocalDate departure = new LocalDate(2017, 12, 19)
+	def arrival = new LocalDate(2017, 12, 15)
+	def departure = new LocalDate(2017, 12, 19)
 
 	@Override
 	def whenCreateInDatabase() {
-		Hotel hotel = new Hotel(HOTEL_CODE, HOTEL_NAME, HOTEL_NIF, HOTEL_IBAN, 10.0, 20.0)
+		def hotel = new Hotel(HOTEL_CODE, HOTEL_NAME, HOTEL_NIF, HOTEL_IBAN, 10.0, 20.0)
 		new Room(hotel, ROOM_NUMBER, Type.DOUBLE)
-		Hotel.reserveRoom(Type.DOUBLE, this.arrival, this.departure, CLIENT_NIF, CLIENT_IBAN)
+		Hotel.reserveRoom(Type.DOUBLE, arrival, departure, CLIENT_NIF, CLIENT_IBAN)
 	}
 
 	@Override
 	def thenAssert() {
 		assert FenixFramework.getDomainRoot().getHotelSet().size() == 1
 
-		List<Hotel> hotels = new ArrayList<>(FenixFramework.getDomainRoot().getHotelSet())
+		def hotels = new ArrayList<>(FenixFramework.getDomainRoot().getHotelSet())
 		Hotel hotel = hotels.get(0)
 
 		assert hotel.getName().equals(HOTEL_NAME)
@@ -44,14 +44,14 @@ class HotelPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 		assert processor != null
 		assert processor.getBookingSet().size() == 1
 
-		List<Room> rooms = new ArrayList<>(hotel.getRoomSet());
+		def rooms = new ArrayList<>(hotel.getRoomSet());
 		Room room = rooms.get(0);
 
 		assert room.getNumber().equals(ROOM_NUMBER)
 		assert room.getType() == Type.DOUBLE
 		assert room.getBookingSet().size() == 1
 
-		List<Booking> bookings = new ArrayList<>(room.getBookingSet());
+		def bookings = new ArrayList<>(room.getBookingSet());
 		Booking booking = bookings.get(0);
 
 		assert booking.getReference() != null
@@ -68,7 +68,7 @@ class HotelPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 	@Override
 	def deleteFromDatabase() {
-		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
+		for (def hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			hotel.delete()
 		}
 	}
