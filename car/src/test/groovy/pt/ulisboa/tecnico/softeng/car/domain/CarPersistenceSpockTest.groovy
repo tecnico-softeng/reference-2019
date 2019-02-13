@@ -6,16 +6,16 @@ import pt.ist.fenixframework.FenixFramework
 
 class CarPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
-	 def ADVENTURE_ID = "AdventureId"
-	 def NAME1 = "eartz"
-	 def PLATE_CAR1 = "aa-00-11"
-	 def PLATE_CAR2 = "aa-00-12"
-	 def DRIVING_LICENSE = "br123"
-	 def date1 = LocalDate.parse("2018-01-06")
-	 def date2 = LocalDate.parse("2018-01-07")
-	 def NIF = "NIF"
-	 def IBAN = "IBAN"
-	 def IBAN_BUYER = "IBAN"
+	def ADVENTURE_ID = "AdventureId"
+	def NAME1 = "eartz"
+	def PLATE_CAR1 = "aa-00-11"
+	def PLATE_CAR2 = "aa-00-12"
+	def DRIVING_LICENSE = "br123"
+	def date1 = LocalDate.parse("2018-01-06")
+	def date2 = LocalDate.parse("2018-01-07")
+	def NIF = "NIF"
+	def IBAN = "IBAN"
+	def IBAN_BUYER = "IBAN"
 
 	@Override
 	def whenCreateInDatabase() {
