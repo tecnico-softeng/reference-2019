@@ -72,7 +72,7 @@ class CarPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 	@Override
 	def deleteFromDatabase() {
 		for (RentACar ra : FenixFramework.getDomainRoot().getRentACarSet()) {
-			ra.delete();
+			ra.delete()
 		}
 	}
 }
