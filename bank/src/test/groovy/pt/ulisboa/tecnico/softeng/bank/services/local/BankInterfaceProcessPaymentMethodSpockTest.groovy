@@ -22,7 +22,7 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 	@Override
 	def populate4Test() {
 		bank = new Bank('Money','BK01')
-		Client client = new Client(bank,'António')
+		def client = new Client(bank,'António')
 		account = new Account(bank, client)
 		iban = account.getIBAN()
 		account.deposit(500)

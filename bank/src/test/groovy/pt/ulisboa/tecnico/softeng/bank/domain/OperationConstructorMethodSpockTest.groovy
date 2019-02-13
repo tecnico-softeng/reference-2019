@@ -36,13 +36,13 @@ class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	@Unroll('operation: #type, #acc, #value')
 	def 'exception'() {
 		when: 'when creating an invalid operation'
-		new Operation(null,this.account,1000)
+		new Operation(typoe, account,value)
 
 		then: 'throw an exception'
 		thrown(BankException)
 
 		where:
-		type  | acc | value
+		type          | acc     | value
 		null          | account | 1000
 		Type.WITHDRAW | null    | 1000
 		Type.DEPOSIT  | account | 0
