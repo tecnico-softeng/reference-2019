@@ -4,7 +4,7 @@ import org.joda.time.LocalDate
 
 import pt.ist.fenixframework.FenixFramework
 
-class CarPersistenceSpockTest extends SpockPersistencyTestAbstractClass {
+class CarPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 	private static final String ADVENTURE_ID = "AdventureId";
 	private static final String NAME1 = "eartz";
