@@ -69,7 +69,15 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 
 		then:
 		secondReference == firstReference
-		400.0 == this.account.getBalance()
+		400.0 == account.getBalance()
+	}
+
+	def 'one amount'() {
+		when:
+		BankInterface.processPayment(new BankOperationData(this.iban, 1, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
+
+		then:
+		499.0 == account.getBalance()
 	}
 
 
@@ -87,7 +95,6 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 		null    | 100
 		'  '    | 100
  		iban    | 0
-		iban    | 1
 		'other' | 0
 	}
 
@@ -107,7 +114,6 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 		null    | 10
 		''      | 10
 		'XPTO'  | 10
-		iban    | 1
 		'other' | 0
 	}
 
