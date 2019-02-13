@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
+import spock.lang.Shared
 import spock.lang.Unroll
 
 
@@ -10,8 +11,8 @@ class VehicleRentSpockTest extends SpockRollbackTestAbstractClass {
     def PLATE_CAR = '22-33-HZ'
     def RENT_A_CAR_NAME = 'Eartz'
     def DRIVING_LICENSE = 'lx1423'
-    def date1 = LocalDate.parse('2018-01-06')
-    def date2 = LocalDate.parse('2018-01-09')
+    @Shared def date1 = LocalDate.parse('2018-01-06')
+    @Shared def date2 = LocalDate.parse('2018-01-09')
     def NIF = 'NIF'
     def IBAN = 'IBAN'
     def IBAN_BUYER = 'IBAN'

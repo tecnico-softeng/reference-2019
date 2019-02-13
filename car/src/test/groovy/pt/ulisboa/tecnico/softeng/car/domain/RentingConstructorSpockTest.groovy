@@ -11,12 +11,12 @@ class RentingConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
      def RENT_A_CAR_NAME = 'Eartz'
      def PLATE_CAR = '22-33-HZ'
-     def DRIVING_LICENSE = 'br112233'
-     def date1 = LocalDate.parse('2018-01-06')
-     def date2 = LocalDate.parse('2018-01-07')
-     def NIF = 'NIF'
-     def IBAN = 'IBAN'
-     def IBAN_BUYER = 'IBAN'
+     @Shared def DRIVING_LICENSE = 'br112233'
+     @Shared def date1 = LocalDate.parse('2018-01-06')
+     @Shared def date2 = LocalDate.parse('2018-01-07')
+     @Shared def NIF = 'NIF'
+     @Shared def IBAN = 'IBAN'
+     @Shared def IBAN_BUYER = 'IBAN'
      @Shared def car
 
     @Override
