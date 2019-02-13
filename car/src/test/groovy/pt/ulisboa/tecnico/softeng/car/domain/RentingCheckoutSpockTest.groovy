@@ -4,16 +4,16 @@ import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 
 class RentingCheckoutSpockTest extends SpockRollbackTestAbstractClass {
-	static final String ADVENTURE_ID = "AdventureId"
-	static final String NAME1='eartz'
-	static final String PLATE_CAR1='aa-00-11'
-	static final String DRIVING_LICENSE='br123'
-	static final LocalDate date1= LocalDate.parse('2018-01-06')
-	static final LocalDate date2= LocalDate.parse('2018-01-07')
-	static final String NIF='NIF'
-	static final String IBAN='IBAN'
-	static final String IBAN_BUYER='IBAN'
-	Car car
+	def ADVENTURE_ID = "AdventureId"
+	def NAME1='eartz'
+	def PLATE_CAR1='aa-00-11'
+	def DRIVING_LICENSE='br123'
+	def date1= LocalDate.parse('2018-01-06')
+	def date2= LocalDate.parse('2018-01-07')
+	def NIF='NIF'
+	def IBAN='IBAN'
+	def IBAN_BUYER='IBAN'
+	def car
 
 	@Override
 	def populate4Test() {

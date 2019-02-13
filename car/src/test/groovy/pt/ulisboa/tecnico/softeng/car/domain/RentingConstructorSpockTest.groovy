@@ -9,15 +9,15 @@ import java.sql.Driver
 
 class RentingConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
-     static final String RENT_A_CAR_NAME = 'Eartz'
-     static final String PLATE_CAR = '22-33-HZ'
-     static final String DRIVING_LICENSE = 'br112233'
-     static final LocalDate date1 = LocalDate.parse('2018-01-06')
-     static final LocalDate date2 = LocalDate.parse('2018-01-07')
-     static final String NIF = 'NIF'
-     static final String IBAN = 'IBAN'
-     static final String IBAN_BUYER = 'IBAN'
-     @Shared Car car
+     def RENT_A_CAR_NAME = 'Eartz'
+     def PLATE_CAR = '22-33-HZ'
+     def DRIVING_LICENSE = 'br112233'
+     def date1 = LocalDate.parse('2018-01-06')
+     def date2 = LocalDate.parse('2018-01-07')
+     def NIF = 'NIF'
+     def IBAN = 'IBAN'
+     def IBAN_BUYER = 'IBAN'
+     @Shared def car
 
     @Override
     def populate4Test() {
