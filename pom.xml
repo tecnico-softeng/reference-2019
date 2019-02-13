@@ -22,7 +22,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<version.junit>4.12</version.junit>
-
 		<version.spock>1.0-groovy-2.4</version.spock>
 		<version.groovy>2.4.7</version.groovy>
 		<version.powermock>1.7.4</version.powermock>

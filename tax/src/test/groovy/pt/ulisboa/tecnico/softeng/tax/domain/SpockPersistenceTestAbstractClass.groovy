@@ -1,11 +1,11 @@
-package pt.ulisboa.tecnico.softeng.car.domain
-
-import javax.transaction.NotSupportedException
-import javax.transaction.SystemException
+package pt.ulisboa.tecnico.softeng.tax.domain
 
 import pt.ist.fenixframework.FenixFramework
 import pt.ist.fenixframework.core.WriteOnReadError
 import spock.lang.Specification
+
+import javax.transaction.NotSupportedException
+import javax.transaction.SystemException
 
 abstract class SpockPersistenceTestAbstractClass extends Specification {
 
