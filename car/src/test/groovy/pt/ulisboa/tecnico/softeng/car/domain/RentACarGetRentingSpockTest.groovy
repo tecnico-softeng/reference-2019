@@ -16,21 +16,19 @@ class RentACarGetRentingSpockTest extends SpockRollbackTestAbstractClass {
     private static final String IBAN_BUYER='IBAN'
     private Renting renting
 
-
     @Override
     def populate4Test() {
-        RentACar rentACar1=new RentACar(NAME1,NIF,IBAN)
-        Vehicle car1=new Car(PLATE_CAR1,10,10,rentACar1)
+        RentACar rentACar1 = new RentACar(NAME1,NIF,IBAN)
+        Vehicle car1 = new Car(PLATE_CAR1,10,10,rentACar1)
 
-        renting=car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
+        renting = car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
 
         car1.rent(DRIVING_LICENSE,date3,date4,NIF,IBAN_BUYER,ADVENTURE_ID)
-
     }
 
     def 'get renting'() {
         expect:
-        RentACar.getRenting(this.renting.getReference()) == renting
+        RentACar.getRenting(renting.getReference()) == renting
     }
 
     def 'non existing'() {

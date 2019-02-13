@@ -1,13 +1,15 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
+import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 
 
 class RentACarConstructorSpockTest extends SpockRollbackTestAbstractClass {
-    def NAME = 'eartz'
-    def NIF = 'NIF'
-    def IBAN = 'IBAN'
+    @Shared def NAME = 'eartz'
+    @Shared def NIF = 'NIF'
+    @Shared def IBAN = 'IBAN'
 
     @Override
     def populate4Test() { }
@@ -20,19 +22,18 @@ class RentACarConstructorSpockTest extends SpockRollbackTestAbstractClass {
         rentACar.getName() == NAME
     }
 
-    def 'null name'() {
+
+    @Unroll('RentACar: #name')
+    def 'exceptions'() {
         when:
-        new RentACar(null,NIF,IBAN)
+        new RentACar('', nif, iban)
 
         then:
         thrown(CarException)
-    }
 
-    def 'empty name'() {
-        when:
-        new RentACar('',NIF,IBAN)
-
-        then:
-        thrown(CarException)
+        where:
+        name | nif | iban
+        null | NIF | IBAN
+        ''   | NIF | IBAN
     }
 }

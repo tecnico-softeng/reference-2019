@@ -23,24 +23,19 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 	@Override
 	def populate4Test() {
 		this.rentACar1=new RentACar(NAME1,NIF,IBAN)
-
 		this.rentACar2=new RentACar(NAME2,NIF + '1',IBAN)
-
 	}
 
 	def 'only cars'() {
-		given:
+		when:
         Vehicle car1=new Car(PLATE_CAR1,10,10,this.rentACar1)
-
 		car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
-
         Vehicle car2=new Car(PLATE_CAR2,10,10,this.rentACar2)
 
         Vehicle motorcycle=new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
-
 		Set<Vehicle> cars= RentACar.getAllAvailableCars(date3,date4)
 
-		expect:
+		then:
 		cars.contains(car1)
 		cars.contains(car2)
 		!cars.contains(motorcycle)
@@ -49,14 +44,14 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 	def 'only available cars'() {
 		given:
         Vehicle car1=new Car(PLATE_CAR1,10,10,this.rentACar1)
-
         Vehicle car2=new Car(PLATE_CAR2,10,10,this.rentACar2)
 
 		car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
 
+		when:
 		Set<Vehicle> cars= RentACar.getAllAvailableCars(date1,date2)
 
-		expect:
+		then:
 		!cars.contains(car1)
 		cars.contains(car2)
 	}
@@ -64,12 +59,12 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 	def 'only motorcycles'() {
 		given:
         Vehicle car=new Car(PLATE_CAR1,10,10,this.rentACar1)
-
         Vehicle motorcycle=new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
+		when:
 		Set<Vehicle> cars= RentACar.getAllAvailableMotorcycles(date3,date4)
 
-		expect:
+		then:
 		cars.contains(motorcycle)
 		!cars.contains(car)
 	}
