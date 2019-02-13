@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.softeng.car.domain;
+package pt.ulisboa.tecnico.softeng.hotel.domain
 
 import javax.transaction.NotSupportedException
 import javax.transaction.SystemException
@@ -7,7 +7,7 @@ import pt.ist.fenixframework.FenixFramework
 import pt.ist.fenixframework.core.WriteOnReadError
 import spock.lang.Specification
 
-abstract class SpockPersistencyTestAbstractClass extends Specification {
+abstract class SpockPersistenceTestAbstractClass extends Specification {
 
 	def 'test persistence'() {
 		when:
