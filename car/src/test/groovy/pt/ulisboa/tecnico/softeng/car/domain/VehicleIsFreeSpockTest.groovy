@@ -3,17 +3,17 @@ package pt.ulisboa.tecnico.softeng.car.domain
 import org.joda.time.LocalDate
 
 class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
-    static final String ADVENTURE_ID = "AdventureId"
-    static final String PLATE_CAR='22-33-HZ'
-    static final String RENT_A_CAR_NAME='Eartz'
-    static final String DRIVING_LICENSE='lx1423'
-    static final LocalDate date1= LocalDate.parse('2018-01-06')
-    static final LocalDate date2= LocalDate.parse('2018-01-07')
-    static final LocalDate date3= LocalDate.parse('2018-01-08')
-    static final LocalDate date4= LocalDate.parse('2018-01-09')
-    static final String NIF='NIF'
-    static final String IBAN='IBAN'
-    static final String IBAN_BUYER='IBAN'
+    def ADVENTURE_ID = "AdventureId"
+    def PLATE_CAR='22-33-HZ'
+    def RENT_A_CAR_NAME='Eartz'
+    def DRIVING_LICENSE='lx1423'
+    def date1= LocalDate.parse('2018-01-06')
+    def date2= LocalDate.parse('2018-01-07')
+    def date3= LocalDate.parse('2018-01-08')
+    def date4= LocalDate.parse('2018-01-09')
+    def NIF='NIF'
+    def IBAN='IBAN'
+    def IBAN_BUYER='IBAN'
 
     RentACar rentACar
 

@@ -20,7 +20,7 @@ import static org.powermock.api.mockito.PowerMockito.*
 
 @PrepareForTest([TaxInterface.class, BankInterface.class])
 class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractClass {
-    private static final String ADVENTURE_ID = "AdventureId"
+    def ADVENTURE_ID = "AdventureId"
     def CANCEL_PAYMENT_REFERENCE = 'CancelPaymentReference'
 	def INVOICE_REFERENCE = 'InvoiceReference'
 	def PAYMENT_REFERENCE = 'PaymentReference'

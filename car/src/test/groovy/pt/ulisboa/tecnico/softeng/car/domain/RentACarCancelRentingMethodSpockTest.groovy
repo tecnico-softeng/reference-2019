@@ -6,18 +6,18 @@ import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import spock.lang.Unroll
 
 class RentACarCancelRentingMethodSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String ADVENTURE_ID = "AdventureId"
-	private static final String PLATE_CAR='22-33-HZ'
-	private static final String RENT_A_CAR_NAME='Eartz'
-	private static final String DRIVING_LICENSE='lx1423'
-	private static final LocalDate BEGIN= LocalDate.parse('2018-01-06')
-	private static final LocalDate END= LocalDate.parse('2018-01-09')
-	private static final String NIF='NIF'
-	private static final String IBAN='IBAN'
-	private static final String IBAN_BUYER='IBAN'
-	private RentACar rentACar
-	private Car car
-	private Renting renting
+	def ADVENTURE_ID = "AdventureId"
+	def PLATE_CAR='22-33-HZ'
+	def RENT_A_CAR_NAME='Eartz'
+	def DRIVING_LICENSE='lx1423'
+	def BEGIN= LocalDate.parse('2018-01-06')
+	def END= LocalDate.parse('2018-01-09')
+	def NIF='NIF'
+	def IBAN='IBAN'
+	def IBAN_BUYER='IBAN'
+	def rentACar
+	def car
+	def renting
 
 
 	@Override
