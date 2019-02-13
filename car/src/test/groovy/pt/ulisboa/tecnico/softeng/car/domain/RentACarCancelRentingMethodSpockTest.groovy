@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.softeng.car.domain
 import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
+import spock.lang.Unroll
 
 class RentACarCancelRentingMethodSpockTest extends SpockRollbackTestAbstractClass {
 	private static final String ADVENTURE_ID = "AdventureId"
@@ -33,38 +34,29 @@ class RentACarCancelRentingMethodSpockTest extends SpockRollbackTestAbstractClas
 		String cancel = RentACar.cancelRenting(renting.getReference())
 
 		expect:
-		this.renting.isCancelled()
-		this.renting.getCancellationReference() == cancel
+		renting.isCancelled()
+		renting.getCancellationReference() == cancel
 	}
 
-	def 'does not exist'() {
+	@Unroll('#label')
+	def 'exceptions'() {
 		when:
-        RentACar.cancelRenting('MISSING_REFERENCE')
+		RentACar.cancelRenting(ref)
 
 		then:
 		thrown(CarException)
+
+		where:
+		label | ref
+		'missing ref' | 'MISSING_REFERENCE'
+		'null ref'    | null
+		'empty ref'   | ''
 	}
 
-	def 'null reference'() {
-		when:
-        RentACar.cancelRenting(null)
-
-		then:
-		thrown(CarException)
-	}
-
-	def 'empty reference'() {
-		when:
-        RentACar.cancelRenting('')
-
-		then:
-		thrown(CarException)
-	}
 
 	def 'success integration'() {
 		given:
 		GroovySpy(TaxInterface, global: true)
-
 
 		when:
 		String cancel= RentACar.cancelRenting(renting.getReference())

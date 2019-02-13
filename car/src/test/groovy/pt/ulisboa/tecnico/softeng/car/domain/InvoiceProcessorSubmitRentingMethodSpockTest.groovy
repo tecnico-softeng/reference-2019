@@ -48,7 +48,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'success'() {
-        setup: "setting things up"
+        given: "setting things up"
         mockStatic(TaxInterface.class)
 		when(TaxInterface.submitInvoice(Mockito.any(RestInvoiceData.class))).thenReturn(INVOICE_REFERENCE)
 
@@ -64,7 +64,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'one tax failure on submit invoice'() {
-		setup:
+		given:
 		mockStatic(BankInterface.class)
 		when(BankInterface.processPayment(Mockito.any(RestInvoiceData.class)))
 				.thenReturn(PAYMENT_REFERENCE)
@@ -79,7 +79,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 		car.rent(DRIVING_LICENSE,date2,date3,NIF_CUSTOMER,IBAN_CUSTOMER,ADVENTURE_ID)
 
 		and:
-        verifyStatic(Mockito.times(3))
+        verifyStatic(TaxInterface.class, Mockito.times(3))
 		TaxInterface.submitInvoice(Mockito.any(RestInvoiceData.class))
 
         then: "if verifications go well, test passes"
@@ -87,7 +87,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'one remote failure on submit invoice'() {
-		setup:
+		given:
 		mockStatic(BankInterface.class)
 		when(BankInterface.processPayment(Mockito.any(RestBankOperationData.class)))
 				.thenReturn(PAYMENT_REFERENCE)
@@ -102,7 +102,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 		car.rent(DRIVING_LICENSE, date2, date3, NIF_CUSTOMER, IBAN_CUSTOMER,ADVENTURE_ID)
 
 		and:
-		verifyStatic(Mockito.times(3))
+		verifyStatic(TaxInterface.class, Mockito.times(3))
 		TaxInterface.submitInvoice(Mockito.any(RestInvoiceData.class))
 
 		then: "if verifications go well, test passes"
@@ -110,7 +110,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'one bank failure on process payment'() {
-		setup:
+		given:
 		mockStatic(BankInterface.class)
 		when(BankInterface.processPayment(Mockito.any(RestBankOperationData.class)))
 				.thenThrow(new BankException())
@@ -125,7 +125,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 		car.rent(DRIVING_LICENSE, date2, date3, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 
 		and:
-        verifyStatic(Mockito.times(3))
+        verifyStatic(TaxInterface.class, Mockito.times(3))
 		BankInterface.processPayment(Mockito.any(RestBankOperationData.class))
 
 		then: "if verifications go well, test passes"
@@ -133,7 +133,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'one remote failure on process payment'() {
-		setup:
+		given:
 		mockStatic(BankInterface.class)
 		when(BankInterface.processPayment(Mockito.any(RestBankOperationData.class)))
 				.thenThrow(new RemoteAccessException())
@@ -148,7 +148,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 		car.rent(DRIVING_LICENSE, date2, date3, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 
 		and:
-        verifyStatic(Mockito.times(3))
+        verifyStatic(BankInterface.class, Mockito.times(3))
 		BankInterface.processPayment(Mockito.any(RestBankOperationData.class))
 
 		then: "if verifications go well, test passes"
@@ -156,7 +156,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'successful cancel'() {
-		setup:
+		given:
 		mockStatic(BankInterface.class)
 		when(BankInterface.processPayment(Mockito.any(RestBankOperationData.class)))
 				.thenReturn(PAYMENT_REFERENCE)
@@ -170,8 +170,9 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 
 		doNothing().when(TaxInterface, "cancelInvoice", Mockito.any(String.class))
 
+		Renting renting = this.car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
+
 		when:
-        Renting renting = this.car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 		renting.cancel()
 
 		then: "if verifications go well, test passes"
@@ -179,7 +180,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'one bank exception on cancel payment'() {
-		setup:
+		given:
 		mockStatic(TaxInterface.class)
 		when(TaxInterface.submitInvoice(Mockito.any(RestInvoiceData.class)))
 			.thenReturn(INVOICE_REFERENCE)
@@ -194,13 +195,14 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 				.thenThrow(new BankException())
 				.thenReturn(CANCEL_PAYMENT_REFERENCE)
 
+		Renting renting = this.car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
+
 		when:
-        Renting renting = this.car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 		renting.cancel()
 		car.rent(DRIVING_LICENSE, date2, date3, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 
 		and:
-        verifyStatic(Mockito.times(2))
+        verifyStatic(BankInterface.class, Mockito.times(2))
 		BankInterface.cancelPayment(Mockito.any(String.class))
 
 		then: "if verifications go well, test passes"
@@ -208,7 +210,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'one remote exception on cancel payment'() {
-		setup:
+		given:
 		mockStatic(TaxInterface.class)
 		when(TaxInterface.submitInvoice(Mockito.any(RestInvoiceData.class)))
 				.thenReturn(INVOICE_REFERENCE)
@@ -223,13 +225,14 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 				.thenThrow(new RemoteAccessException())
 				.thenReturn(CANCEL_PAYMENT_REFERENCE)
 
+		Renting renting = this.car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
+
 		when:
-        Renting renting = this.car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
-		renting.cancel();
+		renting.cancel()
 		car.rent(DRIVING_LICENSE, date2, date3, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 
 		and:
-        verifyStatic(Mockito.times(2))
+        verifyStatic(BankInterface.class, Mockito.times(2))
 		BankInterface.cancelPayment(Mockito.any(String.class))
 
 		then: "if verifications go well, test passes"
@@ -237,7 +240,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'one remote/tax exception on cancel invoice'(Throwable exp) {
-		setup:
+		given:
 		mockStatic(TaxInterface.class)
 		when(TaxInterface.submitInvoice(Mockito.any(RestInvoiceData.class)))
 				.thenReturn(INVOICE_REFERENCE)
@@ -261,13 +264,14 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 		when(BankInterface.cancelPayment(Mockito.any(String.class)))
 				.thenReturn(CANCEL_PAYMENT_REFERENCE)
 
+		Renting renting = this.car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
+
 		when:
-        Renting renting = this.car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 		renting.cancel()
 		car.rent(DRIVING_LICENSE, date2, date3, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 
 		and:
-        verifyStatic(Mockito.times(2))
+        verifyStatic(TaxInterface.class, Mockito.times(2))
 		TaxInterface.cancelInvoice(Mockito.any(String.class))
 
 		then: "if verifications go well, test passes"

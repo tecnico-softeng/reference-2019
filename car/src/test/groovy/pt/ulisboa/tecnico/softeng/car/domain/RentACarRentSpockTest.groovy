@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
+import spock.lang.Unroll
 
 class RentACarRentSpockTest extends SpockRollbackTestAbstractClass {
     private static final String ADVENTURE_ID = "AdventureId"
@@ -23,23 +24,26 @@ class RentACarRentSpockTest extends SpockRollbackTestAbstractClass {
     }
 
     def 'rent a car has car available'() {
-        given:
+        when:
         String reference= RentACar.rent(Car,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN,END,ADVENTURE_ID)
 
-        expect:
+        then:
         reference != null
         !car.isFree(BEGIN,END)
     }
 
-    def 'rent a car has no cars available'() {
-        given:
-        RentACar.rent(Car,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN,END,ADVENTURE_ID)
-
+    @Unroll('no car/motorcycle: #name')
+    def 'exceptions'() {
         when:
-        RentACar.rent(Car,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN.plusDays(1),END.plusDays(1),ADVENTURE_ID)
+        RentACar.rent(Motorcycle,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN,END,ADVENTURE_ID)
 
         then:
         thrown(CarException)
+
+        where:
+        name         | type
+        'car'        | Car.class
+        'motorcycle' | Motorcycle.class
     }
 
     def 'no rent a cars'() {
@@ -48,14 +52,6 @@ class RentACarRentSpockTest extends SpockRollbackTestAbstractClass {
 
         when:
         RentACar.rent(Car,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN,END,ADVENTURE_ID)
-
-        then:
-        thrown(CarException)
-    }
-
-    def 'no motorcycles'() {
-        when:
-        RentACar.rent(Motorcycle,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN,END,ADVENTURE_ID)
 
         then:
         thrown(CarException)
