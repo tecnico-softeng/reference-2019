@@ -42,7 +42,7 @@ class VehicleRentSpockTest extends SpockRollbackTestAbstractClass {
         def car = new Car(PLATE_CAR,10,10,rentACar)
 
         when:
-        car.rent(DRIVING_LICENSE, date1,null, NIF + "1", IBAN_BUYER, ADVENTURE_ID)
+        car.rent(DRIVING_LICENSE, begin, end, NIF + "1", IBAN_BUYER, ADVENTURE_ID)
 
         then:
         thrown(CarException)

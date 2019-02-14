@@ -18,16 +18,16 @@ class RentACarGetRentingDataSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		RentACar rentACar1=new RentACar(NAME1,NIF,IBAN)
-		car=new Car(PLATE_CAR1,10,10,rentACar1)
+		def rentACar1 = new RentACar(NAME1,NIF,IBAN)
+		car = new Car(PLATE_CAR1,10,10,rentACar1)
 	}
 
 	def 'success'() {
 		given:
-        Renting renting = car.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
+        def renting = car.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
 
 		when:
-		RentingData rentingData = RentACar.getRentingData(renting.getReference())
+		def rentingData = RentACar.getRentingData(renting.getReference())
 
 		then:
 		rentingData.getReference() == renting.getReference()
