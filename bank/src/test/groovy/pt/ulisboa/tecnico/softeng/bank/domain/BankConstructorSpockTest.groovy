@@ -13,15 +13,18 @@ class BankConstructorSpockTest extends SpockRollbackTestAbstractClass {
 	def populate4Test() { }
 
 	def 'success'() {
-		when:
+		when: 'creatinga  bank account'
 		def bank = new Bank(BANK_NAME,BANK_CODE)
 
-		then:
-		bank.getName() == BANK_NAME
-		bank.getCode() == BANK_CODE
+		then: 'should all be ok, with the correct values'
+		with(bank) {
+			getName() == BANK_NAME
+			getCode() == BANK_CODE
+			getAccountSet().size() == 0
+			getClientSet().size() == 0
+		}
+
 		FenixFramework.getDomainRoot().getBankSet().size() == 1
-		bank.getAccountSet().size() == 0
-		bank.getClientSet().size() == 0
 	}
 
 	@Unroll('creating bank: #label')
@@ -43,13 +46,13 @@ class BankConstructorSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'not unique code'() {
-		given:
+		given: 'given the fact that one bank account was created'
 		new Bank(BANK_NAME,BANK_CODE)
 
-		when:
+		when: 'creating another entitty with the same code'
 		new Bank(BANK_NAME,BANK_CODE)
 
-		then:
+		then: 'should through an exception'
 		def error = thrown(BankException)
 		FenixFramework.getDomainRoot().getBankSet().size() == 1
 	}

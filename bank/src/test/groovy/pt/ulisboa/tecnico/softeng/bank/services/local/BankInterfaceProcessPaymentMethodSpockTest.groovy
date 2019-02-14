@@ -33,7 +33,7 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 		account.getIBAN()
 
 		when:
-		String newReference=BankInterface.processPayment(new BankOperationData(iban,100,TRANSACTION_SOURCE,TRANSACTION_REFERENCE))
+		def newReference = BankInterface.processPayment(new BankOperationData(iban,100,TRANSACTION_SOURCE,TRANSACTION_REFERENCE))
 
 		then:
 		newReference != null
@@ -44,10 +44,10 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 
 	def 'success two banks'() {
 		given:
-		Bank otherBank = new Bank('Money','BK02')
-		Client otherClient=new Client(otherBank,'Manuel')
-		Account otherAccount=new Account(otherBank,otherClient)
-		String otherIban = otherAccount.getIBAN()
+		def otherBank = new Bank('Money','BK02')
+		def otherClient=new Client(otherBank,'Manuel')
+		def otherAccount=new Account(otherBank,otherClient)
+		def otherIban = otherAccount.getIBAN()
 		otherAccount.deposit(1000)
 
 		when:
@@ -64,8 +64,8 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 		this.account.getIBAN()
 
 		when:
-		String firstReference=BankInterface.processPayment(new BankOperationData(iban,100,TRANSACTION_SOURCE,TRANSACTION_REFERENCE))
-		String secondReference=BankInterface.processPayment(new BankOperationData(iban,100,TRANSACTION_SOURCE,TRANSACTION_REFERENCE))
+		def firstReference=BankInterface.processPayment(new BankOperationData(iban,100,TRANSACTION_SOURCE,TRANSACTION_REFERENCE))
+		def secondReference=BankInterface.processPayment(new BankOperationData(iban,100,TRANSACTION_SOURCE,TRANSACTION_REFERENCE))
 
 		then:
 		secondReference == firstReference

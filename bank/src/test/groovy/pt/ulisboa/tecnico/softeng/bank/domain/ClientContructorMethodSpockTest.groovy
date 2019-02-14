@@ -16,10 +16,10 @@ class ClientContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'success'() {
-		when:
-		Client client = new Client(bank, CLIENT_NAME)
+		when: 'creating a clint with appropriate arguments'
+		def client = new Client(bank, CLIENT_NAME)
 
-		then:
+		then: 'is successful and the object client has the proper values'
 		client.getName() == CLIENT_NAME
 		client.getID().length() >= 1
 		bank.getClientSet().contains(client)
