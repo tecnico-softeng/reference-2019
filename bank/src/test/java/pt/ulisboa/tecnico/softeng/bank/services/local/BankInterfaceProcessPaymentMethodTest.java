@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.softeng.bank.domain.Account;
 import pt.ulisboa.tecnico.softeng.bank.domain.Bank;
 import pt.ulisboa.tecnico.softeng.bank.domain.Client;
@@ -100,24 +99,4 @@ public class BankInterfaceProcessPaymentMethodTest extends RollbackTestAbstractC
 		BankInterface.processPayment(new BankOperationData("other", 0, TRANSACTION_SOURCE, TRANSACTION_REFERENCE));
 	}
 
-	@Test(expected = BankException.class)
-	public void nullReference() {
-		Bank.processPayment(null, 10);
-	}
-
-	@Test(expected = BankException.class)
-	public void emptyReference() {
-		Bank.processPayment("", 10);
-	}
-
-	@Test(expected = BankException.class)
-	public void notExistsReference() {
-		Bank.processPayment("XPTO", 10);
-	}
-
-	@Test(expected = BankException.class)
-	public void noBanks() {
-		FenixFramework.getDomainRoot().getBankSet().clear();
-		Bank.processPayment(this.account.getIBAN(), 10);
-	}
 }
