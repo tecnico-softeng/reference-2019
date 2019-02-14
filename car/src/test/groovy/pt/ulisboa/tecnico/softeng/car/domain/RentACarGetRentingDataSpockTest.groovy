@@ -1,8 +1,8 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
-import pt.ulisboa.tecnico.softeng.car.services.local.dataobjects.RentingData
 
 class RentACarGetRentingDataSpockTest extends SpockRollbackTestAbstractClass {
 	def ADVENTURE_ID = "AdventureId"
@@ -24,7 +24,7 @@ class RentACarGetRentingDataSpockTest extends SpockRollbackTestAbstractClass {
 
 	def 'success'() {
 		given: 'renting a car is assumed to have happened'
-        def renting = car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
+		def renting = car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
 		when: 'fetching the renting data'
 		def rentingData = RentACar.getRentingData(renting.getReference())
@@ -32,15 +32,14 @@ class RentACarGetRentingDataSpockTest extends SpockRollbackTestAbstractClass {
 		then: 'values should be according to renting'
 		with(rentingData) {
 			getReference() == renting.getReference()
-			getReference() == renting.getReference()
 			getRentACarCode() == car.getRentACar().getCode()
+			getPlate().toLowerCase().equals(PLATE_CAR1)
 		}
-		PLATE_CAR1.compareToIgnoreCase(rentingData.getPlate()) == 0
 	}
 
 	def 'get renting data fail'() {
 		when: 'wrong renting data'
-        RentACar.getRentingData('1')
+		RentACar.getRentingData('1')
 
 		then: 'throws an exception'
 		thrown(CarException)

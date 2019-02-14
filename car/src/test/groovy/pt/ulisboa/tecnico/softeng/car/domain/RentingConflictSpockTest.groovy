@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -46,12 +47,10 @@ class RentingConflictSpockTest extends SpockRollbackTestAbstractClass {
 		given: 'given a renting'
 		def renting = new Renting(DRIVING_LICENSE,date1,date2,car,NIF,IBAN_BUYER)
 
-		when: 'throws an exception if dates of conflict are invalid'
+		when: 'throws an exception if end is before start'
 		renting.conflict(date2,date1)
 
 		then:
 		thrown(CarException)
 	}
-
-
 }
