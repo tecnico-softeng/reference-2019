@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.softeng.bank.domain
 
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
-import spock.lang.Shared
 import spock.lang.Unroll
 
 class AccountDepositMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -47,11 +46,5 @@ class AccountDepositMethodSpockTest extends SpockRollbackTestAbstractClass {
 		amnt | label
 		0    | 'zero amount'
 		-100 | 'negative amount'
-	}
-
-
-	def 'one amount'() {
-		expect: 'it should be possible to depoist 1 amount on a created account'
-		account.deposit(1)
 	}
 }
