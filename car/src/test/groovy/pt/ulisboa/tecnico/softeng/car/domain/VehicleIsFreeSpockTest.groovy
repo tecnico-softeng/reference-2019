@@ -28,7 +28,7 @@ class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
 
     @Unroll('#begin, #end')
     def 'no booking was made'() {
-        expect:
+        expect: 'no booking, hence car is free for given dates'
         car.isFree(begin,end)
         
         where:
@@ -41,13 +41,12 @@ class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
 
     @Unroll('#begin, #end')
     def 'bookings were made'() {
-        when:
+        when: 'when a booking is made'
         car.rent(DRIVING_LICENSE, date2, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
         car.rent(DRIVING_LICENSE, date3, date4, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-        then:
-        car.isFree(date1,date1)
-        !car.isFree(begin,end)
+        then: 'then a car is not free'
+        !car.isFree(begin, end)
 
         where:
         begin | end

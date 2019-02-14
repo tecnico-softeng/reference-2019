@@ -25,26 +25,26 @@ class VehicleRentSpockTest extends SpockRollbackTestAbstractClass {
     }
 
     def 'double rent'() {
-        given:
+        given: 'given a car available'
         def car = new Car(PLATE_CAR,10,10, rentACar)
 
-        when:
+        when: 'renting it twice'
         car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
         car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-        then:
+        then: 'throws an exception'
         thrown(CarException)
     }
 
     @Unroll('#begin, #end')
     def 'exceptions'() {
-        given:
+        given: 'given a car available'
         def car = new Car(PLATE_CAR,10,10,rentACar)
 
-        when:
+        when: 'wrong parameters for renting'
         car.rent(DRIVING_LICENSE, begin, end, NIF + "1", IBAN_BUYER, ADVENTURE_ID)
 
-        then:
+        then: 'throws an exception'
         thrown(CarException)
 
         where:

@@ -20,24 +20,26 @@ class RentACarRentSpockTest extends SpockRollbackTestAbstractClass {
     @Override
     def populate4Test() {
         rentACar = new RentACar(RENT_A_CAR_NAME,NIF,IBAN)
-        car = new Car(PLATE_CAR,10,10,rentACar)
     }
 
     def 'rent a car has car available'() {
-        when:
-        String reference= RentACar.rent(Car,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN,END,ADVENTURE_ID)
+        given: 'given a car availble'
+        car = new Car(PLATE_CAR,10,10,rentACar)
 
-        then:
+        when: 'when renting the car'
+        def reference= RentACar.rent(Car, DRIVING_LICENSE, NIF, IBAN_BUYER, BEGIN, END, ADVENTURE_ID)
+
+        then: 'than it should succeed: get a renting reference and car becomess not free'
         reference != null
         !car.isFree(BEGIN,END)
     }
 
     @Unroll('no car/motorcycle: #name')
     def 'exceptions'() {
-        when:
-        RentACar.rent(Motorcycle,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN,END,ADVENTURE_ID)
+        when: 'if the rent a car has no vehicles'
+        RentACar.rent(type, DRIVING_LICENSE, NIF, IBAN_BUYER, BEGIN, END, ADVENTURE_ID)
 
-        then:
+        then: 'renting a vehicle should throw an exception'
         thrown(CarException)
 
         where:
@@ -47,13 +49,13 @@ class RentACarRentSpockTest extends SpockRollbackTestAbstractClass {
     }
 
     def 'no rent a cars'() {
-        given:
+        given: 'if there are no rent a cars'
         rentACar.delete()
 
-        when:
+        when: 'trying to rent a car'
         RentACar.rent(Car,DRIVING_LICENSE,NIF,IBAN_BUYER,BEGIN,END,ADVENTURE_ID)
 
-        then:
+        then: 'throws an exception'
         thrown(CarException)
     }
 }

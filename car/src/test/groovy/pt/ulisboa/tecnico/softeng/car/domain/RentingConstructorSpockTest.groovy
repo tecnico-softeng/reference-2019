@@ -36,10 +36,10 @@ class RentingConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
     @Unroll('RentACar: #dl | #d1 | #d2 | #veh | #nif | #iban')
     def 'exceptions'() {
-        when:
+        when: 'renting with wrong arguments'
         new Renting(dl, d1, d2, veh, nif, iban)
 
-        then:
+        then: 'throws an exception'
         thrown(CarException)
 
         where:

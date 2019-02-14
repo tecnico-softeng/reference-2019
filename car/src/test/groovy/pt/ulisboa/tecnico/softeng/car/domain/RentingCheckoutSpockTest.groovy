@@ -17,29 +17,29 @@ class RentingCheckoutSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		RentACar rentACar = new RentACar(NAME1,NIF,IBAN)
-		car=new Car(PLATE_CAR1,10,10,rentACar)
+		def rentACar = new RentACar(NAME1,NIF,IBAN)
+		car = new Car(PLATE_CAR1,10,10,rentACar)
 	}
 
 	def 'checkout'() {
-		given:
-        Renting renting=car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
+		given: 'given a renting'
+        def renting = car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-		when:
+		when: 'when checkingout with a valid number of km'
 		renting.checkout(100)
 
-		then:
+		then: 'then car is updated with that number'
 		car.getKilometers() == 110
 	}
 
 	def 'fail checkout'() {
-		given:
-        Renting renting=car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
+		given: 'given a renting'
+        def renting = car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-		when:
+		when: 'when checing out with a negative number of km'
 		renting.checkout(-10)
 
-		then:
+		then: 'an exception is thrown'
 		thrown(CarException)
 	}
 }

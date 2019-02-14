@@ -15,20 +15,20 @@ class RentACarConstructorSpockTest extends SpockRollbackTestAbstractClass {
     def populate4Test() { }
 
     def 'success'() {
-        given:
+        given: 'creating a new rent a car'
         RentACar rentACar=new RentACar(NAME,NIF,IBAN)
 
-        expect:
+        expect: 'should succeed'
         rentACar.getName() == NAME
     }
 
 
     @Unroll('RentACar: #name')
     def 'exceptions'() {
-        when:
-        new RentACar('', nif, iban)
+        when: 'creating a RentACar with invalid arguments'
+        new RentACar(name, nif, iban)
 
-        then:
+        then: 'throws an exception'
         thrown(CarException)
 
         where:

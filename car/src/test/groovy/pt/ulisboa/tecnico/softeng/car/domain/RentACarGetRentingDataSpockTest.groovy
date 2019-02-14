@@ -18,29 +18,31 @@ class RentACarGetRentingDataSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		def rentACar1 = new RentACar(NAME1,NIF,IBAN)
-		car = new Car(PLATE_CAR1,10,10,rentACar1)
+		def rentACar1 = new RentACar(NAME1, NIF, IBAN)
+		car = new Car(PLATE_CAR1, 10, 10, rentACar1)
 	}
 
 	def 'success'() {
-		given:
-        def renting = car.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
+		given: 'renting a car is assumed to have happened'
+        def renting = car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-		when:
+		when: 'fetching the renting data'
 		def rentingData = RentACar.getRentingData(renting.getReference())
 
-		then:
-		rentingData.getReference() == renting.getReference()
-		rentingData.getDrivingLicense() == DRIVING_LICENSE
+		then: 'values should be according to renting'
+		with(rentingData) {
+			getReference() == renting.getReference()
+			getReference() == renting.getReference()
+			getRentACarCode() == car.getRentACar().getCode()
+		}
 		PLATE_CAR1.compareToIgnoreCase(rentingData.getPlate()) == 0
-		rentingData.getRentACarCode() == this.car.getRentACar().getCode()
 	}
 
 	def 'get renting data fail'() {
-		when:
+		when: 'wrong renting data'
         RentACar.getRentingData('1')
 
-		then:
+		then: 'throws an exception'
 		thrown(CarException)
 	}
 }

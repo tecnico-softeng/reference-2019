@@ -18,8 +18,8 @@ class RentACarGetRentingSpockTest extends SpockRollbackTestAbstractClass {
 
     @Override
     def populate4Test() {
-        RentACar rentACar1 = new RentACar(NAME1,NIF,IBAN)
-        Vehicle car1 = new Car(PLATE_CAR1,10,10,rentACar1)
+        def rentACar1 = new RentACar(NAME1,NIF,IBAN)
+        def car1 = new Car(PLATE_CAR1,10,10,rentACar1)
 
         renting = car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
 
