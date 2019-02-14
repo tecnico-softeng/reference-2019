@@ -34,7 +34,7 @@ class RentingConstructorSpockTest extends SpockRollbackTestAbstractClass {
         car.getPrice() * (date2.getDayOfYear() - date1.getDayOfYear() + 1) == renting.getPrice()
     }
 
-    @Unroll('RentACar: exceptions')
+    @Unroll('RentACar: #dl | #d1 | #d2 | #veh | #nif | #iban')
     def 'exceptions'() {
         when:
         new Renting(dl, d1, d2, veh, nif, iban)

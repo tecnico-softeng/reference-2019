@@ -23,11 +23,17 @@ class VehicleConstructorSpockTest extends SpockRollbackTestAbstractClass {
         def motorcycle = new Motorcycle(PLATE_MOTORCYCLE, 10, 10, rentACar)
 
         then:
-        car.getPlate() == PLATE_CAR
-        rentACar.hasVehicle(PLATE_CAR)
+        with(car) {
+            getPlate() == PLATE_CAR
+            getPrice() == 10.0
+        }
+
+        with(rentACar) {
+            rentACar.hasVehicle(PLATE_CAR)
+            rentACar.hasVehicle(PLATE_MOTORCYCLE)
+        }
+        
         motorcycle.getPlate() == PLATE_MOTORCYCLE
-        rentACar.hasVehicle(PLATE_MOTORCYCLE)
-        10.0 == car.getPrice()
     }
 
     @Unroll('RentACar: #plate, #km, #price, #rac')
