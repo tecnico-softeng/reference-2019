@@ -1,12 +1,11 @@
 package pt.ulisboa.tecnico.softeng.bank.services.local
 
-import pt.ulisboa.tecnico.softeng.bank.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.bank.domain.Account
 import pt.ulisboa.tecnico.softeng.bank.domain.Bank
 import pt.ulisboa.tecnico.softeng.bank.domain.Client
+import pt.ulisboa.tecnico.softeng.bank.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.bank.domain.Operation.Type
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
-import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData
 import spock.lang.Unroll
 
 class BankInterfaceGetOperationDataMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -25,14 +24,16 @@ class BankInterfaceGetOperationDataMethodSpockTest extends SpockRollbackTestAbst
 
 	def 'success'() {
 		when:
-		def data=BankInterface.getOperationData(reference)
+		def data = BankInterface.getOperationData(reference)
 
 		then:
-		data.getReference() == reference
-		data.getIban() == account.getIBAN()
-		data.getType() == Type.DEPOSIT.name()
-		100.0 == data.getValue()
-		data.getTime() != null
+		with(data) {
+			getReference() == reference
+			getIban() == account.getIBAN()
+			getType() == Type.DEPOSIT.name()
+			getValue() == 100.0
+			getTime() != null
+		}
 	}
 
 	@Unroll('operationData: #label')
@@ -49,5 +50,4 @@ class BankInterfaceGetOperationDataMethodSpockTest extends SpockRollbackTestAbst
 		''      | 'empty reference'
 		'XPTO'  | 'not exists reference'
 	}
-
 }

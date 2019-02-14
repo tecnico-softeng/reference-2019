@@ -19,8 +19,8 @@ class BankPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 	def thenAssert() {
 		assert 1 == FenixFramework.getDomainRoot().getBankSet().size()
 
-		List<Bank> banks=new ArrayList<>(FenixFramework.getDomainRoot().getBankSet())
-		Bank bank=banks.get(0)
+		def banks = new ArrayList<>(FenixFramework.getDomainRoot().getBankSet())
+		def bank = banks.get(0)
 
 		assert BANK_NAME == bank.getName()
 		assert BANK_CODE == bank.getCode()

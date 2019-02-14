@@ -1,8 +1,8 @@
 package pt.ulisboa.tecnico.softeng.bank.domain
 
-import spock.lang.Shared
 import pt.ulisboa.tecnico.softeng.bank.domain.Operation.Type
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
+import spock.lang.Shared
 import spock.lang.Unroll
 
 class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -11,14 +11,14 @@ class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 
 	@Override
 	def populate4Test() {
-		bank = new Bank('Money','BK01')
-		def client = new Client(bank,'António')
-		account = new Account(bank,client)
+		bank = new Bank('Money', 'BK01')
+		def client = new Client(bank, 'António')
+		account = new Account(bank, client)
 	}
 
 	def 'success'() {
 		when: 'when creating an operation'
-		def operation = new Operation(Type.DEPOSIT, account,1000)
+		def operation = new Operation(Type.DEPOSIT, account, 1000)
 
 		then: 'the object should hold the proper values'
 		with(operation) {
@@ -26,7 +26,7 @@ class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 			getReference().length() > Bank.CODE_SIZE
 			getType() == Type.DEPOSIT
 			getAccount() == account
-			1000 == getValue()
+			getValue() == 1000
 			getTime() != null
 			bank.getOperation(getReference()) == operation
 		}
@@ -46,12 +46,14 @@ class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 		null          | account | 1000
 		Type.WITHDRAW | null    | 1000
 		Type.DEPOSIT  | account | 0
-		Type.WITHDRAW | null    | -1000
+		Type.DEPOSIT  | account | -1000
+		Type.WITHDRAW | account  | 0
+		Type.WITHDRAW | account  | -1000
 	}
 
 	def 'one amount'() {
 		when:
-		def operation = new Operation(Type.DEPOSIT, account,1)
+		def operation = new Operation(Type.DEPOSIT, account, 1)
 
 		then:
 		bank.getOperation(operation.getReference()) == operation

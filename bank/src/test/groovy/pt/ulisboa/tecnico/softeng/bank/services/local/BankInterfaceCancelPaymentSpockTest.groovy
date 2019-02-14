@@ -1,9 +1,9 @@
 package pt.ulisboa.tecnico.softeng.bank.services.local
 
-import pt.ulisboa.tecnico.softeng.bank.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.bank.domain.Account
 import pt.ulisboa.tecnico.softeng.bank.domain.Bank
 import pt.ulisboa.tecnico.softeng.bank.domain.Client
+import pt.ulisboa.tecnico.softeng.bank.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
 import spock.lang.Unroll
 
@@ -22,7 +22,7 @@ class BankInterfaceCancelPaymentSpockTest extends SpockRollbackTestAbstractClass
 
 	def 'success'() {
 		when:
-		def newReference=BankInterface.cancelPayment(reference)
+		def newReference = BankInterface.cancelPayment(reference)
 
 		then:
 		bank.getOperation(newReference) != null
@@ -41,6 +41,5 @@ class BankInterfaceCancelPaymentSpockTest extends SpockRollbackTestAbstractClass
 		null    | 'null reference'
 		''      | 'empty reference'
 		'XPTO'  | 'not exists reference'
-
 	}
 }
