@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.softeng.car.domain
+package pt.ulisboa.tecnico.softeng.hotel.domain
 
 import javax.transaction.NotSupportedException
 import javax.transaction.SystemException
@@ -52,7 +52,7 @@ abstract class SpockPersistenceTestAbstractClass extends Specification {
 			e.printStackTrace()
 		}
 
-		return true
+		return true;
 	}
 
 
@@ -64,7 +64,7 @@ abstract class SpockPersistenceTestAbstractClass extends Specification {
 			e1.printStackTrace()
 		}
 
-		deleteFromDatabase()
+		deleteFromDatabase();
 
 		try {
 			FenixFramework.getTransactionManager().commit()
@@ -73,7 +73,7 @@ abstract class SpockPersistenceTestAbstractClass extends Specification {
 		}
 	}
 
-	abstract def whenCreateInDatabase()
-	abstract def thenAssert()
-	abstract def deleteFromDatabase()
+	abstract def whenCreateInDatabase();
+	abstract def thenAssert();
+	abstract def deleteFromDatabase();
 }

@@ -3,75 +3,69 @@ package pt.ulisboa.tecnico.softeng.car.domain
 import org.joda.time.LocalDate
 
 class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String ADVENTURE_ID = "AdventureId"
-	private static final String NAME1='eartz'
-	private static final String NAME2='eartz'
-	private static final String PLATE_CAR1='aa-00-11'
-	private static final String PLATE_CAR2='aa-00-22'
-	private static final String PLATE_MOTORCYCLE='44-33-HZ'
-	private static final String DRIVING_LICENSE='br123'
-	private static final LocalDate date1= LocalDate.parse('2018-01-06')
-	private static final LocalDate date2= LocalDate.parse('2018-01-07')
-	private static final LocalDate date3= LocalDate.parse('2018-01-08')
-	private static final LocalDate date4= LocalDate.parse('2018-01-09')
-	private static final String NIF='NIF'
-	private static final String IBAN='IBAN'
-	private static final String IBAN_BUYER='IBAN'
-	private RentACar rentACar1
-	private RentACar rentACar2
+	def ADVENTURE_ID = "AdventureId"
+	def NAME1 = 'eartz'
+	def NAME2 = 'eartz'
+	def PLATE_CAR1 = 'aa-00-11'
+	def PLATE_CAR2 = 'aa-00-22'
+	def PLATE_MOTORCYCLE = '44-33-HZ'
+	def DRIVING_LICENSE = 'br123'
+	def date1 = LocalDate.parse('2018-01-06')
+	def date2 = LocalDate.parse('2018-01-07')
+	def date3 = LocalDate.parse('2018-01-08')
+	def date4 = LocalDate.parse('2018-01-09')
+	def NIF = 'NIF'
+	def IBAN = 'IBAN'
+	def IBAN_BUYER = 'IBAN'
+	def rentACar1
+	def rentACar2
 
 	@Override
 	def populate4Test() {
-		this.rentACar1=new RentACar(NAME1,NIF,IBAN)
-
-		this.rentACar2=new RentACar(NAME2,NIF + '1',IBAN)
-
+		rentACar1 = new RentACar(NAME1,NIF,IBAN)
+		rentACar2 = new RentACar(NAME2,NIF + '1',IBAN)
 	}
 
 	def 'only cars'() {
 		given:
-        Vehicle car1=new Car(PLATE_CAR1,10,10,this.rentACar1)
-
+		def car1 = new Car(PLATE_CAR1,10,10,this.rentACar1)
 		car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
+		def car2 = new Car(PLATE_CAR2,10,10,this.rentACar2)
+		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
-        Vehicle car2=new Car(PLATE_CAR2,10,10,this.rentACar2)
+		when:
+		def cars = RentACar.getAllAvailableCars(date3,date4)
 
-        Vehicle motorcycle=new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
-
-		Set<Vehicle> cars= RentACar.getAllAvailableCars(date3,date4)
-
-		expect:
+		then:
 		cars.contains(car1)
 		cars.contains(car2)
 		!cars.contains(motorcycle)
 	}
 
 	def 'only available cars'() {
-		given:
-        Vehicle car1=new Car(PLATE_CAR1,10,10,this.rentACar1)
+		given: 'creating two cars, and renting one'
+		def car1 = new Car(PLATE_CAR1, 10, 10, rentACar1)
+		def car2 = new Car(PLATE_CAR2, 10, 10, rentACar2)
+		car1.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-        Vehicle car2=new Car(PLATE_CAR2,10,10,this.rentACar2)
+		when: 'when fetching available cars'
+		def cars = RentACar.getAllAvailableCars(date1, date2)
 
-		car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
-
-		Set<Vehicle> cars= RentACar.getAllAvailableCars(date1,date2)
-
-		expect:
+		then: 'car2 should be in the returned list'
 		!cars.contains(car1)
 		cars.contains(car2)
 	}
 
 	def 'only motorcycles'() {
-		given:
-        Vehicle car=new Car(PLATE_CAR1,10,10,this.rentACar1)
+		given: 'creating one car, and one motorcycle'
+		def car = new Car(PLATE_CAR1,10,10,this.rentACar1)
+		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
-        Vehicle motorcycle=new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
+		when: 'when fetching available motorcycle'
+		def cars = RentACar.getAllAvailableMotorcycles(date3,date4)
 
-		Set<Vehicle> cars= RentACar.getAllAvailableMotorcycles(date3,date4)
-
-		expect:
+		then: 'only the motorcycle should be in the list'
 		cars.contains(motorcycle)
 		!cars.contains(car)
 	}
-
 }
