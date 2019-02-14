@@ -11,23 +11,23 @@ class AccountDepositMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Override
 	def populate4Test() {
 		bank = new Bank('Money','BK01')
-		Client client = new Client(bank,'António')
+		def client = new Client(bank,'António')
 
 		account = new Account(bank, client)
 	}
 
 	@Unroll('success deposit, #label: #amnt, #balance')
 	def 'success'() {
-		when:
-		String reference = account.deposit(50).getReference()
+		when: 'when depositing an amount to an account'
+		String reference = account.deposit(amnt).getReference()
 
-		then:
-		50 == account.getBalance()
+		then: 'the account is updated appropriately'
+		amnt == account.getBalance()
 		Operation operation = bank.getOperation(reference)
 		operation != null
 		operation.getType() == Operation.Type.DEPOSIT
 		operation.getAccount() == account
-		50 == operation.getValue()
+		balance == operation.getValue()
 
 		where:
 		label              | amnt | balance
@@ -51,7 +51,7 @@ class AccountDepositMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 
 	def 'one amount'() {
-		expect:
+		expect: 'it should be possible to depoist 1 amount on a created account'
 		account.deposit(1)
 	}
 }

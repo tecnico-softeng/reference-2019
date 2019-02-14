@@ -15,14 +15,14 @@ class BankInterfaceCancelPaymentSpockTest extends SpockRollbackTestAbstractClass
 	@Override
 	def populate4Test() {
 		bank = new Bank('Money','BK01')
-		Client client = new Client(bank,'António')
+		def client = new Client(bank,'António')
 		account = new Account(bank, client)
 		reference = account.deposit(100).getReference()
 	}
 
 	def 'success'() {
 		when:
-		String newReference=BankInterface.cancelPayment(reference)
+		def newReference=BankInterface.cancelPayment(reference)
 
 		then:
 		bank.getOperation(newReference) != null

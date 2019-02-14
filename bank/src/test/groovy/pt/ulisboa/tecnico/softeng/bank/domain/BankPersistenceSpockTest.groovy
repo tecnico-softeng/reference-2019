@@ -9,9 +9,9 @@ class BankPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 	@Override
 	def whenCreateInDatabase() {
-		Bank bank = new Bank(BANK_NAME,BANK_CODE)
-		Client client = new Client(bank,CLIENT_NAME)
-		Account account = new Account(bank,client)
+		def bank = new Bank(BANK_NAME,BANK_CODE)
+		def client = new Client(bank,CLIENT_NAME)
+		def account = new Account(bank,client)
 		account.deposit(100)
 	}
 
@@ -28,20 +28,20 @@ class BankPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 		assert 1 == bank.getAccountSet().size()
 		assert 1 == bank.getOperationSet().size()
 
-		List<Client> clients=new ArrayList<>(bank.getClientSet())
-		Client client=clients.get(0)
+		def clients = new ArrayList<>(bank.getClientSet())
+		def client = clients.get(0)
 
 		assert CLIENT_NAME == client.getName()
 
-		List<Account> accounts=new ArrayList<>(bank.getAccountSet())
-		Account account=accounts.get(0)
+		def accounts = new ArrayList<>(bank.getAccountSet())
+		def account = accounts.get(0)
 
 		assert client == account.getClient()
 		assert null != account.getIBAN()
 		assert 100 == account.getBalance()
 
-		List<Operation> operations=new ArrayList<>(bank.getOperationSet())
-		Operation operation=operations.get(0)
+		def operations=new ArrayList<>(bank.getOperationSet())
+		def operation=operations.get(0)
 
 		assert Operation.Type.DEPOSIT == operation.getType()
 		assert 100 == operation.getValue()
@@ -51,7 +51,7 @@ class BankPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 	@Override
 	def deleteFromDatabase() {
-		for (Bank bank : FenixFramework.getDomainRoot().getBankSet()) {
+		for (def bank : FenixFramework.getDomainRoot().getBankSet()) {
 			bank.delete()
 		}
 	}
