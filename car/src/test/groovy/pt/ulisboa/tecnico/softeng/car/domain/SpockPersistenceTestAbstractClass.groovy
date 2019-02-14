@@ -64,7 +64,7 @@ abstract class SpockPersistenceTestAbstractClass extends Specification {
 			e1.printStackTrace()
 		}
 
-		deleteFromDatabase();
+		deleteFromDatabase()
 
 		try {
 			FenixFramework.getTransactionManager().commit()
@@ -73,7 +73,7 @@ abstract class SpockPersistenceTestAbstractClass extends Specification {
 		}
 	}
 
-	abstract def whenCreateInDatabase();
-	abstract def thenAssert();
-	abstract def deleteFromDatabase();
+	abstract def whenCreateInDatabase()
+	abstract def thenAssert()
+	abstract def deleteFromDatabase()
 }
