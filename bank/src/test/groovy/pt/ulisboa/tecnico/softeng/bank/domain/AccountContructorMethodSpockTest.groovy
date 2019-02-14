@@ -1,7 +1,7 @@
 package pt.ulisboa.tecnico.softeng.bank.domain
 
-import spock.lang.Shared
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
+import spock.lang.Shared
 import spock.lang.Unroll
 
 class AccountContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -12,9 +12,9 @@ class AccountContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		bank=new Bank('Money','BK01')
-		client=new Client(bank,'António')
-		allien = new Client(new Bank('MoneyPlus','BK02'),'António')
+		bank = new Bank('Money','BK01')
+		client = new Client(bank,'António')
+		allien = new Client(new Bank('MoneyPlus','BK02'), 'António')
 	}
 
 	def 'success'() {
@@ -30,10 +30,9 @@ class AccountContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 		}
 		bank.getAccountSet().size() == 1
 		bank.getClientSet().contains(client)
-
 	}
 
-	@Unroll('Account: #bnk, #clt')
+	@Unroll('#label for Account: #bnk, #clt')
 	def 'throwing exception'() {
 		when: 'when creating an invalid account'
 		new Account(bnk, clt)
@@ -42,9 +41,9 @@ class AccountContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 		thrown(BankException)
 
 		where:
-		bnk  | clt
-		null | client
-		bank | null
-		bank | allien
+		bnk  | clt | label
+		null | client | 'null bank'
+		bank | null | 'null client'
+		bank | allien | 'not client of bank'
 	}
 }

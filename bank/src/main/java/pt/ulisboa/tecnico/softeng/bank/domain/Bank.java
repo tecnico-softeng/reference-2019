@@ -110,15 +110,6 @@ public class Bank extends Bank_Base {
 		return null;
 	}
 
-	public static String processPayment(String IBAN, double amount) {
-		for (Bank bank : FenixFramework.getDomainRoot().getBankSet()) {
-			if (bank.getAccount(IBAN) != null) {
-				return bank.getAccount(IBAN).withdraw(amount).getReference();
-			}
-		}
-		throw new BankException();
-	}
-
 	public static String cancelPayment(String paymentConfirmation) {
 		Operation operation = getOperationByReference(paymentConfirmation);
 		if (operation != null) {

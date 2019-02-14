@@ -1,9 +1,7 @@
 package pt.ulisboa.tecnico.softeng.bank.domain
 
-import spock.lang.Shared
-import spock.lang.Specification
-import org.junit.Assert
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
+import spock.lang.Shared
 import spock.lang.Unroll
 
 class ClientContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -34,10 +32,10 @@ class ClientContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 		thrown(BankException)
 
 		where:
-		bnk   | name
-		null  | CLIENT_NAME
-		bank  | null
-		bank  | '   '
-		bank  | ''
+		bnk   | name         | label
+		null  | CLIENT_NAME  | 'null bank'
+		bank  | null         | 'null client name'
+		bank  | '   '        | 'blank client name'
+		bank  | ''           | 'empty client name'
 	}
 }

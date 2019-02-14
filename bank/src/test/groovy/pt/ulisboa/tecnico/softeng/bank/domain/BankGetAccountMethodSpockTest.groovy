@@ -17,11 +17,8 @@ class BankGetAccountMethodSpockTest extends SpockRollbackTestAbstractClass {
 		given:
 		def account = new Account(bank, client)
 
-		when:
-		def result = bank.getAccount(account.getIBAN())
-
-		then:
-		result == account
+		expect:
+		bank.getAccount(account.getIBAN()) == account
 	}
 
 	@Unroll('getting account: #label')
@@ -44,15 +41,13 @@ class BankGetAccountMethodSpockTest extends SpockRollbackTestAbstractClass {
 		bank.getAccount('XPTO') == null
 	}
 
-	def 'several accounts do no match'() {
+	def 'several accounts but do no match'() {
 		given:
 		new Account(bank, client)
-
 		and:
 		new Account(bank, client)
 
 		expect:
 		bank.getAccount('XPTO') == null
 	}
-
 }

@@ -1,6 +1,4 @@
 package pt.ulisboa.tecnico.softeng.bank.domain
-import spock.lang.Specification
-import org.junit.Assert
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
 import spock.lang.Unroll
 
@@ -14,11 +12,13 @@ class AccountWithdrawMethodSpockTest extends SpockRollbackTestAbstractClass {
 		def client = new Client(bank,'António')
 
 		account = new Account(bank,client)
-		account.deposit(100)
 	}
 
 	@Unroll('Withdraw: #label')
 	def 'success'() {
+		given: 'an account with balance 100'
+		account.deposit(100)
+
 		when: 'when withdrawing 40'
 		def reference= account.withdraw(amnt).getReference()
 
