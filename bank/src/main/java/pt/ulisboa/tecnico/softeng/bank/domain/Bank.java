@@ -2,7 +2,6 @@ package pt.ulisboa.tecnico.softeng.bank.domain;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
-import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData;
 
 public class Bank extends Bank_Base {
 	public static final int CODE_SIZE = 4;
@@ -98,32 +97,6 @@ public class Bank extends Bank_Base {
 			}
 		}
 		return null;
-	}
-
-	public static Operation getOperationByReference(String reference) {
-		for (Bank bank : FenixFramework.getDomainRoot().getBankSet()) {
-			Operation operation = bank.getOperation(reference);
-			if (operation != null) {
-				return operation;
-			}
-		}
-		return null;
-	}
-
-	public static String cancelPayment(String paymentConfirmation) {
-		Operation operation = getOperationByReference(paymentConfirmation);
-		if (operation != null) {
-			return operation.revert();
-		}
-		throw new BankException();
-	}
-
-	public static BankOperationData getOperationData(String reference) {
-		Operation operation = getOperationByReference(reference);
-		if (operation != null) {
-			return new BankOperationData(operation);
-		}
-		throw new BankException();
 	}
 
 	public Client getClientById(String id) {
