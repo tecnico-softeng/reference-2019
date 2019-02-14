@@ -32,16 +32,16 @@ class VehicleConstructorSpockTest extends SpockRollbackTestAbstractClass {
             rentACar.hasVehicle(PLATE_CAR)
             rentACar.hasVehicle(PLATE_MOTORCYCLE)
         }
-        
+
         motorcycle.getPlate() == PLATE_MOTORCYCLE
     }
 
     @Unroll('RentACar: #plate, #km, #price, #rac')
     def 'exceptions'() {
-        when:
+        when: 'creating a car with wrong parameters'
         new Car(plate, km, price, rac)
 
-        then:
+        then: 'throws an exception'
         thrown(CarException)
 
         where:
@@ -55,23 +55,23 @@ class VehicleConstructorSpockTest extends SpockRollbackTestAbstractClass {
     }
 
     def 'duplicated plate'() {
-        when:
+        when: 'creating 2 cars with the same plate'
         new Car(PLATE_CAR, 0, 10, rentACar)
         new Car(PLATE_CAR, 0, 10, rentACar)
 
-        then:
+        then: 'throws an exception'
         thrown(CarException)
     }
 
     def 'duplicated plate different rent a car'() {
-        given:
+        given: 'create a car in rentacar'
         new Car(PLATE_CAR, 0, 10, rentACar)
 
-        when:
+        when: 'creating 2 cars with the same plate, even in two different rentacars'
         def rentACar2=new RentACar(RENT_A_CAR_NAME + '2', NIF, IBAN)
         new Car(PLATE_CAR, 2, 10, rentACar2)
 
-        then:
+        then: 'throws an exception'
         thrown(CarException)
     }
 

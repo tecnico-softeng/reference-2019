@@ -30,7 +30,6 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	def date1 = LocalDate.parse('2018-01-06')
 	def date2 = LocalDate.parse('2018-01-07')
 	def date3 = LocalDate.parse('2018-01-08')
-	def date4 = LocalDate.parse('2018-01-09')
 	def RENT_A_CAR_NAME = 'Eartz'
 	def NIF = 'NIF'
 	def NIF_CUSTOMER = 'NIF1'
@@ -48,17 +47,17 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
 	}
 
 	def 'success'() {
-        given: "setting things up"
+        given: 'setting things up'
         mockStatic(TaxInterface.class)
 		when(TaxInterface.submitInvoice(Mockito.any(RestInvoiceData.class))).thenReturn(INVOICE_REFERENCE)
 
 		mockStatic(BankInterface.class)
 		when(BankInterface.processPayment(Mockito.any(RestBankOperationData.class))).thenReturn(PAYMENT_REFERENCE)
 
-        when: "successfully renting a car"
+        when: 'successfully renting a car'
         Renting renting = car.rent(DRIVING_LICENSE, date0, date1, NIF_CUSTOMER, IBAN_CUSTOMER, ADVENTURE_ID)
 
-        then: "checking if renting was successful"
+        then: 'checking if renting was successful'
 		renting.paymentReference == PAYMENT_REFERENCE
 		renting.invoiceReference == INVOICE_REFERENCE
 	}
@@ -82,7 +81,7 @@ class InvoiceProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbst
         verifyStatic(TaxInterface.class, Mockito.times(3))
 		TaxInterface.submitInvoice(Mockito.any(RestInvoiceData.class))
 
-        then: "if verifications go well, test passes"
+        then: 'if verifications go well, test passes'
 		true
 	}
 

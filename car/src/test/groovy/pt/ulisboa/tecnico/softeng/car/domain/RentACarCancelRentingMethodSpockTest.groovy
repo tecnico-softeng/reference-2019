@@ -30,20 +30,20 @@ class RentACarCancelRentingMethodSpockTest extends SpockRollbackTestAbstractClas
 	}
 
 	def 'success'() {
-		given:
+		given: 'when cancelling a renting'
 		String cancel = RentACar.cancelRenting(renting.getReference())
 
-		expect:
+		expect: 'the renting becomes cancelled, and the cancellation reference stored'
 		renting.isCancelled()
 		renting.getCancellationReference() == cancel
 	}
 
 	@Unroll('#label')
 	def 'exceptions'() {
-		when:
+		when: 'canceling a wrong ref'
 		RentACar.cancelRenting(ref)
 
-		then:
+		then: 'throws an exception'
 		thrown(CarException)
 
 		where:
