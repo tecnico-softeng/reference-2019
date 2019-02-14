@@ -9,51 +9,51 @@ import spock.lang.Shared
 import spock.lang.Unroll
 
 class TaxInterfaceSubmitInvoiceSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String REFERENCE = '123456789'
-	private static final String SELLER_NIF = '123456789'
-	private static final String BUYER_NIF = '987654321'
-	private static final String FOOD = 'FOOD'
-	private static final double VALUE = 160
-	private static final int TAX = 16
-	@Shared private final LocalDate date = new LocalDate(2018, 02, 13)
-	@Shared private final DateTime time = new DateTime(2018, 02, 13, 10, 10)
-	@Shared private IRS irs
+	@Shared def REFERENCE = '123456789'
+	@Shared def SELLER_NIF = '123456789'
+	@Shared def BUYER_NIF = '987654321'
+	@Shared def FOOD = 'FOOD'
+	@Shared def VALUE = 160
+	@Shared def TAX = 16
+	@Shared def date = new LocalDate(2018, 02, 13)
+	@Shared def time = new DateTime(2018, 02, 13, 10, 10)
+	@Shared def irs
 
 	@Override
 	def populate4Test() {
 		irs = IRS.getIRSInstance()
 
 		new Seller(irs, SELLER_NIF, 'José Vendido', 'Somewhere')
-
 		new Buyer(irs, BUYER_NIF, 'Manuel Comprado', 'Anywhere')
-
 		new ItemType(irs, FOOD, TAX)
 	}
 
 	def 'success'() {
 		given:
-		RestInvoiceData invoiceData = new RestInvoiceData(REFERENCE, SELLER_NIF, BUYER_NIF, FOOD, VALUE, date, time)
-		String invoiceReference = TaxInterface.submitInvoice(invoiceData)
+		def invoiceData = new RestInvoiceData(REFERENCE, SELLER_NIF, BUYER_NIF, FOOD, VALUE, date, time)
+		def invoiceReference = TaxInterface.submitInvoice(invoiceData)
 
 		when:
-		Invoice invoice = irs.getTaxPayerByNIF(SELLER_NIF).getInvoiceByReference(invoiceReference)
+		def invoice = irs.getTaxPayerByNIF(SELLER_NIF).getInvoiceByReference(invoiceReference)
 
 		then:
-		invoice.getReference() == invoiceReference
-		invoice.getSeller().getNif()  ==  SELLER_NIF
-		invoice.getBuyer().getNif()  ==  BUYER_NIF
-		invoice.getItemType().getName()  ==  FOOD
-		160.0  == invoice.getValue()
-		invoice.getDate() == date
+		with(invoice) {
+			getReference() == invoiceReference
+			getSeller().getNif() == SELLER_NIF
+			getBuyer().getNif() == BUYER_NIF
+			getItemType().getName() == FOOD
+			160.0 == getValue()
+			getDate() == date
+		}
 	}
 
 	def 'submit twice'() {
 		given:
-		RestInvoiceData invoiceData = new RestInvoiceData(REFERENCE, SELLER_NIF, BUYER_NIF, FOOD, VALUE, date, time)
+		def invoiceData = new RestInvoiceData(REFERENCE, SELLER_NIF, BUYER_NIF, FOOD, VALUE, date, time)
 
 		when:
-		String invoiceReference = TaxInterface.submitInvoice(invoiceData)
-		String secondInvoiceReference = TaxInterface.submitInvoice(invoiceData)
+		def invoiceReference = TaxInterface.submitInvoice(invoiceData)
+		def secondInvoiceReference = TaxInterface.submitInvoice(invoiceData)
 
 		then:
 		secondInvoiceReference  ==  invoiceReference
@@ -61,7 +61,7 @@ class TaxInterfaceSubmitInvoiceSpockTest extends SpockRollbackTestAbstractClass 
 
 	def 'equal 1970'() {
 		given:
-		RestInvoiceData invoiceData = new RestInvoiceData(REFERENCE, SELLER_NIF, BUYER_NIF, FOOD, VALUE, new LocalDate(1970, 01, 01), new DateTime(1970, 01, 01, 10, 10))
+		def invoiceData = new RestInvoiceData(REFERENCE, SELLER_NIF, BUYER_NIF, FOOD, VALUE, new LocalDate(1970, 01, 01), new DateTime(1970, 01, 01, 10, 10))
 
 		expect:
 		TaxInterface.submitInvoice(invoiceData)
@@ -71,7 +71,7 @@ class TaxInterfaceSubmitInvoiceSpockTest extends SpockRollbackTestAbstractClass 
 	@Unroll('#reference,  #sel,  #buy,  #food,  #value,  #dt,  #tm')
 	def 'exceptions'() {
 		given:
-		RestInvoiceData invoiceData = new RestInvoiceData(reference,  sel,  buy,  food,  value,  dt,  tm)
+		def invoiceData = new RestInvoiceData(reference,  sel,  buy,  food,  value,  dt,  tm)
 
 		when:
 		TaxInterface.submitInvoice(invoiceData)

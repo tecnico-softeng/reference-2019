@@ -3,23 +3,21 @@ package pt.ulisboa.tecnico.softeng.tax.domain
 import org.joda.time.LocalDate
 
 class TaxPayerGetTaxesPerYearMethodsSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String SELLER_NIF = '123456788'
-	private static final String BUYER_NIF = '987654311'
-	private static final String FOOD = 'FOOD'
-	private static final int TAX = 10
-	private final LocalDate date = new LocalDate(2018, 02, 13)
-	private Seller seller
-	private Buyer buyer
-	private ItemType itemType
+	def SELLER_NIF = '123456788'
+	def BUYER_NIF = '987654311'
+	def FOOD = 'FOOD'
+	def TAX = 10
+	def date = new LocalDate(2018, 02, 13)
+	def seller
+	def buyer
+	def itemType
 
 	@Override
 	def populate4Test() {
-		IRS irs=IRS.getIRSInstance()
+		def irs = IRS.getIRSInstance()
 
 		seller = new Seller(irs, SELLER_NIF, 'José Vendido', 'Somewhere')
-
 		buyer = new Buyer(irs, BUYER_NIF, 'Manuel Comprado', 'Anywhere')
-
 		itemType = new ItemType(irs, FOOD, TAX)
 	}
 
@@ -31,7 +29,7 @@ class TaxPayerGetTaxesPerYearMethodsSpockTest extends SpockRollbackTestAbstractC
 		new Invoice(50, date, itemType, seller, buyer)
 
 		when:
-		Map<Integer, Double> toPay=seller.getToPayPerYear()
+		def toPay = seller.getToPayPerYear()
 
 		then:
 		toPay.keySet().size() == 2
@@ -46,7 +44,7 @@ class TaxPayerGetTaxesPerYearMethodsSpockTest extends SpockRollbackTestAbstractC
 
 	def 'success empty'() {
 		when:
-		Map<Integer, Double> toPay=seller.getToPayPerYear()
+		def toPay=seller.getToPayPerYear()
 
 		then:
 		toPay.keySet().size() == 0

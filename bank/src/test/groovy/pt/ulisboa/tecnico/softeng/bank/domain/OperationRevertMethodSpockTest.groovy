@@ -21,8 +21,10 @@ class OperationRevertMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 		then: 'account should have have balance as before'
 		account.getBalance() == 0
+
 		and: 'a new operation is added'
 		bank.getOperation(newReference) != null
+
 		and: 'the initial operation is not removed'
 		bank.getOperation(reference) != null
 	}
@@ -38,8 +40,10 @@ class OperationRevertMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 		then: 'account should have the balance as before'
 		1000 == this.account.getBalance()
+
 		and: 'a new operation is added'
 		this.bank.getOperation(newReference) != null
+
 		and: 'the initial operation is not removed'
 		this.bank.getOperation(reference) != null
 	}

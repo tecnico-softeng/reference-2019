@@ -1,14 +1,14 @@
 package pt.ulisboa.tecnico.softeng.tax.domain
 
+import spock.lang.Shared
 import spock.lang.Unroll
 
-import static org.junit.Assert.fail
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
 
 class ItemTypeConstructorSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String CAR = 'CAR'
-	private static final int TAX = 23
-	IRS irs
+	@Shared def CAR = 'CAR'
+	@Shared def TAX = 23
+	def irs
 
 	@Override
 	def populate4Test() {
@@ -17,10 +17,10 @@ class ItemTypeConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
 	def 'success'() {
 		given:
-		IRS irs = IRS.getIRSInstance()
+		def irs = IRS.getIRSInstance()
 
 		when:
-		ItemType itemType = new ItemType(irs,CAR,TAX)
+		def itemType = new ItemType(irs,CAR,TAX)
 
 		then:
 		itemType.getName() == CAR
@@ -31,7 +31,7 @@ class ItemTypeConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
 	def 'unique name'() {
 		given: "an item type"
-		ItemType itemType = new ItemType(irs,CAR,TAX)
+		def itemType = new ItemType(irs,CAR,TAX)
 
 		when: "another item type is created with the same name"
 		itemType = new ItemType(irs,CAR,TAX)

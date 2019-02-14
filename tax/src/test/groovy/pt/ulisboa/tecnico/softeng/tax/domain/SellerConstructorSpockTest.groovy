@@ -1,24 +1,24 @@
 package pt.ulisboa.tecnico.softeng.tax.domain
 
+import spock.lang.Shared
 import spock.lang.Unroll
 
-import static org.junit.Assert.fail
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
 
 class SellerConstructorSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String ADDRESS = 'Somewhere'
-	private static final String NAME = 'José Vendido'
-	private static final String NIF = '123456789'
+	@Shared def ADDRESS = 'Somewhere'
+	@Shared def NAME = 'José Vendido'
+	@Shared def NIF = '123456789'
 	IRS irs
 
 	@Override
 	def populate4Test() {
-		this.irs=IRS.getIRSInstance()
+		irs = IRS.getIRSInstance()
 	}
 
 	def 'success'() {
 		when:
-		Seller seller=new Seller(this.irs,NIF,NAME,ADDRESS)
+		def seller = new Seller(irs,NIF,NAME,ADDRESS)
 
 		then:
 		seller.getNif() == NIF
@@ -29,7 +29,7 @@ class SellerConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
 	def 'unique nif'() {
 		given: "a seller"
-		Seller seller=new Seller(this.irs,NIF,NAME,ADDRESS)
+		def seller=new Seller(this.irs,NIF,NAME,ADDRESS)
 
 		when: "another buyer with the same info"
 		new Seller(this.irs,NIF,NAME,ADDRESS)
