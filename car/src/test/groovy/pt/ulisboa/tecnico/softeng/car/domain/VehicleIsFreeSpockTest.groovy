@@ -21,7 +21,7 @@ class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
 
     @Override
     def populate4Test() {
-        RentACar rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN)
+        def rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN)
         car = new Car(PLATE_CAR,10,10,rentACar)
     }
 
@@ -41,10 +41,8 @@ class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
 
     @Unroll('#begin, #end')
     def 'bookings were made'() {
-        given:
-        car.rent(DRIVING_LICENSE, date2, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
-
         when:
+        car.rent(DRIVING_LICENSE, date2, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
         car.rent(DRIVING_LICENSE, date3, date4, NIF, IBAN_BUYER, ADVENTURE_ID)
 
         then:

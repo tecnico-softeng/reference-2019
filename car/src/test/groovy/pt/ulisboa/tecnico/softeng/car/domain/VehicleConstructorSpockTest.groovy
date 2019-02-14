@@ -18,11 +18,11 @@ class VehicleConstructorSpockTest extends SpockRollbackTestAbstractClass {
     }
 
     def 'success'() {
-        given:
+        when:
         def car = new Car(PLATE_CAR, 10, 10, rentACar)
         def motorcycle = new Motorcycle(PLATE_MOTORCYCLE, 10, 10, rentACar)
 
-        expect:
+        then:
         car.getPlate() == PLATE_CAR
         rentACar.hasVehicle(PLATE_CAR)
         motorcycle.getPlate() == PLATE_MOTORCYCLE
@@ -49,10 +49,8 @@ class VehicleConstructorSpockTest extends SpockRollbackTestAbstractClass {
     }
 
     def 'duplicated plate'() {
-        given:
-        new Car(PLATE_CAR, 0, 10, rentACar)
-
         when:
+        new Car(PLATE_CAR, 0, 10, rentACar)
         new Car(PLATE_CAR, 0, 10, rentACar)
 
         then:
@@ -64,7 +62,7 @@ class VehicleConstructorSpockTest extends SpockRollbackTestAbstractClass {
         new Car(PLATE_CAR, 0, 10, rentACar)
 
         when:
-        RentACar rentACar2=new RentACar(RENT_A_CAR_NAME + '2', NIF, IBAN)
+        def rentACar2=new RentACar(RENT_A_CAR_NAME + '2', NIF, IBAN)
         new Car(PLATE_CAR, 2, 10, rentACar2)
 
         then:
