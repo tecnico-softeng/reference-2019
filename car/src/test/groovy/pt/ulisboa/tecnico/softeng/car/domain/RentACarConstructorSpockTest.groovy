@@ -15,10 +15,10 @@ class RentACarConstructorSpockTest extends SpockRollbackTestAbstractClass {
     def populate4Test() { }
 
     def 'success'() {
-        given: 'creating a new rent a car'
-        RentACar rentACar=new RentACar(NAME,NIF,IBAN)
+        when: 'creating a new rent a car'
+        def rentACar = new RentACar(NAME,NIF,IBAN)
 
-        expect: 'should succeed'
+        then: 'should succeed'
         rentACar.getName() == NAME
     }
 
