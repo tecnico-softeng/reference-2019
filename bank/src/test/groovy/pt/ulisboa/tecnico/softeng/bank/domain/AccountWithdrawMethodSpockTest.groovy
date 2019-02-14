@@ -11,10 +11,9 @@ class AccountWithdrawMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Override
 	def populate4Test() {
 		bank = new Bank('Money','BK01')
-		Client client = new Client(bank,'António')
+		def client = new Client(bank,'António')
 
 		account = new Account(bank,client)
-
 		account.deposit(100)
 	}
 

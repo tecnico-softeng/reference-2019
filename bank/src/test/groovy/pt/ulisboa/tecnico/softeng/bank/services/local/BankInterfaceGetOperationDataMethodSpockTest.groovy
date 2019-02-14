@@ -17,15 +17,15 @@ class BankInterfaceGetOperationDataMethodSpockTest extends SpockRollbackTestAbst
 
 	@Override
 	def populate4Test() {
-		bank=new Bank('Money','BK01')
-		Client client = new Client(bank,'António')
+		bank = new Bank('Money','BK01')
+		def client = new Client(bank,'António')
 		account = new Account(bank,client)
 		reference = account.deposit(AMOUNT).getReference()
 	}
 
 	def 'success'() {
 		when:
-		BankOperationData data=BankInterface.getOperationData(reference)
+		def data=BankInterface.getOperationData(reference)
 
 		then:
 		data.getReference() == reference
