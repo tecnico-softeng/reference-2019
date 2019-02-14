@@ -24,7 +24,7 @@ class AccountWithdrawMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 		then: 'success'
 		balance == account.getBalance()
-		Operation operation = bank.getOperation(reference)
+		def operation = bank.getOperation(reference)
 		operation != null
 		operation.getType() == Operation.Type.WITHDRAW
 		operation.getAccount() == account

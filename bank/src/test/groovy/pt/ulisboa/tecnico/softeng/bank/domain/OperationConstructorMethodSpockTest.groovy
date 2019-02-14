@@ -47,8 +47,8 @@ class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 		Type.WITHDRAW | null    | 1000
 		Type.DEPOSIT  | account | 0
 		Type.DEPOSIT  | account | -1000
-		Type.WITHDRAW | account  | 0
-		Type.WITHDRAW | account  | -1000
+		Type.WITHDRAW | account | 0
+		Type.WITHDRAW | account | -1000
 	}
 
 	def 'one amount'() {
