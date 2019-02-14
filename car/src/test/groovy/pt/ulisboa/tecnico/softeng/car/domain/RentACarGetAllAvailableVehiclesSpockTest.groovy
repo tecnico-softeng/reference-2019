@@ -27,13 +27,14 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 	}
 
 	def 'only cars'() {
-		when:
-        def car1 = new Car(PLATE_CAR1,10,10,this.rentACar1)
+		given:
+		def car1 = new Car(PLATE_CAR1,10,10,this.rentACar1)
 		car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
-        def car2=new Car(PLATE_CAR2,10,10,this.rentACar2)
+		def car2 = new Car(PLATE_CAR2,10,10,this.rentACar2)
+		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
-        def motorcycle=new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
-		def cars= RentACar.getAllAvailableCars(date3,date4)
+		when:
+		def cars = RentACar.getAllAvailableCars(date3,date4)
 
 		then:
 		cars.contains(car1)
@@ -43,9 +44,8 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 
 	def 'only available cars'() {
 		given: 'creating two cars, and renting one'
-        def car1 = new Car(PLATE_CAR1, 10, 10, rentACar1)
-        def car2 = new Car(PLATE_CAR2, 10, 10, rentACar2)
-
+		def car1 = new Car(PLATE_CAR1, 10, 10, rentACar1)
+		def car2 = new Car(PLATE_CAR2, 10, 10, rentACar2)
 		car1.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
 		when: 'when fetching available cars'
@@ -58,8 +58,8 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 
 	def 'only motorcycles'() {
 		given: 'creating one car, and one motorcycle'
-        def car = new Car(PLATE_CAR1,10,10,this.rentACar1)
-        def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
+		def car = new Car(PLATE_CAR1,10,10,this.rentACar1)
+		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
 		when: 'when fetching available motorcycle'
 		def cars = RentACar.getAllAvailableMotorcycles(date3,date4)
@@ -68,5 +68,4 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 		cars.contains(motorcycle)
 		!cars.contains(car)
 	}
-
 }

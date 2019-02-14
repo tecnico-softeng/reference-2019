@@ -1,8 +1,8 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
-import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import spock.lang.Unroll
 
 class RentACarCancelRentingMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -54,28 +54,11 @@ class RentACarCancelRentingMethodSpockTest extends SpockRollbackTestAbstractClas
 	}
 
 
-	def 'success integration'() {
-		given:
-		GroovySpy(TaxInterface, global: true)
-
+	def 'does not exist reference'() {
 		when:
-		String cancel= RentACar.cancelRenting(renting.getReference())
-
-		then:
-		this.renting.isCancelled()
-		this.renting.getCancellationReference() == cancel
-	}
-
-	def 'does not exist integration'() {
-		given:
-		GroovySpy(TaxInterface, global: true)
-
-		when:
-        RentACar.cancelRenting('MISSING_REFERENCE')
+		RentACar.cancelRenting('MISSING_REFERENCE')
 
 		then:
 		thrown(CarException)
-
-		0 * TaxInterface.cancelInvoice(_)
 	}
 }
