@@ -1,9 +1,7 @@
 package pt.ulisboa.tecnico.softeng.hotel.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,7 +9,6 @@ import org.joda.time.LocalDate;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
-import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.RoomBookingData;
 
 public class Hotel extends Hotel_Base {
 	static final int CODE_SIZE = 7;
@@ -141,63 +138,8 @@ public class Hotel extends Hotel_Base {
 		return null;
 	}
 
-	public static String reserveRoom(Room.Type type, LocalDate arrival, LocalDate departure, String buyerNIF,
-			String buyerIban) {
-		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
-			Room room = hotel.hasVacancy(type, arrival, departure);
-			if (room != null) {
-				Booking booking = room.reserve(type, arrival, departure, buyerNIF, buyerIban);
-				return booking.getReference();
-			}
-		}
-		throw new HotelException();
-	}
-
-	public static String cancelBooking(String reference) {
-		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
-			Booking booking = hotel.getBooking(reference);
-			if (booking != null) {
-				return booking.cancel();
-			}
-		}
-		throw new HotelException();
-	}
-
-	public static RoomBookingData getRoomBookingData(String reference) {
-		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
-			for (Room room : hotel.getRoomSet()) {
-				Booking booking = room.getBooking(reference);
-				if (booking != null) {
-					return new RoomBookingData(booking);
-				}
-			}
-		}
-		throw new HotelException();
-	}
-
-	public static List<Room> getAvailableRooms(int number, LocalDate arrival, LocalDate departure) {
-		List<Room> availableRooms = new ArrayList<>();
-		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
-			availableRooms.addAll(hotel.getAvailableRooms(arrival, departure));
-			if (availableRooms.size() >= number) {
-				return availableRooms;
-			}
-		}
-		return availableRooms;
-	}
-
-	public static Hotel getHotelByCode(String code) {
-		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
-			if (hotel.getCode().equals(code)) {
-				return hotel;
-			}
-		}
-		return null;
-	}
-
 	public Room getRoomByNumber(String number) {
 		return getRoomSet().stream().filter(r -> r.getNumber().equals(number)).findFirst().orElse(null);
-
 	}
 
 	@Override
@@ -216,6 +158,20 @@ public class Hotel extends Hotel_Base {
 	public Collection<? extends Booking> getBookings4BulkId(String bulkId) {
 		return getRoomSet().stream().flatMap(r -> r.getBookingSet().stream())
 				.filter(b -> b.getBulkId() != null && b.getBulkId().equals(bulkId)).collect(Collectors.toSet());
+	}
+
+	public Booking reserveRoom(Room.Type type, LocalDate arrival, LocalDate departure, String buyerNif,
+			String buyerIban, String adventureId) {
+		Room room = hasVacancy(type, arrival, departure);
+		if (room != null) {
+			Booking newBooking = room.reserve(type, arrival, departure, buyerNif, buyerIban);
+			newBooking.setAdventureId(adventureId);
+
+			return newBooking;
+		}
+
+		throw new HotelException();
+
 	}
 
 }

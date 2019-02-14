@@ -5,7 +5,7 @@ import org.joda.time.LocalDate
 import spock.lang.Shared
 import spock.lang.Unroll
 
-class VehicleIsFreeSpockTest extends SpockRollbackTestAbstractClass {
+class VehicleIsFreeSpockMethodTest extends SpockRollbackTestAbstractClass {
 	def ADVENTURE_ID = "AdventureId"
 	def PLATE_CAR='22-33-HZ'
 	def RENT_A_CAR_NAME='Eartz'

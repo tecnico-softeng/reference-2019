@@ -52,7 +52,7 @@ public class HotelPersistenceTest {
 
 		new Room(hotel, ROOM_NUMBER, Type.DOUBLE);
 
-		Hotel.reserveRoom(Type.DOUBLE, this.arrival, this.departure, CLIENT_NIF, CLIENT_IBAN);
+		hotel.reserveRoom(Type.DOUBLE, this.arrival, this.departure, CLIENT_NIF, CLIENT_IBAN, "adventureId");
 	}
 
 	@Atomic(mode = TxMode.READ)
