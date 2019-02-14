@@ -8,30 +8,34 @@ class OperationRevertMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Override
 	def populate4Test() {
 		bank = new Bank('Money','BK01')
-		Client client = new Client(bank,'António')
+		def client = new Client(bank,'António')
 		account = new Account(bank,client)
 	}
 
 	def 'revert deposit'() {
-		when:
-		String reference = account.deposit(100).getReference()
-		Operation operation = bank.getOperation(reference)
-		String newReference=operation.revert()
+		given: 'a deposit'
+		def reference = account.deposit(100).getReference()
+		def operation = bank.getOperation(reference)
 
-		then:
-		0 == this.account.getBalance()
-		this.bank.getOperation(newReference) != null
-		this.bank.getOperation(reference) != null
+		when: 'when reverting the deposit'
+		def newReference = operation.revert()
+
+		then: 'account should have have deposit as before'
+		0 == account.getBalance()
+		bank.getOperation(newReference) != null
+		bank.getOperation(reference) != null
 	}
 
 	def 'revert withdraw'() {
-		when:
+		given: 'given a deposit'
 		account.deposit(1000)
-		String reference=this.account.withdraw(100).getReference()
-		Operation operation=this.bank.getOperation(reference)
-		String newReference=operation.revert()
 
-		then:
+		when: 'when reverting the operation'
+		def reference=this.account.withdraw(100).getReference()
+		def operation=this.bank.getOperation(reference)
+		def newReference=operation.revert()
+
+		then: 'account should have have deposit as before'
 		1000 == this.account.getBalance()
 		this.bank.getOperation(newReference) != null
 		this.bank.getOperation(reference) != null

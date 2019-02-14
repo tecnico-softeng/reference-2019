@@ -18,16 +18,19 @@ class AccountContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'success'() {
-		when:
-		Account account = new Account(bank, client)
+		when: 'creating an account'
+		def account = new Account(bank, client)
 
-		then:
-		account.getBank() == bank
-		account.getIBAN().startsWith(bank.getCode())
-		account.getClient() == client
-		0.0d == account.getBalance()
+		then: 'all info in the object is correct'
+		with(account) {
+			getBank() == bank
+			getIBAN().startsWith(bank.getCode())
+			getClient() == client
+			0.0d == getBalance()
+		}
 		bank.getAccountSet().size() == 1
 		bank.getClientSet().contains(client)
+
 	}
 
 	@Unroll('Account: #bnk, #clt')

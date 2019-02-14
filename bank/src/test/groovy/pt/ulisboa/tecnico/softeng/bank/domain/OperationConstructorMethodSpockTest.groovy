@@ -12,22 +12,24 @@ class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	@Override
 	def populate4Test() {
 		bank = new Bank('Money','BK01')
-		Client client = new Client(bank,'António')
+		def client = new Client(bank,'António')
 		account = new Account(bank,client)
 	}
 
 	def 'success'() {
-		when:
-		Operation operation=new Operation(Type.DEPOSIT, account,1000)
+		when: 'when creating an operation'
+		def operation = new Operation(Type.DEPOSIT, account,1000)
 
-		then:
-		operation.getReference().startsWith(bank.getCode())
-		operation.getReference().length() > Bank.CODE_SIZE
-		operation.getType() == Type.DEPOSIT
-		operation.getAccount() == account
-		1000 == operation.getValue()
-		operation.getTime() != null
-		bank.getOperation(operation.getReference()) == operation
+		then: 'the object should hold the proper values'
+		with(operation) {
+			getReference().startsWith(bank.getCode())
+			getReference().length() > Bank.CODE_SIZE
+			getType() == Type.DEPOSIT
+			getAccount() == account
+			1000 == getValue()
+			getTime() != null
+			bank.getOperation(getReference()) == operation
+		}
 	}
 
 
@@ -48,10 +50,10 @@ class OperationConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	}
 
 	def 'one amount'() {
-		given:
-		Operation operation=new Operation(Type.DEPOSIT, account,1)
+		when:
+		def operation = new Operation(Type.DEPOSIT, account,1)
 
-		expect:
+		then:
 		bank.getOperation(operation.getReference()) == operation
 	}
 }
