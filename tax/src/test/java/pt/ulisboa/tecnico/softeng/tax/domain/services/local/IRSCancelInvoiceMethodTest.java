@@ -1,18 +1,18 @@
-package pt.ulisboa.tecnico.softeng.tax.domain;
+package pt.ulisboa.tecnico.softeng.tax.domain.services.local;
 
 import static org.junit.Assert.assertTrue;
 
 import org.joda.time.LocalDate;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import pt.ulisboa.tecnico.softeng.tax.domain.Buyer;
 import pt.ulisboa.tecnico.softeng.tax.domain.IRS;
 import pt.ulisboa.tecnico.softeng.tax.domain.Invoice;
 import pt.ulisboa.tecnico.softeng.tax.domain.ItemType;
+import pt.ulisboa.tecnico.softeng.tax.domain.RollbackTestAbstractClass;
 import pt.ulisboa.tecnico.softeng.tax.domain.Seller;
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException;
+import pt.ulisboa.tecnico.softeng.tax.services.local.TaxInterface;
 
 public class IRSCancelInvoiceMethodTest extends RollbackTestAbstractClass {
 	private static final String SELLER_NIF = "123456789";
@@ -37,24 +37,24 @@ public class IRSCancelInvoiceMethodTest extends RollbackTestAbstractClass {
 
 	@Test
 	public void success() {
-		IRS.cancelInvoice(this.reference);
+		TaxInterface.cancelInvoice(this.reference);
 
 		assertTrue(this.invoice.isCancelled());
 	}
 
 	@Test(expected = TaxException.class)
 	public void nullReference() {
-		IRS.cancelInvoice(null);
+		TaxInterface.cancelInvoice(null);
 	}
 
 	@Test(expected = TaxException.class)
 	public void emptyReference() {
-		IRS.cancelInvoice("   ");
+		TaxInterface.cancelInvoice("   ");
 	}
 
 	@Test(expected = TaxException.class)
 	public void referenceDoesNotExist() {
-		IRS.cancelInvoice("XXXXXXXX");
+		TaxInterface.cancelInvoice("XXXXXXXX");
 	}
 
 }

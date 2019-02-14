@@ -6,7 +6,7 @@ import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import spock.lang.Shared
 import spock.lang.Unroll
 
-class RentingConflictSpockTest extends SpockRollbackTestAbstractClass {
+class RentingConflictMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def PLATE_CAR = '22-33-HZ'
 	def DRIVING_LICENSE = 'br112233'
 	@Shared def date0 = LocalDate.parse('2018-01-05')

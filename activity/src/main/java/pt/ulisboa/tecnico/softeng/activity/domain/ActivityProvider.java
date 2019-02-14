@@ -77,16 +77,6 @@ public class ActivityProvider extends ActivityProvider_Base {
 		return null;
 	}
 
-	private static Booking getBookingByReference(String reference) {
-		for (ActivityProvider provider : FenixFramework.getDomainRoot().getActivityProviderSet()) {
-			Booking booking = provider.getBooking(reference);
-			if (booking != null) {
-				return booking;
-			}
-		}
-		return null;
-	}
-
 	@Override
 	public int getCounter() {
 		int counter = super.getCounter() + 1;

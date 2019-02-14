@@ -80,13 +80,9 @@ public class HotelInterface {
 		Room.Type type = roomBookingData.getRoomType().equals("SINGLE") ? Room.Type.SINGLE : Room.Type.DOUBLE;
 
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
-			Room room = hotel.hasVacancy(type, roomBookingData.getArrival(), roomBookingData.getDeparture());
-			if (room != null) {
-				Booking newBooking = room.reserve(type, roomBookingData.getArrival(), roomBookingData.getDeparture(),
-						roomBookingData.getBuyerNif(), roomBookingData.getBuyerIban());
-				newBooking.setAdventureId(roomBookingData.getAdventureId());
-				return new RestRoomBookingData(newBooking);
-			}
+			return new RestRoomBookingData(hotel.reserveRoom(type, roomBookingData.getArrival(),
+					roomBookingData.getDeparture(), roomBookingData.getBuyerNif(), roomBookingData.getBuyerIban(),
+					roomBookingData.getAdventureId()));
 		}
 		throw new HotelException();
 	}
