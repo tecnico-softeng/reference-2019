@@ -2,7 +2,7 @@ package pt.ulisboa.tecnico.softeng.tax.domain
 
 import spock.lang.Unroll
 
-class IRSGetItemTypeByNameSpockTest extends SpockRollbackTestAbstractClass {
+class IRSGetItemTypeByNameMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def FOOD = 'FOOD'
 	def VALUE = 16
 	def irs
