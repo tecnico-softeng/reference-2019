@@ -1,7 +1,5 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
 
-import org.junit.Assert
-
 class ActivityMatchAgeMethodSpockTest extends SpockRollbackTestAbstractClass {
 	private static final int MIN_AGE=25
 	private static final int MAX_AGE=80
@@ -20,7 +18,7 @@ class ActivityMatchAgeMethodSpockTest extends SpockRollbackTestAbstractClass {
 		activity.matchAge(arg)
 
 		where:
-		arg << [(MAX_AGE - MIN_AGE).intdiv(2), MIN_AGE]
+		arg << [(MAX_AGE - MIN_AGE).intdiv(2), MAX_AGE, MIN_AGE]
 	}
 
 
@@ -29,6 +27,6 @@ class ActivityMatchAgeMethodSpockTest extends SpockRollbackTestAbstractClass {
 		!activity.matchAge(arg)
 
 		where:
-		arg << [MIN_AGE - 1, MAX_AGE, MAX_AGE + 1]
+		arg << [MIN_AGE - 1, MAX_AGE + 1]
 	}
 }
