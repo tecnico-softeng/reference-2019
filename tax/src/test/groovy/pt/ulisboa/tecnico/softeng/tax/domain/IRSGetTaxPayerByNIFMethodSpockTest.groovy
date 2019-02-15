@@ -3,7 +3,7 @@ package pt.ulisboa.tecnico.softeng.tax.domain
 import spock.lang.Shared
 import spock.lang.Unroll
 
-class IRSGetTaxPayerByNIFSpockTest extends SpockRollbackTestAbstractClass {
+class IRSGetTaxPayerByNIFMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Shared def SELLER_NIF = '123456789'
 	@Shared def BUYER_NIF = '987654321'
 	def irs

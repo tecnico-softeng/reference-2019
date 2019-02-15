@@ -4,7 +4,7 @@ import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import spock.lang.Shared
 import spock.lang.Unroll
 
-class VehicleConstructorSpockMethodTest extends SpockRollbackTestAbstractClass {
+class VehicleConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Shared def PLATE_CAR = '22-33-HZ'
 	def PLATE_MOTORCYCLE = '44-33-HZ'
 	def RENT_A_CAR_NAME = 'Eartz'
