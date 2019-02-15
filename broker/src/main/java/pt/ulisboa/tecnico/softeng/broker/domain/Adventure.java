@@ -55,7 +55,7 @@ public class Adventure extends Adventure_Base {
 			throw new BrokerException();
 		}
 
-		if (client.getAge() < 18 || client.getAge() > 100) {
+		if (client == null || client.getAge() < 18 || client.getAge() > 100) {
 			throw new BrokerException();
 		}
 
