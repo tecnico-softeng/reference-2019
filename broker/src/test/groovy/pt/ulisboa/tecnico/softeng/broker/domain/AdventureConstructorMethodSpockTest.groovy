@@ -14,15 +14,14 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	@Override
 	def populate4Test() {
 		broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN)
-		client17 = new Client(broker, CLIENT_IBAN, CLIENT_NIF + "2", DRIVING_LICENSE + "2", 17)
-		client18 = new Client(broker, CLIENT_IBAN, CLIENT_NIF + "1", DRIVING_LICENSE + "1", 18)
+		client17 = new Client(broker, CLIENT_IBAN, CLIENT_NIF + 17, DRIVING_LICENSE + 17, 17)
 		client20 = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
-		client100 = new Client(broker, CLIENT_IBAN, OTHER_NIF + "3", DRIVING_LICENSE + "3", 100)
 	}
 
 	@Unroll('success: #begin, #end, #age, #margin')
 	def 'success 18 20 and 100'() {
 		when: 'an adventure is created'
+		def client = new Client(broker, iban, nif, dl, age)
 		def adventure = new Adventure(broker, begin, end, client, margin)
 
 		then: 'all its attributes are correctly set'
@@ -34,7 +33,7 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 			getClient() == client
 			getMargin() == margin
 			getAge() == age
-			getIban().equals(CLIENT_IBAN)
+			getIban().equals(iban)
 
 			getPaymentConfirmation() == null
 			getActivityConfirmation() == null
@@ -43,12 +42,10 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 		broker.getAdventureSet().contains(adventure)
 
 		where:
-		client    | begin | end   | margin || age
-		client18  | BEGIN | END   | MARGIN || 18
-		client20  | BEGIN | END   | MARGIN || 20
-		client100 | BEGIN | END   | MARGIN || 100
-		client20  | BEGIN | BEGIN | MARGIN || 20
-		client20  | BEGIN | END   | 1      || 20
+		begin | end   | margin | iban            | nif             | dl                   | age
+		BEGIN | END   | MARGIN | CLIENT_IBAN + 1 | CLIENT_NIF + 10 | DRIVING_LICENSE + 10 | AGE
+		BEGIN | END   | MARGIN | CLIENT_IBAN + 2 | CLIENT_NIF + 11 | DRIVING_LICENSE + 11 | 18
+		BEGIN | END   | MARGIN | CLIENT_IBAN + 3 | CLIENT_NIF + 13 | DRIVING_LICENSE + 13 | 100
 	}
 
 	@Unroll('#label')
@@ -61,13 +58,10 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 
 		where:
 		broker | begin | end                | client   | margin | label
-		null   | BEGIN | END                | client20 | MARGIN | 'broker is null'
-		broker | null  | END                | client20 | MARGIN | 'begin date is null'
-		broker | BEGIN | null               | client20 | MARGIN | 'end date is null'
-		broker | BEGIN | BEGIN.minusDays(1) | client20 | MARGIN | 'end date before begin date'
-		broker | BEGIN | END                | null     | MARGIN | 'client is null'
 		broker | BEGIN | END                | client17 | MARGIN | 'client is 17 years old'
 		broker | BEGIN | END                | client20 | 0      | 'margin is zero'
 		broker | BEGIN | END                | client20 | -100   | 'margin is negative'
+		broker | BEGIN | END                | null     | MARGIN | 'client is null'
 	}
+
 }
