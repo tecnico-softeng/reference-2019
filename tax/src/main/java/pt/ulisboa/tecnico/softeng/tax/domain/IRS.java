@@ -3,7 +3,6 @@ package pt.ulisboa.tecnico.softeng.tax.domain;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
-import pt.ulisboa.tecnico.softeng.tax.exception.TaxException;
 
 public class IRS extends IRS_Base {
 
@@ -62,30 +61,6 @@ public class IRS extends IRS_Base {
 			invoice.delete();
 		}
 
-	}
-
-	public static void cancelInvoice(String reference) {
-		if (reference == null || reference.isEmpty()) {
-			throw new TaxException();
-		}
-
-		Invoice invoice = IRS.getIRSInstance().getInvoiceByReference(reference);
-
-		if (invoice == null) {
-			throw new TaxException();
-		}
-
-		invoice.cancel();
-	}
-
-	private Invoice getInvoiceByReference(String reference) {
-		for (TaxPayer taxPayer : getTaxPayerSet()) {
-			Invoice invoice = taxPayer.getInvoiceByReference(reference);
-			if (invoice != null) {
-				return invoice;
-			}
-		}
-		return null;
 	}
 
 	@Override

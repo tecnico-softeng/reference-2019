@@ -1,8 +1,13 @@
-package pt.ulisboa.tecnico.softeng.car.domain
+package pt.ulisboa.tecnico.softeng.car.services.local
 
 import org.joda.time.LocalDate
 
-class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstractClass {
+import pt.ulisboa.tecnico.softeng.car.domain.Car
+import pt.ulisboa.tecnico.softeng.car.domain.Motorcycle
+import pt.ulisboa.tecnico.softeng.car.domain.RentACar
+import pt.ulisboa.tecnico.softeng.car.domain.SpockRollbackTestAbstractClass
+
+class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def ADVENTURE_ID = "AdventureId"
 	def NAME1 = 'eartz'
 	def NAME2 = 'eartz'
@@ -34,7 +39,7 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
 		when:
-		def cars = RentACar.getAllAvailableCars(date3,date4)
+		def cars = RentACarInterface.getAllAvailableCars(date3,date4)
 
 		then:
 		cars.contains(car1)
@@ -49,7 +54,7 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 		car1.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
 		when: 'when fetching available cars'
-		def cars = RentACar.getAllAvailableCars(date1, date2)
+		def cars = RentACarInterface.getAllAvailableCars(date1, date2)
 
 		then: 'car2 should be in the returned list'
 		!cars.contains(car1)
@@ -62,7 +67,7 @@ class RentACarGetAllAvailableVehiclesSpockTest extends SpockRollbackTestAbstract
 		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
 		when: 'when fetching available motorcycle'
-		def cars = RentACar.getAllAvailableMotorcycles(date3,date4)
+		def cars = RentACarInterface.getAllAvailableMotorcycles(date3,date4)
 
 		then: 'only the motorcycle should be in the list'
 		cars.contains(motorcycle)

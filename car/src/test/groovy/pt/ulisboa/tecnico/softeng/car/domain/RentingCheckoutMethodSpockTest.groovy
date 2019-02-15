@@ -3,7 +3,7 @@ package pt.ulisboa.tecnico.softeng.car.domain
 import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 
-class RentingCheckoutSpockTest extends SpockRollbackTestAbstractClass {
+class RentingCheckoutMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def ADVENTURE_ID = "AdventureId"
 	def NAME1='eartz'
 	def PLATE_CAR1='aa-00-11'

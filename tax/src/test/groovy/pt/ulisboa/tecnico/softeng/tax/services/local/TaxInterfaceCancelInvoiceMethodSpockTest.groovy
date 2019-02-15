@@ -1,11 +1,17 @@
-package pt.ulisboa.tecnico.softeng.tax.domain
+package pt.ulisboa.tecnico.softeng.tax.services.local
 
 import org.joda.time.LocalDate
 
+import pt.ulisboa.tecnico.softeng.tax.domain.Buyer
+import pt.ulisboa.tecnico.softeng.tax.domain.IRS
+import pt.ulisboa.tecnico.softeng.tax.domain.Invoice
+import pt.ulisboa.tecnico.softeng.tax.domain.ItemType
+import pt.ulisboa.tecnico.softeng.tax.domain.Seller
+import pt.ulisboa.tecnico.softeng.tax.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
 import spock.lang.Unroll
 
-class IRSCancelInvoiceMethodSpockTest extends SpockRollbackTestAbstractClass {
+class TaxInterfaceCancelInvoiceMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def SELLER_NIF = '123456789'
 	def BUYER_NIF = '987654321'
 	def FOOD = 'FOOD'
@@ -29,7 +35,7 @@ class IRSCancelInvoiceMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 	def 'success'() {
 		when:
-		IRS.cancelInvoice(reference)
+		TaxInterface.cancelInvoice(reference)
 
 		then:
 		invoice.isCancelled()
@@ -38,7 +44,7 @@ class IRSCancelInvoiceMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Unroll('#label')
 	def 'test: '() {
 		when:
-		IRS.cancelInvoice(ref)
+		TaxInterface.cancelInvoice(ref)
 
 		then:
 		thrown(TaxException)
@@ -49,5 +55,4 @@ class IRSCancelInvoiceMethodSpockTest extends SpockRollbackTestAbstractClass {
 		'empty reference'          | ' '
 		'reference does not exist' | 'XXXXXXXX'
 	}
-
 }
