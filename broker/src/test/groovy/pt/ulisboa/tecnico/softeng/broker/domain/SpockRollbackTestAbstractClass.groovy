@@ -10,7 +10,7 @@ import spock.lang.Specification
 
 abstract class SpockRollbackTestAbstractClass extends Specification implements SharedDefinitions {
 
-	def setup() throws Exception {
+	def setupSpec() throws Exception {
 		try {
 			FenixFramework.getTransactionManager().begin(false)
 			populate4Test()
@@ -19,7 +19,7 @@ abstract class SpockRollbackTestAbstractClass extends Specification implements S
 		}
 	}
 
-	def cleanup() {
+	def cleanupSpec() {
 		try {
 			FenixFramework.getTransactionManager().rollback()
 		} catch (IllegalStateException | SecurityException | SystemException e) {
