@@ -73,7 +73,7 @@ abstract class SpockPersistenceTestAbstractClass extends Specification {
 		}
 	}
 
-	abstract def whenCreateInDatabase();
-	abstract def thenAssert();
-	abstract def deleteFromDatabase();
+	abstract def whenCreateInDatabase()
+	abstract def thenAssert()
+	abstract def deleteFromDatabase()
 }

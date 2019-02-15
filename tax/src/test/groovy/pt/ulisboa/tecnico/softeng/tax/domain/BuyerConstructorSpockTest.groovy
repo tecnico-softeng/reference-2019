@@ -1,15 +1,15 @@
 package pt.ulisboa.tecnico.softeng.tax.domain
 
+import spock.lang.Shared
 import spock.lang.Unroll
 
-import static org.junit.Assert.fail
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
 
 class BuyerConstructorSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String ADDRESS = 'Somewhere'
-	private static final String NAME = 'José Vendido'
-	private static final String NIF = '123456789'
-	IRS irs
+	@Shared def ADDRESS = 'Somewhere'
+	@Shared def NAME = 'José Vendido'
+	@Shared def NIF = '123456789'
+	def irs
 
 	@Override
 	def populate4Test() {
@@ -18,18 +18,20 @@ class BuyerConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
 	def 'success'() {
 		when:
-		Buyer buyer = new Buyer(irs, NIF, NAME, ADDRESS)
+		def buyer = new Buyer(irs, NIF, NAME, ADDRESS)
 
 		then:
-		buyer.getNif() == NIF
-		buyer.getName() == NAME
-		buyer.getAddress() == ADDRESS
+		with(buyer) {
+			getNif() == NIF
+			getName() == NAME
+			getAddress() == ADDRESS
+		}
 		IRS.getIRSInstance().getTaxPayerByNIF(NIF) == buyer
 	}
 
 	def 'unique nif'() {
 		given: "a buyer"
-		Buyer seller = new Buyer(irs, NIF, NAME, ADDRESS)
+		def seller = new Buyer(irs, NIF, NAME, ADDRESS)
 
 		when: "another buyer with the same info"
 		new Buyer(irs, NIF, NAME, ADDRESS)

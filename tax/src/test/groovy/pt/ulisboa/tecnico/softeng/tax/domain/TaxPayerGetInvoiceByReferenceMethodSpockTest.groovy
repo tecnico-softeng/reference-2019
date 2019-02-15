@@ -4,28 +4,25 @@ import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
 import spock.lang.Unroll
 
-class TaxPayerGetInvoiceByReferenceSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String SELLER_NIF = '123456789'
-	private static final String BUYER_NIF = '987654321'
-	private static final String FOOD = 'FOOD'
-	private static final int VALUE = 16
-	private static final int TAX = 23
-	private final LocalDate date = new LocalDate(2018,02,13)
-	private Seller seller
-	private Buyer buyer
-	private ItemType itemType
-	private Invoice invoice
+class TaxPayerGetInvoiceByReferenceMethodSpockTest extends SpockRollbackTestAbstractClass {
+	def SELLER_NIF = '123456789'
+	def BUYER_NIF = '987654321'
+	def FOOD = 'FOOD'
+	def VALUE = 16
+	def TAX = 23
+	def date = new LocalDate(2018,02,13)
+	def seller
+	def buyer
+	def itemType
+	def invoice
 
 	@Override
 	def populate4Test() {
-		IRS irs = IRS.getIRSInstance()
+		def irs = IRS.getIRSInstance()
 
 		seller = new Seller(irs,SELLER_NIF,'José Vendido','Somewhere')
-
 		buyer = new Buyer(irs,BUYER_NIF,'Manuel Comprado','Anywhere')
-
 		itemType = new ItemType(irs,FOOD,TAX)
-
 		invoice = new Invoice(VALUE,date,itemType,seller,buyer)
 	}
 

@@ -7,7 +7,6 @@ import spock.lang.Specification
 import javax.transaction.NotSupportedException
 import javax.transaction.SystemException
 
-
 abstract class SpockRollbackTestAbstractClass extends Specification {
 
 	def setup() throws Exception {
