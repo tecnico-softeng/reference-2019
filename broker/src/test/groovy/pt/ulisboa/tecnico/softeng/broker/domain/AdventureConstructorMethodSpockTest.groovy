@@ -4,7 +4,7 @@ import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException
 import spock.lang.Shared
 import spock.lang.Unroll
 
-class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
+class AdventureConstructorMethodSpockTest extends SpockRollbackClassLevelTestAbstractClass {
 	@Shared broker
 	@Shared client17
 	@Shared client20
