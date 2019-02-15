@@ -5,11 +5,9 @@ import spock.lang.Shared
 import spock.lang.Unroll
 
 class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
-	@Shared def broker
-	@Shared def client17
-	@Shared def client18
-	@Shared def client20
-	@Shared def client100
+	@Shared broker
+	@Shared client17
+	@Shared client20
 
 	@Override
 	def populate4Test() {
@@ -51,13 +49,13 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	@Unroll('#label')
 	def 'invalid arguments'() {
 		when: 'an adventure is created with invalid arguments'
-		new Adventure(broker, begin, end, client, margin)
+		new Adventure(br, begin, end, client, margin)
 
 		then: 'an exception is thrown'
 		thrown(BrokerException)
 
 		where:
-		broker | begin | end                | client   | margin | label
+		br     | begin | end                | client   | margin | label
 		null   | BEGIN | END                | client20 | MARGIN | 'broker is null'
 		broker | null  | END                | client20 | MARGIN | 'begin date is null'
 		broker | BEGIN | null               | client20 | MARGIN | 'end date is null'
