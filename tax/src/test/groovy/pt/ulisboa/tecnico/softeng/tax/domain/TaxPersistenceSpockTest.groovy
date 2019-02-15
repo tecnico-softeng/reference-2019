@@ -5,18 +5,18 @@ import pt.ist.fenixframework.FenixFramework
 
 
 class TaxPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
-	private static final String SELLER_NIF = '123456789'
-	private static final String BUYER_NIF = '987654321'
-	private static final String FOOD = 'FOOD'
-	private static final int VALUE = 16
-	private final LocalDate date = new LocalDate(2018,02,13)
+	def SELLER_NIF = '123456789'
+	def BUYER_NIF = '987654321'
+	def FOOD = 'FOOD'
+	def VALUE = 16
+	def date = new LocalDate(2018,02,13)
 
 	@Override
 	def whenCreateInDatabase() {
-		IRS irs=IRS.getIRSInstance()
-		Seller seller=new Seller(irs, SELLER_NIF,'José Vendido','Somewhere')
-		Buyer buyer=new Buyer(irs, BUYER_NIF,'Manuel Comprado','Anywhere')
-		ItemType it=new ItemType(irs, FOOD,VALUE)
+		def irs = IRS.getIRSInstance()
+		def seller = new Seller(irs, SELLER_NIF,'José Vendido','Somewhere')
+		def buyer = new Buyer(irs, BUYER_NIF,'Manuel Comprado','Anywhere')
+		def it = new ItemType(irs, FOOD,VALUE)
 		new Invoice(VALUE, date, it, seller, buyer)
 	}
 
@@ -33,17 +33,17 @@ class TaxPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 	@Override
 	def thenAssert() {
-		IRS irs=IRS.getIRSInstance()
+		def irs=IRS.getIRSInstance()
 		assert 2 == irs.getTaxPayerSet().size()
 
-		TaxPayer taxPayer1=new ArrayList<>(irs.getTaxPayerSet()).get(0)
+		def taxPayer1 = new ArrayList<>(irs.getTaxPayerSet()).get(0)
 		if (taxPayer1 instanceof Seller) {
 			assert SELLER_NIF == taxPayer1.getNif()
 		} else {
 			assert  BUYER_NIF == taxPayer1.getNif()
 		}
 
-		TaxPayer taxPayer2=new ArrayList<>(irs.getTaxPayerSet()).get(1)
+		def taxPayer2 = new ArrayList<>(irs.getTaxPayerSet()).get(1)
 		if (taxPayer2 instanceof Seller) {
 			assert SELLER_NIF == taxPayer2.getNif()
 		} else {
@@ -52,12 +52,12 @@ class TaxPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 		assert 1 == irs.getItemTypeSet().size()
 
-		ItemType itemType=new ArrayList<>(irs.getItemTypeSet()).get(0)
+		def itemType = new ArrayList<>(irs.getItemTypeSet()).get(0)
 		assert VALUE == itemType.getTax()
 		assert FOOD == itemType.getName()
 		assert 1 == irs.getInvoiceSet().size()
 
-		Invoice invoice=new ArrayList<>(irs.getInvoiceSet()).get(0)
+		def invoice = new ArrayList<>(irs.getInvoiceSet()).get(0)
 		assert VALUE == invoice.getValue()
 		assert invoice.getReference() != null
 		assert date == invoice.getDate()

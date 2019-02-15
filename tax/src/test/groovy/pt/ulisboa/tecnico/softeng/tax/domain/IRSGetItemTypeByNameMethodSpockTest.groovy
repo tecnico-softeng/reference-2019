@@ -1,12 +1,11 @@
 package pt.ulisboa.tecnico.softeng.tax.domain
 
-import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
 import spock.lang.Unroll
 
-class IRSGetItemTypeByNameSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String FOOD = 'FOOD'
-	private static final int VALUE = 16
-	private IRS irs
+class IRSGetItemTypeByNameMethodSpockTest extends SpockRollbackTestAbstractClass {
+	def FOOD = 'FOOD'
+	def VALUE = 16
+	def irs
 
 	@Override
 	def populate4Test() {
@@ -18,7 +17,7 @@ class IRSGetItemTypeByNameSpockTest extends SpockRollbackTestAbstractClass {
 	@Unroll('#label')
 	def 'test: '() {
 		when:
-		ItemType itemType=irs.getItemTypeByName(name)
+		def itemType=irs.getItemTypeByName(name)
 
 		then:
 		itemType == null

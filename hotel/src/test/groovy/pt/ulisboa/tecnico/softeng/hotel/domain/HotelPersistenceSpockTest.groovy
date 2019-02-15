@@ -15,6 +15,7 @@ class HotelPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 	def ROOM_NUMBER = '01'
 	def CLIENT_NIF = '123458789'
 	def CLIENT_IBAN = 'IBANC'
+	def ADVENTURE_ID = 'AdventureId'
 
 	def arrival = new LocalDate(2017, 12, 15)
 	def departure = new LocalDate(2017, 12, 19)
@@ -23,7 +24,7 @@ class HotelPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 	def whenCreateInDatabase() {
 		def hotel = new Hotel(HOTEL_CODE, HOTEL_NAME, HOTEL_NIF, HOTEL_IBAN, 10.0, 20.0)
 		new Room(hotel, ROOM_NUMBER, Type.DOUBLE)
-		Hotel.reserveRoom(Type.DOUBLE, arrival, departure, CLIENT_NIF, CLIENT_IBAN)
+		hotel.reserveRoom(Type.DOUBLE, arrival, departure, CLIENT_NIF, CLIENT_IBAN, ADVENTURE_ID)
 	}
 
 	@Override

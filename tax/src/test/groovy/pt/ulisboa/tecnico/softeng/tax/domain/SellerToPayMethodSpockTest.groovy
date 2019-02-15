@@ -3,24 +3,22 @@ package pt.ulisboa.tecnico.softeng.tax.domain
 import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
 
-class SellerToPaySpockTest extends SpockRollbackTestAbstractClass {
-	private static final String SELLER_NIF = '123456789'
-	private static final String BUYER_NIF = '987654321'
-	private static final String FOOD = 'FOOD'
-	private static final int TAX = 10
-	private final LocalDate date = new LocalDate(2018, 02, 13)
-	private Seller seller
-	private Buyer buyer
-	private ItemType itemType
+class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
+	def SELLER_NIF = '123456789'
+	def BUYER_NIF = '987654321'
+	def FOOD = 'FOOD'
+	def TAX = 10
+	def date = new LocalDate(2018, 02, 13)
+	def seller
+	def buyer
+	def itemType
 
 	@Override
 	def populate4Test() {
-		IRS irs = IRS.getIRSInstance()
+		def irs = IRS.getIRSInstance()
 
 		seller = new Seller(irs, SELLER_NIF, 'José Vendido', 'Somewhere')
-
 		buyer = new Buyer(irs, BUYER_NIF, 'Manuel Comprado', 'Anywhere')
-
 		itemType = new ItemType(irs, FOOD, TAX)
 	}
 
@@ -74,7 +72,7 @@ class SellerToPaySpockTest extends SpockRollbackTestAbstractClass {
 	def 'ignore cancelled'() {
 		when:
 		new Invoice(100, date, itemType, seller, buyer)
-		Invoice invoice = new Invoice(100, date, itemType, seller, buyer)
+		def invoice = new Invoice(100, date, itemType, seller, buyer)
 
 		new Invoice(50, date, itemType, seller, buyer)
 		invoice.cancel()

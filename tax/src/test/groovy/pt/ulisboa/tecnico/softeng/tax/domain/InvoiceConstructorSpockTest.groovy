@@ -7,40 +7,41 @@ import spock.lang.Shared
 import spock.lang.Unroll
 
 class InvoiceConstructorSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String SELLER_NIF='123456789'
-	private static final String BUYER_NIF='987654321'
-	private static final String FOOD='FOOD'
-	private static final int VALUE=16
-	private static final int TAX=23
-	@Shared private final LocalDate date=new LocalDate(2018,02,13)
-	@Shared private Seller seller
-	@Shared private Buyer buyer
-	@Shared private ItemType itemType
+	def SELLER_NIF = '123456789'
+	def BUYER_NIF = '987654321'
+	def FOOD = 'FOOD'
+	@Shared def VALUE = 16
+	def TAX = 23
+	@Shared def date = new LocalDate(2018,02,13)
+	@Shared def seller
+	@Shared def buyer
+	@Shared def itemType
 
 	@Override
 	def populate4Test() {
-		IRS irs = IRS.getIRSInstance()
+		def irs = IRS.getIRSInstance()
 
 		seller = new Seller(irs,SELLER_NIF,'José Vendido','Somewhere')
-
 		buyer = new Buyer(irs,BUYER_NIF,'Manuel Comprado','Anywhere')
-
 		itemType = new ItemType(irs,FOOD,TAX)
 	}
 
 	def 'success'() {
 		when:
-		Invoice invoice = new Invoice(VALUE, date, itemType, seller, buyer)
+		def invoice = new Invoice(VALUE, date, itemType, seller, buyer)
 
 		then:
-		invoice.getReference() != null
-		16.0 == invoice.getValue()
-		invoice.getDate() == date
-		invoice.getItemType() == itemType
-		invoice.getSeller() == seller
-		invoice.getBuyer() == buyer
-		3.68 == invoice.getIva()
-		!invoice.isCancelled()
+		with(invoice) {
+			getReference() != null
+			16.0 == getValue()
+			getDate() == date
+			getItemType() == itemType
+			getSeller() == seller
+			getBuyer() == buyer
+			3.68 == getIva()
+			!isCancelled()
+		}
+
 		seller.getInvoiceByReference(invoice.getReference()) == invoice
 		buyer.getInvoiceByReference(invoice.getReference()) == invoice
 	}

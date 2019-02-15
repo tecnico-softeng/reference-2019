@@ -79,15 +79,6 @@ public class Bank extends Bank_Base {
 		return null;
 	}
 
-	public static Bank getBankByCode(String code) {
-		for (Bank bank : FenixFramework.getDomainRoot().getBankSet()) {
-			if (bank.getCode().equals(code)) {
-				return bank;
-			}
-		}
-		return null;
-	}
-
 	public Operation getOperationBySourceAndReference(String transactionSource, String transactionReference) {
 		for (Operation operation : getOperationSet()) {
 			if (operation.getTransactionSource() != null && operation.getTransactionReference() != null

@@ -1,6 +1,8 @@
 package pt.ulisboa.tecnico.softeng.car.services.local;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
@@ -58,11 +60,15 @@ public class RentACarInterface {
 
 	@Atomic(mode = Atomic.TxMode.READ)
 	public static RestRentingData getRentingData(String reference) {
+		return new RestRentingData(getRenting(reference));
+	}
+
+	private static Renting getRenting(String reference) {
 		Renting renting = FenixFramework.getDomainRoot().getRentACarSet().stream()
 				.flatMap(rac -> rac.getVehicleSet().stream()).flatMap(v -> v.getRentingSet().stream())
 				.filter(r -> r.getReference().equals(reference)).findFirst().orElseThrow(() -> new CarException());
 
-		return new RestRentingData(renting);
+		return renting;
 	}
 
 	@Atomic(mode = Atomic.TxMode.WRITE)
@@ -151,8 +157,8 @@ public class RentACarInterface {
 			return new RestRentingData(renting);
 		}
 
-		return new RestRentingData(RentACar.rent(type.equals("CAR") ? Car.class : Motorcycle.class, license, nif, iban,
-				begin, end, adventureId));
+		return new RestRentingData(
+				rent(type.equals("CAR") ? Car.class : Motorcycle.class, license, nif, iban, begin, end, adventureId));
 
 	}
 
@@ -192,14 +198,6 @@ public class RentACarInterface {
 		}
 	}
 
-	public static Renting getRenting(String reference) {
-		Renting renting = FenixFramework.getDomainRoot().getRentACarSet().stream()
-				.flatMap(rac -> rac.getVehicleSet().stream()).flatMap(v -> v.getRentingSet().stream())
-				.filter(r -> r.getReference().equals(reference)).findFirst().orElseThrow(() -> new CarException());
-
-		return renting;
-	}
-
 	private static Renting getReting4AdventureId(String adventureId) {
 		for (RentACar rentACar : FenixFramework.getDomainRoot().getRentACarSet()) {
 			Renting renting = rentACar.getRenting4AdventureId(adventureId);
@@ -208,6 +206,37 @@ public class RentACarInterface {
 			}
 		}
 		return null;
+	}
+
+	private static Set<Vehicle> getAllAvailableVehicles(Class<?> cls, LocalDate begin, LocalDate end) {
+		final Set<Vehicle> vehicles = new HashSet<>();
+		for (final RentACar rentACar : FenixFramework.getDomainRoot().getRentACarSet()) {
+			vehicles.addAll(rentACar.getAvailableVehicles(cls, begin, end));
+		}
+		return vehicles;
+	}
+
+	private static Set<Vehicle> getAllAvailableMotorcycles(LocalDate begin, LocalDate end) {
+		return getAllAvailableVehicles(Motorcycle.class, begin, end);
+	}
+
+	private static Set<Vehicle> getAllAvailableCars(LocalDate begin, LocalDate end) {
+		return getAllAvailableVehicles(Car.class, begin, end);
+	}
+
+	private static Renting rent(Class<? extends Vehicle> vehicleType, String drivingLicense, String buyerNif,
+			String buyerIban, LocalDate begin, LocalDate end, String adventureId) {
+		Set<Vehicle> availableVehicles;
+
+		if (vehicleType == Car.class) {
+			availableVehicles = getAllAvailableCars(begin, end);
+		} else {
+			availableVehicles = getAllAvailableMotorcycles(begin, end);
+		}
+
+		return availableVehicles.stream().findFirst()
+				.map(v -> v.rent(drivingLicense, begin, end, buyerNif, buyerIban, adventureId))
+				.orElseThrow(CarException::new);
 	}
 
 }
