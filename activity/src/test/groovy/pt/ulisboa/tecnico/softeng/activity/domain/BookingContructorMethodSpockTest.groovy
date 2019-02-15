@@ -1,15 +1,16 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
 
-import static org.junit.Assert.fail
 import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
+import spock.lang.Shared
+import spock.lang.Unroll
 
 class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
-	def provider
-	def offer
-	def AMOUNT = 30
-	def IBAN = 'IBAN'
-	def NIF = '123456789'
+	@Shared def provider
+	@Shared def offer
+	@Shared def AMOUNT = 30
+	@Shared def IBAN = 'IBAN'
+	@Shared def NIF = '123456789'
 
 	@Override
 	def populate4Test() {
@@ -27,76 +28,48 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 		when:
 		def booking = new Booking(provider, offer, NIF, IBAN)
 
-		expect:
-		booking.getReference().startsWith(provider.getCode())
-		booking.getReference().length() > ActivityProvider.CODE_SIZE
+		then:
+		with(booking) {
+			getReference().startsWith(provider.getCode())
+			getReference().length() > ActivityProvider.CODE_SIZE
+			getBuyerNif() == NIF
+			getIban() == IBAN
+			30 == getAmount()
+		}
 		offer.getNumberActiveOfBookings() == 1
-		booking.getBuyerNif() == NIF
-		booking.getIban() == IBAN
-		0 == booking.getAmount()
 	}
 
-	def 'null provider'() {
-		given:
-		new Booking(null, offer, NIF, IBAN)
+	@Unroll('exceptions: #prov, #off, #nif, #iban')
+	def 'exceptions'() {
+		when:
+		new Booking(prov, off, nif, iban)
 
-		expect:
+		then:
 		thrown(ActivityException)
-	}
 
-	def 'null offer'() {
-		given:
-		new Booking(provider,null, NIF, IBAN)
-
-		expect:
-		thrown(ActivityException)
-	}
-
-	def 'null nif'() {
-		given:
-		new Booking(null, offer,null, IBAN)
-
-		expect:
-		thrown(ActivityException)
-	}
-
-	def 'empty iban'() {
-		given:
-		new Booking(provider, null, NIF, '     ')
-
-		expect:
-		thrown(ActivityException)
-	}
-
-	def 'null iban'() {
-		given:
-		new Booking(null, offer, NIF, null)
-
-		expect:
-		thrown(ActivityException)
-	}
-
-	def 'empty nif'() {
-		given:
-		new Booking(this.provider,null,'     ',IBAN)
-
-		expect:
-		thrown(ActivityException)
+		where:
+		prov     | off   | nif  | iban
+		null     | offer | NIF  | IBAN
+		provider | null  | NIF  | IBAN
+		provider | offer | null | IBAN
+		provider | offer | NIF  | '   '
+		provider | offer | NIF  | null
+		provider | offer | '  ' | null
 	}
 
 	def 'booking equal capacity'() {
-		expect:
+		given:
 		new Booking(provider,offer,NIF,IBAN)
 		new Booking(provider,offer,NIF,IBAN)
 		new Booking(provider,offer,NIF,IBAN)
 
-		try {
-			new Booking(provider,offer,NIF,IBAN)
-			fail()
-		} catch(ActivityException ae) {
-			this.offer.getNumberActiveOfBookings() == 3
-		}
+		when:
+		new Booking(provider,offer,NIF,IBAN)
 
+
+		then:
+		def error = thrown(ActivityException)
+		offer.getNumberActiveOfBookings() == 3
 	}
 
 	def 'booking equal capacity but has cancelled'() {
@@ -104,13 +77,14 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 		new Booking(provider,offer,NIF,IBAN)
 		new Booking(provider,offer,NIF,IBAN)
 
-		def booking=new Booking(provider,offer,NIF,IBAN)
+		def booking = new Booking(provider,offer,NIF,IBAN)
 
 		booking.cancel()
 
+		when:
 		new Booking(provider,offer,NIF,IBAN)
 
-		expect:
+		then:
 		this.offer.getNumberActiveOfBookings() == 3
 	}
 
