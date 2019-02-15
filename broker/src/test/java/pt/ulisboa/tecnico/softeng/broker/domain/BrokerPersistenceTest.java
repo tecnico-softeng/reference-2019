@@ -27,9 +27,9 @@ public class BrokerPersistenceTest extends BaseTest {
 	public void atomicProcess() {
 		Broker broker = new Broker(BROKER_CODE, BROKER_NAME, BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN);
 		Client client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
-		new Adventure(broker, this.begin, this.end, client, MARGIN, true);
+		new Adventure(broker, this.BEGIN, this.END, client, MARGIN, true);
 
-		BulkRoomBooking bulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, this.begin, this.end, NIF_AS_BUYER,
+		BulkRoomBooking bulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, this.BEGIN, this.END, NIF_AS_BUYER,
 				CLIENT_IBAN);
 
 		new Reference(bulk, REF_ONE);
@@ -55,8 +55,8 @@ public class BrokerPersistenceTest extends BaseTest {
 
 		assertNotNull(adventure.getID());
 		assertEquals(broker, adventure.getBroker());
-		assertEquals(this.begin, adventure.getBegin());
-		assertEquals(this.end, adventure.getEnd());
+		assertEquals(this.BEGIN, adventure.getBegin());
+		assertEquals(this.END, adventure.getEnd());
 		assertEquals(AGE, adventure.getAge());
 		assertEquals(CLIENT_IBAN, adventure.getIban());
 		assertNull(adventure.getPaymentConfirmation());
@@ -82,8 +82,8 @@ public class BrokerPersistenceTest extends BaseTest {
 		BulkRoomBooking bulk = bulks.get(0);
 
 		assertNotNull(bulk);
-		assertEquals(this.begin, bulk.getArrival());
-		assertEquals(this.end, bulk.getDeparture());
+		assertEquals(this.BEGIN, bulk.getArrival());
+		assertEquals(this.END, bulk.getDeparture());
 		assertEquals(NUMBER_OF_BULK, bulk.getNumber());
 		assertFalse(bulk.getCancelled());
 		assertEquals(0, bulk.getNumberOfHotelExceptions());
