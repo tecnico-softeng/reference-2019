@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
 
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -28,11 +29,11 @@ class ActivityProviderFindOfferMethodSpockTest extends SpockRollbackTestAbstract
 		when:
 		def offers = provider.findOffer(theb, thee, age)
 
-		then:
+		then: 'finds an offer'
 		offers.size() == 1
 		offers.contains(offer)
 
-		where:
+		where: 'for all possible ages'
 		theb  | thee | age
 		begin | end  | AGE
 		begin | end  | MIN_AGE
@@ -44,14 +45,13 @@ class ActivityProviderFindOfferMethodSpockTest extends SpockRollbackTestAbstract
 		when:
 		provider.findOffer(theb, thee, age)
 
-		then:
+		then: 'throws exceptions'
 		thrown(ActivityException)
 
 		where:
 		theb  | thee | age
 		null  | end  | AGE
-		begin | null | MIN_AGE
-		begin | null | MAX_AGE
+		begin | null | AGE
 	}
 
 	@Unroll('empty: #theb, #thee, #age')
@@ -128,5 +128,4 @@ class ActivityProviderFindOfferMethodSpockTest extends SpockRollbackTestAbstract
 		then:
 		offers.size() == 1
 	}
-
 }

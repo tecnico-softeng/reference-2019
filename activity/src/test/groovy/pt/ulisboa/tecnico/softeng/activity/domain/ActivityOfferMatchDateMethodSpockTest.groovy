@@ -1,8 +1,9 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
 
-import spock.lang.Shared
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
+import spock.lang.Shared
 import spock.lang.Unroll
 
 class ActivityOfferMatchDateMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -23,17 +24,18 @@ class ActivityOfferMatchDateMethodSpockTest extends SpockRollbackTestAbstractCla
 		offer.matchDate(theb, thee) == res
 
 		where:
-		theb                  | thee                || res
-		begin                 | end                 || true
-		begin.minusDays(1) | end                 || false
-		begin                 | end.plusDays(1)  || false
-		begin                 | end.minusDays(1) || false
+		theb               | thee             || res
+		begin              | end              || true
+		begin.minusDays(1) | end              || false
+		begin.plusDays(1)  | end              || false
+		begin              | end.plusDays(1)  || false
+		begin              | end.minusDays(1) || false
 	}
 
 	@Unroll('exception: #label')
 	def 'exceptions'() {
 		when:
-		offer.matchDate(null,this.end)
+		offer.matchDate(theb ,thee)
 
 		then:
 		thrown(ActivityException)
@@ -42,6 +44,5 @@ class ActivityOfferMatchDateMethodSpockTest extends SpockRollbackTestAbstractCla
 		theb                 | thee | label
 		null                 | end  | 'null begin date'
 		begin                | null | 'null end date'
-		begin.plusDays(1) | end  | 'begin plus one'
 	}
 }

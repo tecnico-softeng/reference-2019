@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
 
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -34,7 +35,7 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 			getReference().length() > ActivityProvider.CODE_SIZE
 			getBuyerNif() == NIF
 			getIban() == IBAN
-			30 == getAmount()
+			getAmount() == 30
 		}
 		offer.getNumberActiveOfBookings() == 1
 	}
@@ -52,40 +53,37 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 		null     | offer | NIF  | IBAN
 		provider | null  | NIF  | IBAN
 		provider | offer | null | IBAN
-		provider | offer | NIF  | '   '
+		provider | offer | '  ' | IBAN
 		provider | offer | NIF  | null
-		provider | offer | '  ' | null
+		provider | offer | NIF  | '   '
 	}
 
 	def 'booking equal capacity'() {
-		given:
+		given: 'it is complete'
 		new Booking(provider,offer,NIF,IBAN)
 		new Booking(provider,offer,NIF,IBAN)
 		new Booking(provider,offer,NIF,IBAN)
 
-		when:
+		when: 'a booking'
 		new Booking(provider,offer,NIF,IBAN)
 
-
-		then:
+		then: 'throws an exception'
 		def error = thrown(ActivityException)
 		offer.getNumberActiveOfBookings() == 3
 	}
 
 	def 'booking equal capacity but has cancelled'() {
-		given:
+		given: 'is complete'
 		new Booking(provider,offer,NIF,IBAN)
 		new Booking(provider,offer,NIF,IBAN)
-
 		def booking = new Booking(provider,offer,NIF,IBAN)
-
+		and: 'there is a cancel'
 		booking.cancel()
 
-		when:
+		when: 'booking'
 		new Booking(provider,offer,NIF,IBAN)
 
-		then:
-		this.offer.getNumberActiveOfBookings() == 3
+		then: 'succeeds and is complete'
+		offer.getNumberActiveOfBookings() == 3
 	}
-
 }

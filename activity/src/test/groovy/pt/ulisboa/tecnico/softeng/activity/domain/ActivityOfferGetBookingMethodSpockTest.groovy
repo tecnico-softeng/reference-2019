@@ -23,7 +23,7 @@ class ActivityOfferGetBookingMethodSpockTest extends SpockRollbackTestAbstractCl
 		when:
 		def booking = new Booking(provider, offer, NIF, IBAN)
 
-		then:
+		then: 'the booking can be obtained through the confirmation reference'
 		offer.getBooking(booking.getReference()) == booking
 	}
 
@@ -34,16 +34,12 @@ class ActivityOfferGetBookingMethodSpockTest extends SpockRollbackTestAbstractCl
 		when:
 		booking.cancel()
 
-		then:
+		then: 'the booking can be obtained through the cancellation reference'
 		offer.getBooking(booking.getCancel()) == booking
 	}
 
 	def 'does not exist'() {
-		when:
-		new Booking(provider, offer, NIF, IBAN)
-
-		then:
+		expect:
 		offer.getBooking('XPTO') == null
 	}
-
 }
