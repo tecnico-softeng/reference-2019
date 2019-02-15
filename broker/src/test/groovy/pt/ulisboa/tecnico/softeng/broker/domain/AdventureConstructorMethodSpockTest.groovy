@@ -14,16 +14,14 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	@Override
 	def populate4Test() {
 		broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN)
-		client17 = new Client(broker, CLIENT_IBAN, CLIENT_NIF + "2", DRIVING_LICENSE + "2", 17)
-		client18 = new Client(broker, CLIENT_IBAN, CLIENT_NIF + "1", DRIVING_LICENSE + "1", 18)
 		client20 = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
-		client100 = new Client(broker, CLIENT_IBAN, OTHER_NIF + "3", DRIVING_LICENSE + "3", 100)
+		client100 = new Client(broker, CLIENT_IBAN + "3", OTHER_NIF + "3", DRIVING_LICENSE + "3", 100)
 	}
 
 	@Unroll('success: #begin, #end, #age, #margin')
 	def 'success 18 20 and 100'() {
 		when: 'an adventure is created'
-		def adventure = new Adventure(broker, begin, end, client, margin)
+		def adventure = new Adventure(broker, begin, end, client100, margin)
 
 		then: 'all its attributes are correctly set'
 		adventure.getBroker() == broker
@@ -43,12 +41,12 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 		broker.getAdventureSet().contains(adventure)
 
 		where:
-		client    | begin | end   | margin || age
-		client18  | BEGIN | END   | MARGIN || 18
-		client20  | BEGIN | END   | MARGIN || 20
-		client100 | BEGIN | END   | MARGIN || 100
-		client20  | BEGIN | BEGIN | MARGIN || 20
-		client20  | BEGIN | END   | 1      || 20
+		cli       | begin | end   | margin | age
+		client18  | BEGIN | END   | MARGIN | 18
+		client20  | BEGIN | END   | MARGIN | 20
+		client100 | BEGIN | END   | MARGIN | 100
+		client20  | BEGIN | BEGIN | MARGIN | 20
+		client20  | BEGIN | END   | 1      | 20
 	}
 
 	@Unroll('#label')
