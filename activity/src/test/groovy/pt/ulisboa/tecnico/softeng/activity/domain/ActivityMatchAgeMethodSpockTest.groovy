@@ -20,7 +20,7 @@ class ActivityMatchAgeMethodSpockTest extends SpockRollbackTestAbstractClass {
 		activity.matchAge(arg)
 
 		where:
-		arg << [(MAX_AGE - MIN_AGE) / 2, MIN_AGE]
+		arg << [(MAX_AGE - MIN_AGE).intdiv(2), MIN_AGE]
 	}
 
 
