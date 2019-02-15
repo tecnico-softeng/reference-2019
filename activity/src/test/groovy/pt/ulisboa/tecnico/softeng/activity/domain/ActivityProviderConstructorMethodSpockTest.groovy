@@ -52,7 +52,7 @@ class ActivityProviderConstructorMethodSpockTest extends SpockRollbackTestAbstra
 		new ActivityProvider(cd1, n1, nif1, IBAN)
 
 		when:
-			new ActivityProvider(cd2, n2, nif2, IBAN)
+		new ActivityProvider(cd2, n2, nif2, IBAN)
 
 		then:
 		def error = thrown(ActivityException)

@@ -24,16 +24,11 @@ class ActivityMatchAgeMethodSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 
-	void lessThanMinAge() {
-		Assert.assertFalse(this.activity.matchAge(MIN_AGE - 1))
-	}
+	def 'less than min age'() {
+		expect:
+		!activity.matchAge(arg)
 
-	void successEqualMaxAge() {
-		Assert.assertFalse(this.activity.matchAge(MAX_AGE))
+		where:
+		arg << [MIN_AGE - 1, MAX_AGE, MAX_AGE + 1]
 	}
-
-	void greaterThanMaxAge() {
-		Assert.assertFalse(this.activity.matchAge(MAX_AGE + 1))
-	}
-
 }

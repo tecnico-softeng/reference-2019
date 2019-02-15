@@ -86,7 +86,7 @@ class ActivityProviderFindOfferMethodSpockTest extends SpockRollbackTestAbstract
 		new Activity(otherProvider,'Bush Walking',18,80,25)
 
 		when:
-		List<ActivityOffer> offers=otherProvider.findOffer(begin, end, AGE)
+		def offers = otherProvider.findOffer(begin, end, AGE)
 
 		then:
 		offers.isEmpty()

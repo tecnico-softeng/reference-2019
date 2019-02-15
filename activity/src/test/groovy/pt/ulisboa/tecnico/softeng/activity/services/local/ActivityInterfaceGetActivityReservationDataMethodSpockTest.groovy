@@ -11,13 +11,13 @@ import pt.ulisboa.tecnico.softeng.activity.services.remote.dataobjects.RestActiv
 import spock.lang.Unroll
 
 class ActivityInterfaceGetActivityReservationDataMethodSpockTest extends SpockRollbackTestAbstractClass {
-	private static final String NAME='ExtremeAdventure'
-	private static final String CODE='XtremX'
-	private final LocalDate begin=new LocalDate(2016,12,19)
-	private final LocalDate end=new LocalDate(2016,12,21)
-	private ActivityProvider provider
-	private ActivityOffer offer
-	private Booking booking
+	def NAME = 'ExtremeAdventure'
+	def CODE = 'XtremX'
+	def begin = new LocalDate(2016,12,19)
+	def end = new LocalDate(2016,12,21)
+	def provider
+	def offer
+	def booking
 
 	@Override
 	def populate4Test() {
