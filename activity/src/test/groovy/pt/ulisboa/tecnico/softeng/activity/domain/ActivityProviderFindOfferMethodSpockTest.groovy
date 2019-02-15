@@ -33,10 +33,10 @@ class ActivityProviderFindOfferMethodSpockTest extends SpockRollbackTestAbstract
 		offers.contains(offer)
 
 		where:
-		theb | thee | age
-		begin | end | AGE
-		begin | end | MIN_AGE
-		begin | end | MAX_AGE
+		theb  | thee | age
+		begin | end  | AGE
+		begin | end  | MIN_AGE
+		begin | end  | MAX_AGE
 	}
 
 	@Unroll('exceptions: #theb, #thee, #age')
