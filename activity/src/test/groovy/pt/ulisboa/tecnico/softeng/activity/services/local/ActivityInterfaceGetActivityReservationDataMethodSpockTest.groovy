@@ -1,11 +1,12 @@
 package pt.ulisboa.tecnico.softeng.activity.services.local
 
-import pt.ulisboa.tecnico.softeng.activity.domain.SpockRollbackTestAbstractClass
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.activity.domain.Activity
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityOffer
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityProvider
 import pt.ulisboa.tecnico.softeng.activity.domain.Booking
+import pt.ulisboa.tecnico.softeng.activity.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
 import pt.ulisboa.tecnico.softeng.activity.services.remote.dataobjects.RestActivityBookingData
 import spock.lang.Unroll
@@ -27,8 +28,10 @@ class ActivityInterfaceGetActivityReservationDataMethodSpockTest extends SpockRo
 	}
 
 	def 'success'() {
-		when:
+		given:
 		booking = new Booking(provider,offer,'123456789','IBAN')
+
+		when:
 		RestActivityBookingData data=ActivityInterface.getActivityReservationData(booking.getReference())
 
 		then:
@@ -42,15 +45,15 @@ class ActivityInterfaceGetActivityReservationDataMethodSpockTest extends SpockRo
 	}
 
 	def 'success cancelled'() {
-		given:
+		given: 'a cancelled booking'
 		booking = new Booking(provider,offer,'123456789','IBAN')
 		provider.getProcessor().submitBooking(booking)
-
-		when:
 		booking.cancel()
+
+		when: 'get booking data'
 		RestActivityBookingData data=ActivityInterface.getActivityReservationData(booking.getCancel())
 
-		then:
+		then: 'the information if OK'
 		data.getReference() == booking.getReference()
 		data.getCancellation() == booking.getCancel()
 		data.getName() == NAME

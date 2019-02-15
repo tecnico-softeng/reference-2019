@@ -1,8 +1,6 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
-import spock.lang.Specification
 import org.joda.time.LocalDate
-import pt.ist.fenixframework.Atomic
-import pt.ist.fenixframework.Atomic.TxMode
+
 import pt.ist.fenixframework.FenixFramework
 
 class ActivityPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
@@ -31,7 +29,7 @@ class ActivityPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 	@Override
 	def thenAssert() {
-		assert 1 == FenixFramework.getDomainRoot().getActivityProviderSet().size()
+		assert FenixFramework.getDomainRoot().getActivityProviderSet().size() == 1
 
 		def providers = new ArrayList<>(FenixFramework.getDomainRoot().getActivityProviderSet())
 		def provider = providers.get(0)
@@ -39,34 +37,34 @@ class ActivityPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 		verifyAll {
 			PROVIDER_CODE == provider.getCode()
 			PROVIDER_NAME == provider.getName()
-			1 == provider.getActivitySet().size()
-			NIF == provider.getNif()
-			IBAN == provider.getIban()
+			provider.getActivitySet().size() == 1
+			provider.getNif() == NIF
+			provider.getIban() == IBAN
 		}
 
 		Processor processor=provider.getProcessor()
 		assert processor != null
-		assert 1 == processor.getBookingSet().size()
+		assert processor.getBookingSet().size() == 1
 
 		def activities = new ArrayList<>(provider.getActivitySet())
 		def activity = activities.get(0)
 		verifyAll {
 			ACTIVITY_NAME == activity.getName()
 			activity.getCode().startsWith(PROVIDER_CODE)
-			18 == activity.getMinAge()
-			65 == activity.getMaxAge()
-			CAPACITY == activity.getCapacity()
-			1 == activity.getActivityOfferSet().size()
+			activity.getMinAge() == 18
+			activity.getMaxAge() == 65
+			activity.getCapacity() == CAPACITY
+			activity.getActivityOfferSet().size() == 1
 		}
 
 		def offers = new ArrayList<>(activity.getActivityOfferSet())
 		def offer = offers.get(0)
 		verifyAll {
-			begin == offer.getBegin()
-			end == offer.getEnd()
-			CAPACITY == offer.getCapacity()
-			1 == offer.getBookingSet().size()
-			AMOUNT == offer.getPrice()
+			offer.getBegin() == begin
+			offer.getEnd() == end
+			offer.getCapacity() == CAPACITY
+			offer.getBookingSet().size() == 1
+			offer.getPrice() == AMOUNT
 		}
 
 		def bookings = new ArrayList<>(offer.getBookingSet())
@@ -79,13 +77,13 @@ class ActivityPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 			booking.getInvoiceReference() == null
 			!booking.getCancelledInvoice()
 			booking.getCancelledPaymentReference() == null
-			'SPORT' == booking.getType()
-			BUYER_NIF == booking.getBuyerNif()
-			BUYER_IBAN == booking.getIban()
-			NIF == booking.getProviderNif()
-			AMOUNT == booking.getAmount()
-			ADVENTURE_ID == booking.getAdventureId()
-			begin == booking.getDate()
+			booking.getType() == 'SPORT'
+			booking.getBuyerNif() == BUYER_NIF
+			booking.getIban() == BUYER_IBAN
+			booking.getProviderNif() == NIF
+			booking.getAmount() == AMOUNT
+			booking.getAdventureId() == ADVENTURE_ID
+			booking.getDate() == begin
 			booking.getTime() != null
 			booking.getProcessor() != null
 		}
@@ -97,5 +95,4 @@ class ActivityPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 			activityProvider.delete()
 		}
 	}
-
 }

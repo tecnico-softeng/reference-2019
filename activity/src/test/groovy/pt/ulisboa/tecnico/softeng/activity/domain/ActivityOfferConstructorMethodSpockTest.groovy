@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
 
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -29,20 +30,19 @@ class ActivityOfferConstructorMethodSpockTest extends SpockRollbackTestAbstractC
 		offer.getBegin() == the_beg
 		offer.getEnd() == the_end
 		offer.getNumberActiveOfBookings() == 0
-		amount == offer.getPrice()
+		offer.getPrice() == amount
 		activity.getActivityOfferSet().size() == 1
 
 		where:
 		the_beg | the_end | amount
 		begin   | end     | 30
 		begin   | begin   | 30
-
 	}
 
 	@Unroll('exception: #the_beg, #the_end')
 	def 'exception'() {
 		when:
-		new ActivityOffer(null,this.begin,this.end,30)
+		new ActivityOffer(null, the_beg ,the_end ,30)
 
 		then:
 		thrown(ActivityException)
@@ -52,7 +52,7 @@ class ActivityOfferConstructorMethodSpockTest extends SpockRollbackTestAbstractC
 		null     | begin   | end                   | 30
 		activity | null    | end                   | 30
 		activity | begin   | null                  | 30
-		activity | begin   | begin.minusDays(1) | 30
+		activity | begin   | begin.minusDays(1)    | 30
 		activity | begin   | end                   | 0
 	}
 }

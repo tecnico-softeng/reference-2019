@@ -1,10 +1,9 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
 
-import spock.lang.Shared
-import spock.lang.Unroll
-
 import pt.ist.fenixframework.FenixFramework
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
+import spock.lang.Shared
+import spock.lang.Unroll
 
 class ActivityProviderConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Shared def PROVIDER_CODE = 'XtremX'
@@ -38,10 +37,10 @@ class ActivityProviderConstructorMethodSpockTest extends SpockRollbackTestAbstra
 		code          | prov          | nif  | iban
 		null          | PROVIDER_NAME | NIF  | IBAN
 		'  '          | PROVIDER_NAME | NIF  | IBAN
+		'12345'       | PROVIDER_NAME | NIF  | IBAN
+		'1234567'     | PROVIDER_NAME | NIF  | IBAN
 		PROVIDER_CODE | null          | NIF  | IBAN
 		PROVIDER_CODE | '  '          | NIF  | IBAN
-		'12345'       | '  '          | NIF  | IBAN
-		'1234567'     | '  '          | NIF  | IBAN
 		PROVIDER_CODE | PROVIDER_NAME | null | IBAN
 		PROVIDER_CODE | PROVIDER_NAME | '  ' | IBAN
 		PROVIDER_CODE | PROVIDER_NAME | NIF  | null
@@ -50,21 +49,20 @@ class ActivityProviderConstructorMethodSpockTest extends SpockRollbackTestAbstra
 
 	@Unroll('uniques: #cd1, #cd2, #n1, #n2, #nif1, #nif2')
 	def 'uniques'() {
-		given:
+		given: 'an acitivity providr'
 		new ActivityProvider(cd1, n1, nif1, IBAN)
 
-		when:
+		when: 'it is created another'
 		new ActivityProvider(cd2, n2, nif2, IBAN)
 
-		then:
+		then: 'throws an exception'
 		def error = thrown(ActivityException)
 		FenixFramework.getDomainRoot().getActivityProviderSet().size() == 1
 
-		where:
+		where: 'if they have de same, code, name, or nif'
 		cd1           | cd2           | n1            | n2            | nif1 | nif2
 		PROVIDER_CODE | PROVIDER_CODE | PROVIDER_NAME | 'Hello'       | NIF  | NIF + 2
 		'123456'      | PROVIDER_CODE | PROVIDER_NAME | PROVIDER_NAME | NIF  | NIF + 2
 		PROVIDER_CODE | '123456'      | PROVIDER_NAME | 'jdgdsk'      | NIF  | NIF
-
 	}
 }
