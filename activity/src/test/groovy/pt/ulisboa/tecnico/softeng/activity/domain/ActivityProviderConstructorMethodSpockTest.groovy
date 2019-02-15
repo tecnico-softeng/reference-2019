@@ -44,6 +44,8 @@ class ActivityProviderConstructorMethodSpockTest extends SpockRollbackTestAbstra
 		'1234567'     | '  '          | NIF  | IBAN
 		PROVIDER_CODE | PROVIDER_NAME | null | IBAN
 		PROVIDER_CODE | PROVIDER_NAME | '  ' | IBAN
+		PROVIDER_CODE | PROVIDER_NAME | NIF  | null
+		PROVIDER_CODE | PROVIDER_NAME | NIF  | '  '
 	}
 
 	@Unroll('uniques: #cd1, #cd2, #n1, #n2, #nif1, #nif2')
