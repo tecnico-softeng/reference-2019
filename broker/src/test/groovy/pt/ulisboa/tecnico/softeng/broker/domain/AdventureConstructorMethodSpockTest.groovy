@@ -58,6 +58,10 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 
 		where:
 		broker | begin | end                | client   | margin | label
+		null   | BEGIN | END                | client20 | MARGIN | 'broker is null'
+		broker | null  | END                | client20 | MARGIN | 'begin date is null'
+		broker | BEGIN | null               | client20 | MARGIN | 'end date is null'
+		broker | BEGIN | BEGIN.minusDays(1) | client20 | MARGIN | 'end date before begin date'
 		broker | BEGIN | END                | client17 | MARGIN | 'client is 17 years old'
 		broker | BEGIN | END                | client20 | 0      | 'margin is zero'
 		broker | BEGIN | END                | client20 | -100   | 'margin is negative'
