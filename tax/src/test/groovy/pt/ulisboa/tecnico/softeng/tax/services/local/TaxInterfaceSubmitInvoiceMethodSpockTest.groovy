@@ -1,14 +1,19 @@
-package pt.ulisboa.tecnico.softeng.tax.domain
+package pt.ulisboa.tecnico.softeng.tax.services.local
 
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
+
+import pt.ulisboa.tecnico.softeng.tax.domain.Buyer
+import pt.ulisboa.tecnico.softeng.tax.domain.IRS
+import pt.ulisboa.tecnico.softeng.tax.domain.ItemType
+import pt.ulisboa.tecnico.softeng.tax.domain.Seller
+import pt.ulisboa.tecnico.softeng.tax.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
-import pt.ulisboa.tecnico.softeng.tax.services.local.TaxInterface
 import pt.ulisboa.tecnico.softeng.tax.services.remote.dataobjects.RestInvoiceData
 import spock.lang.Shared
 import spock.lang.Unroll
 
-class TaxInterfaceSubmitInvoiceSpockTest extends SpockRollbackTestAbstractClass {
+class TaxInterfaceSubmitInvoiceMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Shared def REFERENCE = '123456789'
 	@Shared def SELLER_NIF = '123456789'
 	@Shared def BUYER_NIF = '987654321'
@@ -65,7 +70,6 @@ class TaxInterfaceSubmitInvoiceSpockTest extends SpockRollbackTestAbstractClass 
 
 		expect:
 		TaxInterface.submitInvoice(invoiceData)
-
 	}
 
 	@Unroll('#reference,  #sel,  #buy,  #food,  #value,  #dt,  #tm')

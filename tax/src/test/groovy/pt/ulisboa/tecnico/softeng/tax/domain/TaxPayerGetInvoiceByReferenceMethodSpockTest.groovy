@@ -4,7 +4,7 @@ import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException
 import spock.lang.Unroll
 
-class TaxPayerGetInvoiceByReferenceSpockTest extends SpockRollbackTestAbstractClass {
+class TaxPayerGetInvoiceByReferenceMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def SELLER_NIF = '123456789'
 	def BUYER_NIF = '987654321'
 	def FOOD = 'FOOD'

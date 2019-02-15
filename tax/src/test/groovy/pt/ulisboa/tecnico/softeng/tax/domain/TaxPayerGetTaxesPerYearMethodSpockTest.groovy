@@ -2,7 +2,7 @@ package pt.ulisboa.tecnico.softeng.tax.domain
 
 import org.joda.time.LocalDate
 
-class TaxPayerGetTaxesPerYearMethodsSpockTest extends SpockRollbackTestAbstractClass {
+class TaxPayerGetTaxesPerYearMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def SELLER_NIF = '123456788'
 	def BUYER_NIF = '987654311'
 	def FOOD = 'FOOD'

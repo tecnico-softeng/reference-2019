@@ -7,7 +7,7 @@ import spock.lang.Shared
 import spock.lang.Unroll
 
 
-class VehicleRentSpockMethodTest extends SpockRollbackTestAbstractClass {
+class VehicleRentMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def ADVENTURE_ID = 'AdventureId'
 	def PLATE_CAR = '22-33-HZ'
 	def RENT_A_CAR_NAME = 'Eartz'
