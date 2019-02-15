@@ -26,7 +26,7 @@ public class ReserveActivityStateProcessMethodTest extends RollbackTestAbstractC
 	public void populate4Test() {
 		this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN);
 		this.client = new Client(this.broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
-		this.adventure = new Adventure(this.broker, this.begin, this.end, this.client, MARGIN);
+		this.adventure = new Adventure(this.broker, this.BEGIN, this.END, this.client, MARGIN);
 		this.bookingData = new RestActivityBookingData();
 		this.bookingData.setReference(ACTIVITY_CONFIRMATION);
 		this.bookingData.setPrice(76.78);
@@ -36,7 +36,7 @@ public class ReserveActivityStateProcessMethodTest extends RollbackTestAbstractC
 
 	@Test
 	public void successNoBookRoom(@Mocked final ActivityInterface activityInterface) {
-		Adventure sameDayAdventure = new Adventure(this.broker, this.begin, this.begin, this.client, MARGIN);
+		Adventure sameDayAdventure = new Adventure(this.broker, this.BEGIN, this.BEGIN, this.client, MARGIN);
 		sameDayAdventure.setState(State.RESERVE_ACTIVITY);
 
 		new Expectations() {
@@ -53,7 +53,7 @@ public class ReserveActivityStateProcessMethodTest extends RollbackTestAbstractC
 
 	@Test
 	public void successToRentVehicle(@Mocked final ActivityInterface activityInterface) {
-		Adventure adv = new Adventure(this.broker, this.begin, this.begin, this.client, MARGIN, true);
+		Adventure adv = new Adventure(this.broker, this.BEGIN, this.BEGIN, this.client, MARGIN, true);
 		adv.setState(State.RESERVE_ACTIVITY);
 
 		new Expectations() {
