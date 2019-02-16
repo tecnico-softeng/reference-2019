@@ -6,7 +6,7 @@ import spock.lang.Unroll
 
 class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Shared def broker
-	@Shared def client
+	def client
 
 	@Override
 	def populate4Test() {
@@ -16,7 +16,7 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	@Unroll('success #label: #begin, #end, #age, #margin')
 	def 'success'() {
 		given: 'a client'
-		client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, age)
+		client = getClientWithAge(age)
 
 		when: 'an adventure is created'
 		def adventure = new Adventure(broker, begin, end, client, margin)
@@ -50,10 +50,7 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 	@Unroll('#label')
 	def 'invalid arguments'() {
 		given: 'a client'
-		if (age != -1)
-			client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, age)
-		else
-			client = null
+		client = getClientWithAge(age)
 
 		when: 'an adventure is created with invalid arguments'
 		new Adventure(brok, begin, end, client, margin)
@@ -71,5 +68,12 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 		broker | BEGIN | END                | 20  | 0      | 'margin is zero'
 		broker | BEGIN | END                | 20  | -100   | 'margin is negative'
 		broker | BEGIN | END                | -1  | MARGIN | 'client is null'
+	}
+
+	def getClientWithAge(def age) {
+		if (age != -1)
+			return new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, age)
+		else
+			return null
 	}
 }
