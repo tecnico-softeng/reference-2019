@@ -1,5 +1,4 @@
 package pt.ulisboa.tecnico.softeng.hotel.domain
-import static org.junit.Assert.*
 
 import pt.ulisboa.tecnico.softeng.hotel.domain.Room.Type
 import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException
@@ -28,19 +27,19 @@ class RoomConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Unroll('one of the arguments is invalid: #hotel | #number | #type')
 	def 'incorrect input arguments'() {
 		when: 'create a room with incorrect arguments'
-		new Room(hotel, number, type)
+		new Room(ht, number, type)
 
 		then: 'a HotelException is thrown'
 		def error = thrown(HotelException)
 
 		where:
-		hotel | number | type
-		null | '01' | Type.DOUBLE
-		hotel | null | Type.DOUBLE
-		hotel | '' | Type.DOUBLE
+		ht    | number  | type
+		null  | '01'    | Type.DOUBLE
+		hotel | null    | Type.DOUBLE
+		hotel | ''      | Type.DOUBLE
 		hotel | '     ' | Type.DOUBLE
-		hotel | 'JOSE' | Type.DOUBLE
-		hotel | '01' | null
+		hotel | 'JOSE'  | Type.DOUBLE
+		hotel | '01'    | null
 	}
 
 	def 'not unique room number'() {
