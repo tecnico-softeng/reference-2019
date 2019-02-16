@@ -47,7 +47,7 @@ public class Adventure extends Adventure_Base {
 	}
 
 	private void checkArguments(Broker broker, LocalDate begin, LocalDate end, Client client, double margin) {
-		if (broker == null || begin == null || end == null) {
+		if (client == null || broker == null || begin == null || end == null) {
 			throw new BrokerException();
 		}
 
