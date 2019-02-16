@@ -28,13 +28,13 @@ class ClientConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Unroll('invalid arguments: #label')
 	def 'invalid arguments'() {
 		when: 'a client is created'
-		new Client(broker, iban, nif, license, age)
+		new Client(brok, iban, nif, license, age)
 
 		then: 'it throws an exception'
 		thrown(BrokerException)
 
 		where: 'the values are invalid'
-		broker | iban        | nif        | license         | age | label
+		brok   | iban        | nif        | license         | age | label
 		null   | CLIENT_IBAN | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the broker is null'
 		broker | null        | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the iban is null'
 		broker | '     '     | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the iban is blank'
