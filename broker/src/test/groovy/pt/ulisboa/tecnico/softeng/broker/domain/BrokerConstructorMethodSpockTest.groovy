@@ -1,7 +1,5 @@
 package pt.ulisboa.tecnico.softeng.broker.domain
 
-import static org.junit.Assert.*
-
 import pt.ist.fenixframework.FenixFramework
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException
 import spock.lang.Unroll
