@@ -26,7 +26,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 	public void populate4Test() {
 		this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN);
 		this.client = new Client(this.broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
-		this.adventure = new Adventure(this.broker, this.begin, this.end, this.client, MARGIN);
+		this.adventure = new Adventure(this.broker, this.BEGIN, this.END, this.client, MARGIN);
 
 		this.rentingData = new RestRentingData();
 		this.rentingData.setReference(RENTING_CONFIRMATION);
@@ -40,7 +40,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 		new Expectations() {
 			{
 				CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
-						RentVehicleStateMethodTest.this.begin, RentVehicleStateMethodTest.this.end, this.anyString);
+						RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
 				this.result = RentVehicleStateMethodTest.this.rentingData;
 				this.times = 1;
 			}
@@ -56,7 +56,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 		new Expectations() {
 			{
 				CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
-						RentVehicleStateMethodTest.this.begin, RentVehicleStateMethodTest.this.end, this.anyString);
+						RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
 				this.result = new CarException();
 				this.times = 1;
 			}
@@ -72,7 +72,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 		new Expectations() {
 			{
 				CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
-						RentVehicleStateMethodTest.this.begin, RentVehicleStateMethodTest.this.end, this.anyString);
+						RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
 				this.result = new RemoteAccessException();
 				this.times = 1;
 			}
@@ -88,7 +88,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 		new Expectations() {
 			{
 				CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
-						RentVehicleStateMethodTest.this.begin, RentVehicleStateMethodTest.this.end, this.anyString);
+						RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
 				this.result = new RemoteAccessException();
 				this.times = RentVehicleState.MAX_REMOTE_ERRORS;
 			}
@@ -106,7 +106,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 		new Expectations() {
 			{
 				CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
-						RentVehicleStateMethodTest.this.begin, RentVehicleStateMethodTest.this.end, this.anyString);
+						RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
 				this.result = new RemoteAccessException();
 				this.times = RentVehicleState.MAX_REMOTE_ERRORS - 1;
 			}
@@ -124,7 +124,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 		new Expectations() {
 			{
 				CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
-						RentVehicleStateMethodTest.this.begin, RentVehicleStateMethodTest.this.end, this.anyString);
+						RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
 				this.result = new Delegate() {
 					int i = 0;
 
@@ -153,7 +153,7 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
 		new Expectations() {
 			{
 				CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
-						RentVehicleStateMethodTest.this.begin, RentVehicleStateMethodTest.this.end, this.anyString);
+						RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
 				this.result = new Delegate() {
 					int i = 0;
 

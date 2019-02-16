@@ -93,7 +93,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, departure, this.client, MARGIN, true);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, DEPARTURE, this.client, MARGIN, true);
 
 		adventure.process();
 		adventure.process();
@@ -134,7 +134,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, departure, this.client, MARGIN);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, DEPARTURE, this.client, MARGIN);
 
 		adventure.process();
 		adventure.process();
@@ -176,7 +176,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, arrival, this.client, MARGIN, true);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, ARRIVAL, this.client, MARGIN, true);
 
 		adventure.process();
 		adventure.process();
@@ -210,7 +210,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, arrival, this.client, MARGIN);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, ARRIVAL, this.client, MARGIN);
 
 		adventure.process();
 		adventure.process();
@@ -232,7 +232,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, departure, this.client, MARGIN);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, DEPARTURE, this.client, MARGIN);
 
 		adventure.process();
 		adventure.process();
@@ -257,7 +257,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, departure, this.client, MARGIN);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, DEPARTURE, this.client, MARGIN);
 
 		adventure.process();
 		adventure.process();
@@ -286,7 +286,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, arrival, this.client, MARGIN, true);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, ARRIVAL, this.client, MARGIN, true);
 
 		adventure.process();
 		adventure.process();
@@ -328,7 +328,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, departure, this.client, MARGIN, true);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, DEPARTURE, this.client, MARGIN, true);
 
 		adventure.process();
 		adventure.process();
@@ -377,7 +377,7 @@ public class AdventureSequenceTest extends RollbackTestAbstractClass {
 			}
 		};
 
-		Adventure adventure = new Adventure(this.broker, arrival, departure, this.client, MARGIN, true);
+		Adventure adventure = new Adventure(this.broker, ARRIVAL, DEPARTURE, this.client, MARGIN, true);
 
 		adventure.process();
 		adventure.process();

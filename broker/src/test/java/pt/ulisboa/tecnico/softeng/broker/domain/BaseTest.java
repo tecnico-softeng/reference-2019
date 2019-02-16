@@ -35,10 +35,10 @@ public abstract class BaseTest {
 	protected static final String REF_ONE = "ref1";
 	protected static final String REF_TWO = "ref2";
 
-	protected final LocalDate begin = new LocalDate(2016, 12, 19);
-	protected final LocalDate end = new LocalDate(2016, 12, 21);
-	protected static final LocalDate arrival = new LocalDate(2016, 12, 19);
-	protected static final LocalDate departure = new LocalDate(2016, 12, 21);
+	protected static final LocalDate BEGIN = new LocalDate(2016, 12, 19);
+	protected static final LocalDate END = new LocalDate(2016, 12, 21);
+	protected static final LocalDate ARRIVAL = new LocalDate(2016, 12, 19);
+	protected static final LocalDate DEPARTURE = new LocalDate(2016, 12, 21);
 
 	protected Broker broker;
 	protected Client client;
