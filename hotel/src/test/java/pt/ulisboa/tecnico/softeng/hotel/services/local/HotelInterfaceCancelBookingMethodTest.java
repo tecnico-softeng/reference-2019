@@ -69,7 +69,7 @@ public class HotelInterfaceCancelBookingMethodTest extends RollbackTestAbstractC
 				TaxInterface.cancelInvoice(this.anyString);
 			}
 		};
-		String cancel = Hotel.cancelBooking(this.booking.getReference());
+		String cancel = HotelInterface.cancelBooking(this.booking.getReference());
 
 		Assert.assertTrue(this.booking.isCancelled());
 		Assert.assertEquals(cancel, this.booking.getCancellation());
@@ -83,6 +83,6 @@ public class HotelInterfaceCancelBookingMethodTest extends RollbackTestAbstractC
 				this.times = 0;
 			}
 		};
-		Hotel.cancelBooking("XPTO");
+		HotelInterface.cancelBooking("XPTO");
 	}
 }

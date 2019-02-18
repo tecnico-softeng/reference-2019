@@ -47,6 +47,16 @@ public class RestRoomBookingData {
 		this.adventureId = booking.getAdventureId();
 	}
 
+	public RestRoomBookingData(String roomType, LocalDate arrival, LocalDate departure, String nifBuyer,
+			String ibanBuyer, String adventureId) {
+		this.roomType = roomType;
+		this.arrival = arrival;
+		this.departure = departure;
+		this.buyerNif = nifBuyer;
+		this.buyerIban = ibanBuyer;
+		this.adventureId = adventureId;
+	}
+
 	public String getReference() {
 		return this.reference;
 	}

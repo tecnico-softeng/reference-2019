@@ -22,8 +22,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<version.junit>4.12</version.junit>
-
-		<version.spock>1.0-groovy-2.4</version.spock>
+		<version.spock>1.1-groovy-2.4</version.spock>
 		<version.groovy>2.4.7</version.groovy>
 		<version.powermock>1.7.4</version.powermock>
 		<version.mockito>2.8.9</version.mockito>
@@ -92,7 +91,7 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.17</version>
 					<configuration>
-						<argLine>-noverify</argLine>
+						<argLine>-noverify @{argLine}</argLine>
 					</configuration>
 				</plugin>
 
