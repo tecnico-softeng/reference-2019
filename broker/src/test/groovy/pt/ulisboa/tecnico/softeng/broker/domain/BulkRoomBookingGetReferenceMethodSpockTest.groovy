@@ -89,7 +89,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         given: 'that the hotel interface returns remote access exceptions'
         hotelInterface.getRoomBookingData(_) >> { throw new RemoteAccessException() }
 
-        when: 'the request is done the max number of exceptions'
+        when: 'the request until the max number of exceptions, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue(); i++) {
             bulk.getRoomBookingData4Type(DOUBLE)
         }
@@ -107,7 +107,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         given: 'that the hotel interface returns remote access exceptions'
         hotelInterface.getRoomBookingData(_) >> { throw new RemoteAccessException() }
 
-        when: 'the request is done max number of exceptions - 1'
+        when: 'the request is done until max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
             bulk.getRoomBookingData4Type(DOUBLE)
         }
@@ -135,7 +135,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         given: 'that the hotel interface returns remote access exceptions'
         hotelInterface.getRoomBookingData(_) >> { throw new RemoteAccessException() }
 
-        when: 'the request is done max number of exceptions - 1'
+        when: 'the request is done until max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
             bulk.getRoomBookingData4Type(DOUBLE)
         }
@@ -155,7 +155,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         and: 'the bulk is not cancelled'
         !bulk.getCancelled()
 
-        when: 'the request is done max number of exceptions - 1'
+        when: 'the request is done until max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
             bulk.getRoomBookingData4Type(DOUBLE)
         }
@@ -170,7 +170,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         given: 'that the hotel interface returns remote access exceptions'
         hotelInterface.getRoomBookingData(_) >> { throw new RemoteAccessException() }
 
-        when: 'the request is done max number of exceptions - 1'
+        when: 'the request is done until max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
             bulk.getRoomBookingData4Type(DOUBLE)
         }
@@ -190,7 +190,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         and: 'the bulk is not cancelled'
         !bulk.getCancelled()
 
-        when: 'the request is done max number of exceptions - 1'
+        when: 'the request is until done max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
             bulk.getRoomBookingData4Type(DOUBLE)
         }
