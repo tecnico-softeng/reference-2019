@@ -2,6 +2,8 @@ package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
 
+import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -22,7 +24,11 @@ class VehicleIsFreeMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		def rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN)
+		def bankInterface = new BankInterface()
+		def taxInterface = new TaxInterface()
+		def processor = new Processor(bankInterface, taxInterface)
+
+		def rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN, processor)
 		car = new Car(PLATE_CAR,10,10,rentACar)
 	}
 

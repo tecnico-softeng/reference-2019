@@ -3,6 +3,8 @@ package pt.ulisboa.tecnico.softeng.car.domain
 import org.joda.time.LocalDate
 
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
+import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -22,7 +24,11 @@ class VehicleRentMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN)
+		def bankInterface = new BankInterface()
+		def taxInterface = new TaxInterface()
+		def processor = new Processor(bankInterface, taxInterface)
+
+		rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN, processor)
 	}
 
 	def 'double rent'() {
@@ -30,7 +36,7 @@ class VehicleRentMethodSpockTest extends SpockRollbackTestAbstractClass {
 		def car = new Car(PLATE_CAR,10,10, rentACar)
 		car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-		when: 'renting it twice'
+		when: 'rentingOne it twice'
 		car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
 		then: 'throws an exception'
@@ -42,7 +48,7 @@ class VehicleRentMethodSpockTest extends SpockRollbackTestAbstractClass {
 		given: 'given a car available'
 		def car = new Car(PLATE_CAR,10,10,rentACar)
 
-		when: 'wrong parameters for renting'
+		when: 'wrong parameters for rentingOne'
 		car.rent(DRIVING_LICENSE, begin, end, NIF + "1", IBAN_BUYER, ADVENTURE_ID)
 
 		then: 'throws an exception'

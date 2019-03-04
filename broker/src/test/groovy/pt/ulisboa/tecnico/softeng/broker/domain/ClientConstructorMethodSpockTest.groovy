@@ -69,4 +69,15 @@ class ClientConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
         thrown(BrokerException)
         broker.getClientByNIF(CLIENT_NIF) == client
     }
+
+    def 'clients with the same iban'() {
+        given: 'a client'
+        def client1 = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
+
+        when: 'another client is created with the same iban'
+        def client2 = new Client(broker, CLIENT_IBAN, CLIENT_NIF + "1", DRIVING_LICENSE + '1', AGE)
+
+        then: 'both clients have the same iban'
+        client1.getIban() == client2.getIban()
+    }
 }

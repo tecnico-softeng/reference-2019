@@ -14,6 +14,14 @@ import pt.ulisboa.tecnico.softeng.car.services.remote.exceptions.TaxException;
 public class Processor extends Processor_Base {
 	private static final String TRANSACTION_SOURCE = "CAR";
 
+	private final BankInterface bankInterface;
+	private final TaxInterface taxInterface;
+
+	public Processor(BankInterface bankInterface, TaxInterface taxInterface) {
+		this.bankInterface = bankInterface;
+		this.taxInterface = taxInterface;
+	}
+
 	public void delete() {
 		setRentACar(null);
 
@@ -36,7 +44,7 @@ public class Processor extends Processor_Base {
 				if (renting.getPaymentReference() == null) {
 					try {
 						renting.setPaymentReference(
-								BankInterface.processPayment(new RestBankOperationData(renting.getClientIban(),
+								this.bankInterface.processPayment(new RestBankOperationData(renting.getClientIban(),
 										renting.getPrice(), TRANSACTION_SOURCE, renting.getReference())));
 					} catch (BankException | RemoteAccessException ex) {
 						failedToProcess.add(renting);
@@ -48,7 +56,7 @@ public class Processor extends Processor_Base {
 						renting.getClientNif(), renting.getType(), renting.getPrice(), renting.getBegin(),
 						renting.getTime());
 				try {
-					renting.setInvoiceReference(TaxInterface.submitInvoice(invoiceData));
+					renting.setInvoiceReference(this.taxInterface.submitInvoice(invoiceData));
 				} catch (TaxException | RemoteAccessException ex) {
 					failedToProcess.add(renting);
 				}
@@ -56,9 +64,9 @@ public class Processor extends Processor_Base {
 				try {
 					if (renting.getCancelledPaymentReference() == null) {
 						renting.setCancelledPaymentReference(
-								BankInterface.cancelPayment(renting.getPaymentReference()));
+								this.bankInterface.cancelPayment(renting.getPaymentReference()));
 					}
-					TaxInterface.cancelInvoice(renting.getInvoiceReference());
+					this.taxInterface.cancelInvoice(renting.getInvoiceReference());
 					renting.setCancelledInvoice(true);
 				} catch (BankException | TaxException | RemoteAccessException ex) {
 					failedToProcess.add(renting);

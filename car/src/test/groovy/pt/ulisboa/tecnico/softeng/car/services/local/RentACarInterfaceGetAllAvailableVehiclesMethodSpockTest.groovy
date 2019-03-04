@@ -4,8 +4,11 @@ import org.joda.time.LocalDate
 
 import pt.ulisboa.tecnico.softeng.car.domain.Car
 import pt.ulisboa.tecnico.softeng.car.domain.Motorcycle
+import pt.ulisboa.tecnico.softeng.car.domain.Processor
 import pt.ulisboa.tecnico.softeng.car.domain.RentACar
 import pt.ulisboa.tecnico.softeng.car.domain.SpockRollbackTestAbstractClass
+import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 
 class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def ADVENTURE_ID = "AdventureId"
@@ -24,11 +27,23 @@ class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollb
 	def IBAN_BUYER = 'IBAN'
 	def rentACar1
 	def rentACar2
+	def rentACarInterface
 
 	@Override
 	def populate4Test() {
-		rentACar1 = new RentACar(NAME1,NIF,IBAN)
-		rentACar2 = new RentACar(NAME2,NIF + '1',IBAN)
+		rentACarInterface = new RentACarInterface()
+
+		def bankInterface = new BankInterface()
+		def taxInterface = new TaxInterface()
+		def processor = new Processor(bankInterface, taxInterface)
+
+		rentACar1 = new RentACar(NAME1,NIF,IBAN, processor)
+
+		bankInterface = new BankInterface()
+		taxInterface = new TaxInterface()
+		processor = new Processor(bankInterface, taxInterface)
+
+		rentACar2 = new RentACar(NAME2,NIF + '1',IBAN, processor)
 	}
 
 	def 'only cars'() {
@@ -39,7 +54,7 @@ class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollb
 		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
 		when:
-		def cars = RentACarInterface.getAllAvailableCars(date3,date4)
+		def cars = rentACarInterface.getAllAvailableCars(date3,date4)
 
 		then:
 		cars.contains(car1)
@@ -48,13 +63,13 @@ class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollb
 	}
 
 	def 'only available cars'() {
-		given: 'creating two cars, and renting one'
+		given: 'creating two cars, and rentingOne one'
 		def car1 = new Car(PLATE_CAR1, 10, 10, rentACar1)
 		def car2 = new Car(PLATE_CAR2, 10, 10, rentACar2)
 		car1.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
 		when: 'when fetching available cars'
-		def cars = RentACarInterface.getAllAvailableCars(date1, date2)
+		def cars = rentACarInterface.getAllAvailableCars(date1, date2)
 
 		then: 'car2 should be in the returned list'
 		!cars.contains(car1)
@@ -67,7 +82,7 @@ class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollb
 		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
 
 		when: 'when fetching available motorcycle'
-		def cars = RentACarInterface.getAllAvailableMotorcycles(date3,date4)
+		def cars = rentACarInterface.getAllAvailableMotorcycles(date3,date4)
 
 		then: 'only the motorcycle should be in the list'
 		cars.contains(motorcycle)

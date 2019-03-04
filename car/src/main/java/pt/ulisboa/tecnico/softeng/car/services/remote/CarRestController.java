@@ -24,8 +24,11 @@ public class CarRestController {
 		logger.info("rent type:{}, license:{}, nif:{}, iban:{}, begin:{}, end:{}, adventureId:{}",
 				rentingData.getTypeValue(), rentingData.getDrivingLicense(), rentingData.getBuyerNIF(),
 				rentingData.getBuyerIBAN(), rentingData.getBegin(), rentingData.getEnd(), rentingData.getAdventureId());
+
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
 		try {
-			return new ResponseEntity<RestRentingData>(RentACarInterface.rent(rentingData.getTypeValue(),
+			return new ResponseEntity<RestRentingData>(rentACarInterface.rent(rentingData.getTypeValue(),
 					rentingData.getDrivingLicense(), rentingData.getBuyerNIF(), rentingData.getBuyerIBAN(),
 					rentingData.getBegin(), rentingData.getEnd(), rentingData.getAdventureId()), HttpStatus.OK);
 
@@ -37,8 +40,11 @@ public class CarRestController {
 	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
 	public ResponseEntity<String> cancel(@RequestParam String reference) {
 		logger.info("cancel reference:{}", reference);
+
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
 		try {
-			return new ResponseEntity<>(RentACarInterface.cancelRenting(reference), HttpStatus.OK);
+			return new ResponseEntity<>(rentACarInterface.cancelRenting(reference), HttpStatus.OK);
 		} catch (CarException be) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -47,8 +53,11 @@ public class CarRestController {
 	@RequestMapping(value = "/renting", method = RequestMethod.GET)
 	public ResponseEntity<RestRentingData> renting(@RequestParam String reference) {
 		logger.info("renting reference:{}", reference);
+
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
 		try {
-			RestRentingData rentingData = RentACarInterface.getRentingData(reference);
+			RestRentingData rentingData = rentACarInterface.getRentingData(reference);
 			return new ResponseEntity<RestRentingData>(rentingData, HttpStatus.OK);
 		} catch (CarException be) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
