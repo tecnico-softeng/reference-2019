@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import pt.ulisboa.tecnico.softeng.car.exception.CarException;
 import pt.ulisboa.tecnico.softeng.car.services.local.RentACarInterface;
 import pt.ulisboa.tecnico.softeng.car.services.local.dataobjects.RentingData;
@@ -16,50 +17,50 @@ import pt.ulisboa.tecnico.softeng.car.services.local.dataobjects.VehicleData;
 @Controller
 @RequestMapping(value = "/rentacars/rentacar/{code}/vehicles/vehicle/{plate}/rentings")
 public class RentingsController {
-    private static Logger logger = LoggerFactory.getLogger(RentingsController.class);
+	private static Logger logger = LoggerFactory.getLogger(RentingsController.class);
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String rentingForm(Model model, @PathVariable String code, @PathVariable String plate) {
+	@RequestMapping(method = RequestMethod.GET)
+	public String rentingForm(Model model, @PathVariable String code, @PathVariable String plate) {
 
-        VehicleData vehicleData = RentACarInterface.getVehicleByPlate(code, plate);
-        if (vehicleData == null) {
-            model.addAttribute("error",
-                    "Error: it does not exist a vehicle with plate " + plate);
-            model.addAttribute("rentacar", RentACarInterface.getRentACarData(code));
-            model.addAttribute("renting", new RentingData());
-            model.addAttribute("rentings", RentACarInterface.getRentings(code, plate));
-            model.addAttribute("vehicle", new VehicleData());
-            return "vehiclesView";
-        } else {
-            model.addAttribute("rentacar", RentACarInterface.getRentACarData(code));
-            model.addAttribute("renting", new RentingData());
-            model.addAttribute("rentings", RentACarInterface.getRentings(code, plate));
-            model.addAttribute("vehicle", vehicleData);
-            return "rentingsView";
-        }
-    }
+		RentACarInterface rentACarInterface = new RentACarInterface();
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String rentingSubmit(Model model,
-                                @PathVariable String code,
-                                @PathVariable String plate,
-                                @ModelAttribute RentingData renting) {
-        logger.debug("Renting a car.");
+		VehicleData vehicleData = rentACarInterface.getVehicleByPlate(code, plate);
+		if (vehicleData == null) {
+			model.addAttribute("error", "Error: it does not exist a vehicle with plate " + plate);
+			model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
+			model.addAttribute("renting", new RentingData());
+			model.addAttribute("rentings", rentACarInterface.getRentings(code, plate));
+			model.addAttribute("vehicle", new VehicleData());
+			return "vehiclesView";
+		} else {
+			model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
+			model.addAttribute("renting", new RentingData());
+			model.addAttribute("rentings", rentACarInterface.getRentings(code, plate));
+			model.addAttribute("vehicle", vehicleData);
+			return "rentingsView";
+		}
+	}
 
-        try {
-            RentACarInterface.rent(code, plate, renting.getDrivingLicense(),
-                    renting.getBuyerNIF(), renting.getBuyerIBAN(),
-                    renting.getBegin(), renting.getEnd(), renting.getAdventureId());
-        } catch (CarException be) {
-            model.addAttribute("error", "Error: it was not possible to rent the vehicle");
-            model.addAttribute("rentacar", RentACarInterface.getRentACarData(code));
-            model.addAttribute("renting", renting);
-            model.addAttribute("rentings", RentACarInterface.getRentings(code, plate));
-            model.addAttribute("vehicle", RentACarInterface.getVehicleData(code, plate));
-            return "rentingsView";
-        }
+	@RequestMapping(method = RequestMethod.POST)
+	public String rentingSubmit(Model model, @PathVariable String code, @PathVariable String plate,
+			@ModelAttribute RentingData renting) {
+		logger.debug("Renting a car.");
 
-        return "redirect:/rentacars/rentacar/" + code + "/vehicles/vehicle/" + plate + "/rentings";
-    }
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
+		try {
+			rentACarInterface.rent(code, plate, renting.getDrivingLicense(), renting.getBuyerNIF(),
+					renting.getBuyerIBAN(), renting.getBegin(), renting.getEnd(), renting.getAdventureId());
+		} catch (CarException be) {
+			model.addAttribute("error", "Error: it was not possible to rent the vehicle");
+			model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
+			model.addAttribute("renting", renting);
+			model.addAttribute("rentings", rentACarInterface.getRentings(code, plate));
+			model.addAttribute("vehicle", rentACarInterface.getVehicleData(code, plate));
+			return "rentingsView";
+		}
+
+		return "redirect:/rentacars/rentacar/" + code + "/vehicles/vehicle/" + plate + "/rentings";
+	}
 
 }

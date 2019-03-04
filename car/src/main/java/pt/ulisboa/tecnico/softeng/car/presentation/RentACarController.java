@@ -20,8 +20,11 @@ public class RentACarController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String rentacarForm(Model model) {
 		logger.info("rentacar");
+
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
 		model.addAttribute("rentacar", new RentACarData());
-		model.addAttribute("rentacars", RentACarInterface.getRentACars());
+		model.addAttribute("rentacars", rentACarInterface.getRentACars());
 		return "rentacarsView";
 	}
 
@@ -30,12 +33,14 @@ public class RentACarController {
 		logger.info("rentacarSubmit name:{}, nif:{}, iban:{}", rentacarData.getName(), rentacarData.getNif(),
 				rentacarData.getIban());
 
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
 		try {
-			RentACarInterface.createRentACar(rentacarData);
+			rentACarInterface.createRentACar(rentacarData);
 		} catch (CarException be) {
 			model.addAttribute("error", "Error: it was not possible to create the Rent-A-Car");
 			model.addAttribute("rentacar", rentacarData);
-			model.addAttribute("rentacars", RentACarInterface.getRentACars());
+			model.addAttribute("rentacars", rentACarInterface.getRentACars());
 			return "rentacarsView";
 		}
 
@@ -46,7 +51,9 @@ public class RentACarController {
 	public String deleteRentACars(Model model) {
 		logger.info("deleteRentACars");
 
-		RentACarInterface.deleteRentACars();
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
+		rentACarInterface.deleteRentACars();
 
 		return "redirect:/rentacars";
 	}

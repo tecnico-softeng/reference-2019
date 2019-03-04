@@ -3,9 +3,12 @@ package pt.ulisboa.tecnico.softeng.car.services.local
 import org.joda.time.LocalDate
 
 import pt.ulisboa.tecnico.softeng.car.domain.Car
+import pt.ulisboa.tecnico.softeng.car.domain.Processor
 import pt.ulisboa.tecnico.softeng.car.domain.RentACar
 import pt.ulisboa.tecnico.softeng.car.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
+import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import spock.lang.Unroll
 
 class RentACarInterfaceCancelRentingMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -21,11 +24,17 @@ class RentACarInterfaceCancelRentingMethodSpockTest extends SpockRollbackTestAbs
 	def rentACar
 	def car
 	def renting
-
+	def rentACarInterface
 
 	@Override
 	def populate4Test() {
-		rentACar = new RentACar(RENT_A_CAR_NAME,NIF,IBAN)
+		rentACarInterface = new RentACarInterface()
+
+		def bankInterface = new BankInterface()
+		def taxInterface = new TaxInterface()
+		def processor = new Processor(bankInterface, taxInterface)
+
+		rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN, processor)
 
 		car = new Car(PLATE_CAR,10,10,rentACar)
 
@@ -33,10 +42,10 @@ class RentACarInterfaceCancelRentingMethodSpockTest extends SpockRollbackTestAbs
 	}
 
 	def 'success'() {
-		when: 'when cancelling a renting'
-		String cancel = RentACarInterface.cancelRenting(renting.getReference())
+		when: 'when cancelling a rentingOne'
+		String cancel = rentACarInterface.cancelRenting(renting.getReference())
 
-		then: 'the renting becomes cancelled, and the cancellation reference stored'
+		then: 'the rentingOne becomes cancelled, and the cancellation reference stored'
 		renting.isCancelled()
 		renting.getCancellationReference() == cancel
 	}
@@ -44,7 +53,7 @@ class RentACarInterfaceCancelRentingMethodSpockTest extends SpockRollbackTestAbs
 	@Unroll('#label')
 	def 'exceptions'() {
 		when: 'canceling a wrong ref'
-		RentACarInterface.cancelRenting(ref)
+		rentACarInterface.cancelRenting(ref)
 
 		then: 'throws an exception'
 		thrown(CarException)
@@ -59,7 +68,7 @@ class RentACarInterfaceCancelRentingMethodSpockTest extends SpockRollbackTestAbs
 
 	def 'does not exist reference'() {
 		when:
-		RentACarInterface.cancelRenting('MISSING_REFERENCE')
+		rentACarInterface.cancelRenting('MISSING_REFERENCE')
 
 		then:
 		thrown(CarException)
