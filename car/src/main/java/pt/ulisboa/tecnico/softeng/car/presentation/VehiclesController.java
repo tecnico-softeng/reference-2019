@@ -18,12 +18,14 @@ import pt.ulisboa.tecnico.softeng.car.services.local.dataobjects.VehicleData;
 public class VehiclesController {
 	private static Logger logger = LoggerFactory.getLogger(VehiclesController.class);
 
-	@RequestMapping(method = RequestMethod.GET)
 	public String rentacarForm(Model model, @PathVariable String code) {
 		logger.info("rentacar");
-		model.addAttribute("rentacar", RentACarInterface.getRentACarData(code));
+
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
+		model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
 		model.addAttribute("vehicle", new VehicleData());
-		model.addAttribute("vehicles", RentACarInterface.getVehicles(code));
+		model.addAttribute("vehicles", rentACarInterface.getVehicles(code));
 		return "vehiclesView";
 	}
 
@@ -32,13 +34,15 @@ public class VehiclesController {
 		logger.info("vehicleSubmit plate:{}, km:{}, price:{}, type:{}", vehicleData.getPlate(),
 				vehicleData.getKilometers(), vehicleData.getPrice(), vehicleData.getType());
 
+		RentACarInterface rentACarInterface = new RentACarInterface();
+
 		try {
-			RentACarInterface.createVehicle(code, vehicleData);
+			rentACarInterface.createVehicle(code, vehicleData);
 		} catch (CarException be) {
 			model.addAttribute("error", "Error: it was not possible to create the Rent-A-Car");
-			model.addAttribute("rentacar", RentACarInterface.getRentACarData(code));
+			model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
 			model.addAttribute("vehicle", vehicleData);
-			model.addAttribute("vehicles", RentACarInterface.getVehicles(code));
+			model.addAttribute("vehicles", rentACarInterface.getVehicles(code));
 			return "vehiclesView";
 		}
 

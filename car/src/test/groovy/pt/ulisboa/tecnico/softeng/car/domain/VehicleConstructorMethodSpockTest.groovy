@@ -1,6 +1,8 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
+import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -14,7 +16,11 @@ class VehicleConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN)
+		def bankInterface = new BankInterface()
+		def taxInterface = new TaxInterface()
+		def processor = new Processor(bankInterface, taxInterface)
+
+		rentACar = new RentACar(RENT_A_CAR_NAME, NIF, IBAN, processor)
 	}
 
 	def 'success'() {
@@ -74,7 +80,8 @@ class VehicleConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 		given: 'create a car in rentacar'
 		new Car(PLATE_CAR, 0, 10, rentACar)
 		and: 'another rent a car'
-		def rentACar2 = new RentACar(RENT_A_CAR_NAME + '2', NIF + "1", IBAN)
+		def rentACar2 = new RentACar(RENT_A_CAR_NAME + '2', NIF + "1", IBAN,
+				new Processor(new BankInterface(), new TaxInterface()))
 
 		when: 'creating a car in the other rent a car with the same plate'
 		new Car(PLATE_CAR, 2, 10, rentACar2)

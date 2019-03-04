@@ -3,6 +3,8 @@ package pt.ulisboa.tecnico.softeng.car.domain
 import org.joda.time.LocalDate
 
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
+import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -22,13 +24,17 @@ class RentingConflictMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		def rentACar = new RentACar(RENT_A_CAR_NAME,NIF,IBAN)
+		def bankInterface = new BankInterface()
+		def taxInterface = new TaxInterface()
+		def processor = new Processor(bankInterface, taxInterface)
+
+		def rentACar = new RentACar(RENT_A_CAR_NAME,NIF,IBAN, processor)
 		car = new Car(PLATE_CAR,10,10,rentACar)
 	}
 
 	@Unroll("conflict and non-conflict test: #dt1, #dt2, #dt3, #dt4 || #res")
 	def 'conflict'() {
-		when: 'when renting for a given days'
+		when: 'when rentingOne for a given days'
 		def renting = new Renting(DRIVING_LICENSE,dt1,dt2,car,NIF,IBAN_BUYER)
 
 		then: 'check it does not conflict'
@@ -44,7 +50,7 @@ class RentingConflictMethodSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'end before begin'() {
-		given: 'given a renting'
+		given: 'given a rentingOne'
 		def renting = new Renting(DRIVING_LICENSE,date1,date2,car,NIF,IBAN_BUYER)
 
 		when: 'throws an exception if end is before start'
