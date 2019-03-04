@@ -77,7 +77,7 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
         }
     }
 
-    public String getReference(String type) {
+    public RestRoomBookingData getRoomBookingData4Type(String type) {
         if (getCancelled()) {
             return null;
         }
@@ -98,7 +98,7 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
 
             if (data != null && data.getRoomType().equals(type)) {
                 removeReference(reference);
-                return reference.getValue();
+                return data;
             }
         }
         return null;
