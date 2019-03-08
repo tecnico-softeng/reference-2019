@@ -201,5 +201,4 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         and: 'the bulk is not cancelled'
         !bulk.getCancelled()
     }
-
 }
