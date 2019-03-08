@@ -8,9 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure.State;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.CarInterface;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.HotelInterface;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.TaxInterface;
+import pt.ulisboa.tecnico.softeng.broker.services.remote.*;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRentingData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.CarException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
@@ -18,13 +16,15 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessE
 @RunWith(JMockit.class)
 public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
     @Mocked
+    private CarInterface carInterface;
+    @Mocked
     private TaxInterface taxInterface;
 
     private RestRentingData rentingData;
 
     @Override
     public void populate4Test() {
-        this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN, new HotelInterface());
+        this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN, new ActivityInterface(), new HotelInterface(), this.carInterface, new BankInterface(), this.taxInterface);
         this.client = new Client(this.broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
         this.adventure = new Adventure(this.broker, this.BEGIN, this.END, this.client, MARGIN);
 
@@ -36,10 +36,10 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
     }
 
     @Test
-    public void successRentVehicle(@Mocked final CarInterface carInterface) {
+    public void successRentVehicle() {
         new Expectations() {
             {
-                CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
+                RentVehicleStateMethodTest.this.carInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
                         RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
                 this.result = RentVehicleStateMethodTest.this.rentingData;
                 this.times = 1;
@@ -52,10 +52,10 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
     }
 
     @Test
-    public void carException(@Mocked final CarInterface carInterface) {
+    public void carException() {
         new Expectations() {
             {
-                CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
+                RentVehicleStateMethodTest.this.carInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
                         RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
                 this.result = new CarException();
                 this.times = 1;
@@ -68,10 +68,10 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
     }
 
     @Test
-    public void singleRemoteAccessException(@Mocked final CarInterface carInterface) {
+    public void singleRemoteAccessException() {
         new Expectations() {
             {
-                CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
+                RentVehicleStateMethodTest.this.carInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
                         RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
                 this.result = new RemoteAccessException();
                 this.times = 1;
@@ -84,10 +84,10 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
     }
 
     @Test
-    public void maxRemoteAccessException(@Mocked final CarInterface carInterface) {
+    public void maxRemoteAccessException() {
         new Expectations() {
             {
-                CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
+                RentVehicleStateMethodTest.this.carInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
                         RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
                 this.result = new RemoteAccessException();
                 this.times = RentVehicleState.MAX_REMOTE_ERRORS;
@@ -102,10 +102,10 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
     }
 
     @Test
-    public void maxMinusOneRemoteAccessException(@Mocked final CarInterface carInterface) {
+    public void maxMinusOneRemoteAccessException() {
         new Expectations() {
             {
-                CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
+                RentVehicleStateMethodTest.this.carInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
                         RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
                 this.result = new RemoteAccessException();
                 this.times = RentVehicleState.MAX_REMOTE_ERRORS - 1;
@@ -120,10 +120,10 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
     }
 
     @Test
-    public void twoRemoteAccessExceptionOneSuccess(@Mocked final CarInterface carInterface) {
+    public void twoRemoteAccessExceptionOneSuccess() {
         new Expectations() {
             {
-                CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
+                RentVehicleStateMethodTest.this.carInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
                         RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
                 this.result = new Delegate() {
                     int i = 0;
@@ -149,10 +149,10 @@ public class RentVehicleStateMethodTest extends RollbackTestAbstractClass {
     }
 
     @Test
-    public void oneRemoteAccessExceptionOneCarException(@Mocked final CarInterface carInterface) {
+    public void oneRemoteAccessExceptionOneCarException() {
         new Expectations() {
             {
-                CarInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
+                RentVehicleStateMethodTest.this.carInterface.rentCar(CarInterface.Type.CAR, DRIVING_LICENSE, BROKER_NIF_AS_BUYER, BROKER_IBAN,
                         RentVehicleStateMethodTest.this.BEGIN, RentVehicleStateMethodTest.this.END, this.anyString);
                 this.result = new Delegate() {
                     int i = 0;

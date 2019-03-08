@@ -12,12 +12,11 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*;
 
 @RunWith(JMockit.class)
 public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
-    @Mocked
-    private TaxInterface taxInterface;
 
     @Override
     public void populate4Test() {
-        this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN, new HotelInterface());
+        this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN,
+                new ActivityInterface(), new HotelInterface(), new CarInterface(), new BankInterface(), new TaxInterface());
         this.client = new Client(this.broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
         this.adventure = new Adventure(this.broker, this.BEGIN, this.END, this.client, MARGIN);
 
@@ -29,7 +28,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
         new Expectations() {
             {
-                BankInterface.cancelPayment(PAYMENT_CONFIRMATION);
+                bankInterface.cancelPayment(PAYMENT_CONFIRMATION);
                 this.result = PAYMENT_CANCELLATION;
             }
         };
@@ -44,7 +43,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
         new Expectations() {
             {
-                BankInterface.cancelPayment(PAYMENT_CONFIRMATION);
+                bankInterface.cancelPayment(PAYMENT_CONFIRMATION);
                 this.result = new BankException();
             }
         };
@@ -59,7 +58,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
         new Expectations() {
             {
-                BankInterface.cancelPayment(PAYMENT_CONFIRMATION);
+                bankInterface.cancelPayment(PAYMENT_CONFIRMATION);
                 this.result = new RemoteAccessException();
             }
         };
@@ -77,7 +76,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
         new Expectations() {
             {
-                ActivityInterface.cancelReservation(ACTIVITY_CONFIRMATION);
+                activityInterface.cancelReservation(ACTIVITY_CONFIRMATION);
                 this.result = ACTIVITY_CANCELLATION;
             }
         };
@@ -95,7 +94,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
         new Expectations() {
             {
-                ActivityInterface.cancelReservation(ACTIVITY_CONFIRMATION);
+                activityInterface.cancelReservation(ACTIVITY_CONFIRMATION);
                 this.result = new ActivityException();
             }
         };
@@ -113,7 +112,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
         new Expectations() {
             {
-                ActivityInterface.cancelReservation(ACTIVITY_CONFIRMATION);
+                activityInterface.cancelReservation(ACTIVITY_CONFIRMATION);
                 this.result = new RemoteAccessException();
             }
         };
@@ -195,7 +194,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setRentingConfirmation(RENTING_CONFIRMATION);
         new Expectations() {
             {
-                CarInterface.cancelRenting(RENTING_CONFIRMATION);
+                carInterface.cancelRenting(RENTING_CONFIRMATION);
                 this.result = RENTING_CANCELLATION;
             }
         };
@@ -217,7 +216,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setRentingConfirmation(RENTING_CONFIRMATION);
         new Expectations() {
             {
-                CarInterface.cancelRenting(RENTING_CONFIRMATION);
+                carInterface.cancelRenting(RENTING_CONFIRMATION);
                 this.result = new CarException();
             }
         };
@@ -239,7 +238,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setRentingConfirmation(RENTING_CONFIRMATION);
         new Expectations() {
             {
-                CarInterface.cancelRenting(RENTING_CONFIRMATION);
+                carInterface.cancelRenting(RENTING_CONFIRMATION);
                 this.result = new RemoteAccessException();
             }
         };
@@ -264,7 +263,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setInvoiceReference(INVOICE_REFERENCE);
         new Expectations() {
             {
-                TaxInterface.cancelInvoice(INVOICE_REFERENCE);
+                taxInterface.cancelInvoice(INVOICE_REFERENCE);
             }
         };
 
@@ -288,7 +287,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setInvoiceReference(INVOICE_REFERENCE);
         new Expectations() {
             {
-                TaxInterface.cancelInvoice(INVOICE_REFERENCE);
+                taxInterface.cancelInvoice(INVOICE_REFERENCE);
                 this.result = new TaxException();
             }
         };
@@ -313,7 +312,7 @@ public class UndoStateProcessMethodTest extends RollbackTestAbstractClass {
         this.adventure.setInvoiceReference(INVOICE_REFERENCE);
         new Expectations() {
             {
-                TaxInterface.cancelInvoice(INVOICE_REFERENCE);
+                taxInterface.cancelInvoice(INVOICE_REFERENCE);
                 this.result = new RemoteAccessException();
             }
         };

@@ -5,18 +5,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.HotelInterface;
+import pt.ulisboa.tecnico.softeng.broker.services.remote.*;
 
 public class Broker extends Broker_Base {
     private static final Logger logger = LoggerFactory.getLogger(Broker.class);
 
-    public HotelInterface getHotelInterface() {
-        return this.hotelInterface;
-    }
-
+    private final ActivityInterface activityInterface;
     private final HotelInterface hotelInterface;
+    private final CarInterface carInterface;
+    private final BankInterface bankInterface;
+    private final TaxInterface taxInterface;
 
-    public Broker(String code, String name, String nifAsSeller, String nifAsBuyer, String iban, HotelInterface hotelInterface) {
+    public Broker(String code, String name, String nifAsSeller, String nifAsBuyer, String iban,
+                  ActivityInterface activityInterface, HotelInterface hotelInterface, CarInterface carInterface,
+                  BankInterface bankInterface, TaxInterface taxInterface) {
         checkArguments(code, name, nifAsSeller, nifAsBuyer, iban);
 
         setCode(code);
@@ -25,7 +27,11 @@ public class Broker extends Broker_Base {
         setNifAsBuyer(nifAsBuyer);
         setIban(iban);
 
+        this.activityInterface = activityInterface;
         this.hotelInterface = hotelInterface;
+        this.carInterface = carInterface;
+        this.bankInterface = bankInterface;
+        this.taxInterface = taxInterface;
 
         FenixFramework.getDomainRoot().addBroker(this);
     }
@@ -97,5 +103,26 @@ public class Broker extends Broker_Base {
         int counter = super.getCounter() + 1;
         setCounter(counter);
         return counter;
+    }
+
+    public ActivityInterface getActivityInterface() {
+        return this.activityInterface;
+    }
+
+    public HotelInterface getHotelInterface() {
+        return this.hotelInterface;
+    }
+
+    public CarInterface getCarInterface() {
+        return this.carInterface;
+    }
+
+    public BankInterface getBankInterface() {
+        return this.bankInterface;
+    }
+
+
+    public TaxInterface getTaxInterface() {
+        return this.taxInterface;
     }
 }

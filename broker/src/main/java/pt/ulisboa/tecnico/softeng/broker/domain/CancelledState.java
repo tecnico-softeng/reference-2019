@@ -18,15 +18,19 @@ public class CancelledState extends CancelledState_Base {
 
     @Override
     public void process() {
+        ActivityInterface activityInterface = getAdventure().getBroker().getActivityInterface();
+        CarInterface carInterface = getAdventure().getBroker().getCarInterface();
+        BankInterface bankInterface = getAdventure().getBroker().getBankInterface();
+
         if (getAdventure().getPaymentCancellation() != null) {
             try {
-                BankInterface.getOperationData(getAdventure().getPaymentConfirmation());
+                bankInterface.getOperationData(getAdventure().getPaymentConfirmation());
             } catch (BankException | RemoteAccessException e) {
                 return;
             }
 
             try {
-                BankInterface.getOperationData(getAdventure().getPaymentCancellation());
+                bankInterface.getOperationData(getAdventure().getPaymentCancellation());
             } catch (BankException | RemoteAccessException e) {
                 return;
             }
@@ -34,7 +38,7 @@ public class CancelledState extends CancelledState_Base {
 
         if (getAdventure().getActivityCancellation() != null) {
             try {
-                ActivityInterface.getActivityReservationData(getAdventure().getActivityCancellation());
+                activityInterface.getActivityReservationData(getAdventure().getActivityCancellation());
             } catch (ActivityException | RemoteAccessException e) {
                 return;
             }
@@ -50,7 +54,7 @@ public class CancelledState extends CancelledState_Base {
 
         if (getAdventure().getRentingCancellation() != null) {
             try {
-                CarInterface.getRentingData(getAdventure().getRentingCancellation());
+                carInterface.getRentingData(getAdventure().getRentingCancellation());
             } catch (CarException | RemoteAccessException e) {
                 return;
             }

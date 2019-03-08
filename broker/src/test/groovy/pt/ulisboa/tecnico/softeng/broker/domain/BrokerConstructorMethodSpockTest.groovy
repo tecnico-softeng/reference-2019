@@ -2,7 +2,7 @@ package pt.ulisboa.tecnico.softeng.broker.domain
 
 import pt.ist.fenixframework.FenixFramework
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException
-import pt.ulisboa.tecnico.softeng.broker.services.remote.HotelInterface
+import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import spock.lang.Unroll
 
 class BrokerConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
@@ -13,7 +13,8 @@ class BrokerConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     def success() {
         when: 'a broker is created'
-        def broker = new Broker(BROKER_CODE, BROKER_NAME, BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN, new HotelInterface())
+        def broker = new Broker(BROKER_CODE, BROKER_NAME, BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN,
+                new ActivityInterface(), new HotelInterface(), new CarInterface(), new BankInterface(), new TaxInterface())
 
         then: 'the attributes are correctly set'
         broker.getCode().equals(BROKER_CODE)
@@ -25,7 +26,8 @@ class BrokerConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
     @Unroll('#label: #broker, #name, #nif_seller, #nif_buyer, #iban')
     def 'invalid arguments'() {
         when: 'a broker is created'
-        new Broker(broker, name, nif_seller, nif_buyer, iban, new HotelInterface())
+        new Broker(broker, name, nif_seller, nif_buyer, iban,
+                new ActivityInterface(), new HotelInterface(), new CarInterface(), new BankInterface(), new TaxInterface())
 
         then: 'an exception is thrown'
         thrown(BrokerException)
@@ -53,10 +55,12 @@ class BrokerConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
     @Unroll('duplicate #label')
     def 'unique verifications'() {
         given: 'a broker'
-        def broker = new Broker(code_one, BROKER_NAME, seller_nif_one, buyer_nif_one, BROKER_IBAN, new HotelInterface())
+        def broker = new Broker(code_one, BROKER_NAME, seller_nif_one, buyer_nif_one, BROKER_IBAN,
+                new ActivityInterface(), new HotelInterface(), new CarInterface(), new BankInterface(), new TaxInterface())
 
         when: 'another broker is created'
-        new Broker(code_two, BROKER_NAME, seller_nif_two, buyer_nif_two, BROKER_IBAN, new HotelInterface())
+        new Broker(code_two, BROKER_NAME, seller_nif_two, buyer_nif_two, BROKER_IBAN,
+                new ActivityInterface(), new HotelInterface(), new CarInterface(), new BankInterface(), new TaxInterface())
 
         then: 'an exception is thrown'
         thrown(BrokerException)
