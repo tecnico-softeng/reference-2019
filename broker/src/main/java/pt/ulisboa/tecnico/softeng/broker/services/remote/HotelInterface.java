@@ -28,9 +28,8 @@ public class HotelInterface {
                 roomBookingData.getBuyerIban(), roomBookingData.getAdventureId());
         RestTemplate restTemplate = new RestTemplate();
         try {
-            RestRoomBookingData result = restTemplate.postForObject(ENDPOINT + "/rest/hotels/reserve", roomBookingData,
+            return restTemplate.postForObject(ENDPOINT + "/rest/hotels/reserve", roomBookingData,
                     RestRoomBookingData.class);
-            return result;
         } catch (HttpClientErrorException e) {
             logger.info("reserveRoom HttpClientErrorException arrival:{}, departure:{}, adventureId:{}",
                     roomBookingData.getArrival(), roomBookingData.getDeparture(), roomBookingData.getBuyerNif(),
@@ -48,9 +47,8 @@ public class HotelInterface {
         logger.info("cancelBooking roomConfirmation:{}", roomConfirmation);
         RestTemplate restTemplate = new RestTemplate();
         try {
-            String result = restTemplate.postForObject(ENDPOINT + "/rest/hotels/cancel?reference=" + roomConfirmation,
+            return restTemplate.postForObject(ENDPOINT + "/rest/hotels/cancel?reference=" + roomConfirmation,
                     null, String.class);
-            return result;
         } catch (HttpClientErrorException e) {
             logger.info("cancelBooking HttpClientErrorException roomConfirmation:{}", roomConfirmation);
             throw new HotelException();

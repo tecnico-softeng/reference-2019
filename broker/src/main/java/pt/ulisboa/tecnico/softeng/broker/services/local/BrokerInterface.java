@@ -7,6 +7,7 @@ import pt.ulisboa.tecnico.softeng.broker.domain.Adventure;
 import pt.ulisboa.tecnico.softeng.broker.domain.Broker;
 import pt.ulisboa.tecnico.softeng.broker.domain.BulkRoomBooking;
 import pt.ulisboa.tecnico.softeng.broker.domain.Client;
+import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.AdventureData;
 import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.BrokerData;
 import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.BrokerData.CopyDepth;
@@ -85,7 +86,7 @@ public class BrokerInterface {
     public static void processAdventure(String brokerCode, String id) {
         Adventure adventure = FenixFramework.getDomainRoot().getBrokerSet().stream()
                 .filter(b -> b.getCode().equals(brokerCode)).flatMap(b -> b.getAdventureSet().stream())
-                .filter(a -> a.getID().equals(id)).findFirst().orElse(null);
+                .filter(a -> a.getID().equals(id)).findFirst().orElseThrow(() -> new BrokerException());
 
         adventure.process();
     }
@@ -94,7 +95,7 @@ public class BrokerInterface {
     public static void processBulk(String brokerCode, String bulkId) {
         BulkRoomBooking bulkRoomBooking = FenixFramework.getDomainRoot().getBrokerSet().stream()
                 .filter(b -> b.getCode().equals(brokerCode)).flatMap(b -> b.getRoomBulkBookingSet().stream())
-                .filter(r -> r.getId().equals(bulkId)).findFirst().orElse(null);
+                .filter(r -> r.getId().equals(bulkId)).findFirst().orElseThrow(() -> new BrokerException());
 
         bulkRoomBooking.processBooking();
     }

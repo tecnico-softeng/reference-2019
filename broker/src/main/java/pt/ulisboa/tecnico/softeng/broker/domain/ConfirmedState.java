@@ -10,8 +10,8 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBoo
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*;
 
 public class ConfirmedState extends ConfirmedState_Base {
-    public static int MAX_REMOTE_ERRORS = 20;
-    public static int MAX_BANK_EXCEPTIONS = 5;
+    static final int MAX_REMOTE_ERRORS = 20;
+    static final int MAX_BANK_EXCEPTIONS = 5;
 
     public ConfirmedState() {
         super();

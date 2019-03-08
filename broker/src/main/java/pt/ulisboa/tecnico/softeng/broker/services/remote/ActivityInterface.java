@@ -19,9 +19,8 @@ public class ActivityInterface {
                 activityBookingData.getNif(), activityBookingData.getIban(), activityBookingData.getAdventureId());
         RestTemplate restTemplate = new RestTemplate();
         try {
-            RestActivityBookingData result = restTemplate.postForObject(ENDPOINT + "/rest/providers/reserve",
+            return restTemplate.postForObject(ENDPOINT + "/rest/providers/reserve",
                     activityBookingData, RestActivityBookingData.class);
-            return result;
         } catch (HttpClientErrorException e) {
             logger.info(
                     "reserveActivity HttpClientErrorException begin:{}, end:{}, age:{}, nif:{}, iban:{}, adventureId:{}",
@@ -40,9 +39,8 @@ public class ActivityInterface {
         logger.info("cancelReservation activityConfirmation:{}", activityConfirmation);
         RestTemplate restTemplate = new RestTemplate();
         try {
-            String result = restTemplate.postForObject(
+            return restTemplate.postForObject(
                     ENDPOINT + "/rest/providers/cancel?reference=" + activityConfirmation, null, String.class);
-            return result;
         } catch (HttpClientErrorException e) {
             logger.info("cancelReservation HttpClientErrorException activityConfirmation:{}", activityConfirmation);
             throw new ActivityException();
@@ -56,9 +54,8 @@ public class ActivityInterface {
         logger.info("getActivityReservationData reference:{}", reference);
         RestTemplate restTemplate = new RestTemplate();
         try {
-            RestActivityBookingData result = restTemplate.getForObject(
+            return restTemplate.getForObject(
                     ENDPOINT + "/rest/providers/reservation?reference=" + reference, RestActivityBookingData.class);
-            return result;
         } catch (HttpClientErrorException e) {
             logger.info("getActivityReservationData HttpClientErrorException:{}", reference);
             throw new ActivityException();
