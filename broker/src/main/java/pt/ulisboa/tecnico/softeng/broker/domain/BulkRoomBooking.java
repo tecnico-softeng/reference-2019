@@ -1,13 +1,14 @@
 package pt.ulisboa.tecnico.softeng.broker.domain;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.joda.time.LocalDate;
+
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBookingData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.HotelException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class BulkRoomBooking extends BulkRoomBooking_Base {
     public static final int MAX_HOTEL_EXCEPTIONS = 3;

@@ -6,8 +6,7 @@ import spock.lang.Shared
 import spock.lang.Unroll
 
 class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
-    @Shared
-    def broker
+    @Shared def broker
     def client
 
     @Override
