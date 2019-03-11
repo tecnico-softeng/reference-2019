@@ -1,6 +1,8 @@
 package pt.ulisboa.tecnico.softeng.hotel.services.local
 
-import static org.junit.Assert.*
+import pt.ulisboa.tecnico.softeng.hotel.domain.Processor
+import pt.ulisboa.tecnico.softeng.hotel.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.hotel.services.remote.TaxInterface
 
 import java.util.stream.Collectors
 
@@ -22,17 +24,25 @@ class HotelInterfaceBulkBookingMethodSpockTest extends SpockRollbackTestAbstract
 	@Shared def ARRIVAL = new LocalDate(2016, 12, 19)
 	@Shared def DEPARTURE = new LocalDate(2016, 12, 21)
 
-	def hotel;
+	def hotel
+
+	def bankInterface
+	def taxInterface
+	def processor
 
 	@Override
 	def populate4Test() {
-		hotel = new Hotel('XPTO123', 'Paris', 'NIF', 'IBAN', 20.0, 30.0)
+		bankInterface = Mock(BankInterface)
+		taxInterface = Mock(TaxInterface)
+		processor = new Processor(bankInterface, taxInterface)
+
+		hotel = new Hotel('XPTO123', 'Paris', 'NIF', 'IBAN', 20.0, 30.0, processor)
 		new Room(hotel, '01', Type.DOUBLE)
 		new Room(hotel, '02', Type.SINGLE)
 		new Room(hotel, '03', Type.DOUBLE)
 		new Room(hotel, '04', Type.SINGLE)
 
-		hotel = new Hotel('XPTO124', 'Paris', 'NIF2', 'IBAN2', 25.0, 35.0)
+		hotel = new Hotel('XPTO124', 'Paris', 'NIF2', 'IBAN2', 25.0, 35.0, processor)
 		new Room(hotel, '01', Type.DOUBLE)
 		new Room(hotel, '02', Type.SINGLE)
 		new Room(hotel, '03', Type.DOUBLE)
@@ -49,7 +59,7 @@ class HotelInterfaceBulkBookingMethodSpockTest extends SpockRollbackTestAbstract
 		references.size() == refSize
 
 		where:
-		number | refSize
+		number || refSize
 		2 || 2
 		1 || 1
 		8 || 8
@@ -71,7 +81,7 @@ class HotelInterfaceBulkBookingMethodSpockTest extends SpockRollbackTestAbstract
 		for (def hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			hotel.delete()
 		}
-		hotel = new Hotel('XPTO124', 'Paris', 'NIF', 'IBAN', 27.0, 37.0)
+		hotel = new Hotel('XPTO124', 'Paris', 'NIF', 'IBAN', 27.0, 37.0, processor)
 
 		when: 'a bulkbooking is done'
 		HotelInterface.bulkBooking(3, ARRIVAL, DEPARTURE, NIF_BUYER, IBAN_BUYER, BULK_ID)

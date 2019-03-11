@@ -1,5 +1,9 @@
 package pt.ulisboa.tecnico.softeng.hotel.services.local
 
+import pt.ulisboa.tecnico.softeng.hotel.domain.Processor
+import pt.ulisboa.tecnico.softeng.hotel.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.hotel.services.remote.TaxInterface
+
 import static org.junit.Assert.*
 
 import org.joda.time.LocalDate
@@ -23,9 +27,16 @@ class HotelInterfaceReserveRoomMethodSpockTest extends SpockRollbackTestAbstract
 	def room
 	def hotel
 
+	def bankInterface
+	def taxInterface
+
 	@Override
 	def populate4Test() {
-		hotel = new Hotel('XPTO123', 'Lisboa', NIF_HOTEL, IBAN_HOTEL, 20.0, 30.0)
+		bankInterface = Mock(BankInterface)
+		taxInterface = Mock(TaxInterface)
+		def processor = new Processor(bankInterface, taxInterface)
+
+		hotel = new Hotel('XPTO123', 'Lisboa', NIF_HOTEL, IBAN_HOTEL, 20.0, 30.0, processor)
 		room = new Room(hotel, '01', Room.Type.SINGLE)
 	}
 

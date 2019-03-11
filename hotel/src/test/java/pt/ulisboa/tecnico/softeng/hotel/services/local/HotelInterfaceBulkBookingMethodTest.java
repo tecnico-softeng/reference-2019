@@ -70,38 +70,12 @@ public class HotelInterfaceBulkBookingMethodTest extends RollbackTestAbstractCla
 		assertEquals(2, references.size());
 	}
 
-	@Test(expected = HotelException.class)
-	public void zeroNumber() {
-		HotelInterface.bulkBooking(0, this.arrival, this.departure, this.NIF_BUYER, this.IBAN_BUYER, this.BULK_ID);
-	}
-
-	@Test(expected = HotelException.class)
-	public void noRooms() {
-		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
-			hotel.delete();
-		}
-
-		this.hotel = new Hotel("XPTO124", "Paris", "NIF", "IBAN", 27.0, 37.0);
-
-		HotelInterface.bulkBooking(3, this.arrival, this.departure, this.NIF_BUYER, this.IBAN_BUYER, this.BULK_ID);
-	}
-
 	@Test
 	public void OneNumber() {
 		Set<String> references = HotelInterface.bulkBooking(1, this.arrival, this.departure, this.NIF_BUYER,
 				this.IBAN_BUYER, this.BULK_ID);
 
 		assertEquals(1, references.size());
-	}
-
-	@Test(expected = HotelException.class)
-	public void nullArrival() {
-		HotelInterface.bulkBooking(2, null, this.departure, this.NIF_BUYER, this.IBAN_BUYER, this.BULK_ID);
-	}
-
-	@Test(expected = HotelException.class)
-	public void nullDeparture() {
-		HotelInterface.bulkBooking(2, this.arrival, null, this.NIF_BUYER, this.IBAN_BUYER, this.BULK_ID);
 	}
 
 	@Test
@@ -122,27 +96,6 @@ public class HotelInterfaceBulkBookingMethodTest extends RollbackTestAbstractCla
 		}
 	}
 
-	@Test
-	public void idempotentBulkBooking() {
-		new Expectations() {
-			{
-				BankInterface.processPayment((RestBankOperationData) this.any);
 
-				TaxInterface.submitInvoice((RestInvoiceData) this.any);
-			}
-		};
-
-		Set<String> references = HotelInterface.bulkBooking(4, this.arrival, this.departure, this.NIF_BUYER,
-				this.IBAN_BUYER, this.BULK_ID);
-
-		assertEquals(4, references.size());
-
-		Set<String> equalReferences = HotelInterface.bulkBooking(4, this.arrival, this.departure, this.NIF_BUYER,
-				this.IBAN_BUYER, this.BULK_ID);
-
-		assertEquals(4, HotelInterface.getAvailableRooms(4, this.arrival, this.departure).size());
-		assertEquals(references.stream().sorted().collect(Collectors.toList()),
-				equalReferences.stream().sorted().collect(Collectors.toList()));
-	}
 
 }
