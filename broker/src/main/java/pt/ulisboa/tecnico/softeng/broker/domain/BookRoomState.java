@@ -8,37 +8,38 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.HotelExceptio
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
 
 public class BookRoomState extends BookRoomState_Base {
-	public static final int MAX_REMOTE_ERRORS = 10;
+    public static final int MAX_REMOTE_ERRORS = 10;
 
-	@Override
-	public State getValue() {
-		return State.BOOK_ROOM;
-	}
+    @Override
+    public State getValue() {
+        return State.BOOK_ROOM;
+    }
 
-	@Override
-	public void process() {
-		try {
-			RestRoomBookingData bookingData = HotelInterface.reserveRoom(new RestRoomBookingData(Type.SINGLE,
-					getAdventure().getBegin(), getAdventure().getEnd(), getAdventure().getBroker().getNifAsBuyer(),
-					getAdventure().getBroker().getIban(), getAdventure().getID()));
-			getAdventure().setRoomConfirmation(bookingData.getReference());
-			getAdventure().incAmountToPay(bookingData.getPrice());
-		} catch (HotelException he) {
-			getAdventure().setState(State.UNDO);
-			return;
-		} catch (RemoteAccessException rae) {
-			incNumOfRemoteErrors();
-			if (getNumOfRemoteErrors() == MAX_REMOTE_ERRORS) {
-				getAdventure().setState(State.UNDO);
-			}
-			return;
-		}
+    @Override
+    public void process() {
+        HotelInterface hotelInterface = getAdventure().getBroker().getHotelInterface();
+        try {
+            RestRoomBookingData bookingData = hotelInterface.reserveRoom(new RestRoomBookingData(Type.SINGLE,
+                    getAdventure().getBegin(), getAdventure().getEnd(), getAdventure().getBroker().getNifAsBuyer(),
+                    getAdventure().getBroker().getIban(), getAdventure().getID()));
+            getAdventure().setRoomConfirmation(bookingData.getReference());
+            getAdventure().incAmountToPay(bookingData.getPrice());
+        } catch (HotelException he) {
+            getAdventure().setState(State.UNDO);
+            return;
+        } catch (RemoteAccessException rae) {
+            incNumOfRemoteErrors();
+            if (getNumOfRemoteErrors() == MAX_REMOTE_ERRORS) {
+                getAdventure().setState(State.UNDO);
+            }
+            return;
+        }
 
-		if (getAdventure().shouldRentVehicle()) {
-			getAdventure().setState(State.RENT_VEHICLE);
-		} else {
-			getAdventure().setState(State.PROCESS_PAYMENT);
-		}
-	}
+        if (getAdventure().shouldRentVehicle()) {
+            getAdventure().setState(State.RENT_VEHICLE);
+        } else {
+            getAdventure().setState(State.PROCESS_PAYMENT);
+        }
+    }
 
 }

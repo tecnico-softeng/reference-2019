@@ -7,32 +7,33 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessE
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.TaxException;
 
 public class TaxPaymentState extends TaxPaymentState_Base {
-	public static final int MAX_REMOTE_ERRORS = 3;
+    public static final int MAX_REMOTE_ERRORS = 3;
 
-	@Override
-	public State getValue() {
-		return State.TAX_PAYMENT;
-	}
+    @Override
+    public State getValue() {
+        return State.TAX_PAYMENT;
+    }
 
-	@Override
-	public void process() {
-		try {
-			RestInvoiceData invoiceData = new RestInvoiceData(getAdventure().getBroker().getNifAsSeller(),
-					getAdventure().getClient().getNif(), "ADVENTURE", getAdventure().getAmount(),
-					getAdventure().getBegin(), getAdventure().getTime());
-			getAdventure().setInvoiceReference(TaxInterface.submitInvoice(invoiceData));
-		} catch (TaxException be) {
-			getAdventure().setState(State.UNDO);
-			return;
-		} catch (RemoteAccessException rae) {
-			incNumOfRemoteErrors();
-			if (getNumOfRemoteErrors() == MAX_REMOTE_ERRORS) {
-				getAdventure().setState(State.UNDO);
-			}
-			return;
-		}
+    @Override
+    public void process() {
+        TaxInterface taxInterface = getAdventure().getBroker().getTaxInterface();
+        try {
+            RestInvoiceData invoiceData = new RestInvoiceData(getAdventure().getBroker().getNifAsSeller(),
+                    getAdventure().getClient().getNif(), "ADVENTURE", getAdventure().getAmount(),
+                    getAdventure().getBegin(), getAdventure().getTime());
+            getAdventure().setInvoiceReference(taxInterface.submitInvoice(invoiceData));
+        } catch (TaxException be) {
+            getAdventure().setState(State.UNDO);
+            return;
+        } catch (RemoteAccessException rae) {
+            incNumOfRemoteErrors();
+            if (getNumOfRemoteErrors() == MAX_REMOTE_ERRORS) {
+                getAdventure().setState(State.UNDO);
+            }
+            return;
+        }
 
-		getAdventure().setState(State.CONFIRMED);
-	}
+        getAdventure().setState(State.CONFIRMED);
+    }
 
 }
