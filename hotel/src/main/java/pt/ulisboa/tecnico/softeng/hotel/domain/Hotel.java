@@ -158,7 +158,8 @@ public class Hotel extends Hotel_Base {
 
 	public Collection<? extends Booking> getBookings4BulkId(String bulkId) {
 		return getRoomSet().stream().flatMap(r -> r.getBookingSet().stream())
-				.filter(b -> b.getBulkId() != null && b.getBulkId().equals(bulkId)).collect(Collectors.toSet());
+				.filter(b -> b.getBulkId() != null && b.getBulkId().equals(bulkId))
+				.collect(Collectors.toSet());
 	}
 
 	public Booking reserveRoom(Room.Type type, LocalDate arrival, LocalDate departure, String buyerNif,
