@@ -9,8 +9,6 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.CarException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
 
 public class RentVehicleState extends RentVehicleState_Base {
-    private static final Logger logger = LoggerFactory.getLogger(RentVehicleState.class);
-
     public static final int MAX_REMOTE_ERRORS = 5;
 
     @Override

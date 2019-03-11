@@ -9,8 +9,6 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.CarInterface;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*;
 
 public class CancelledState extends CancelledState_Base {
-    private static final Logger logger = LoggerFactory.getLogger(CancelledState.class);
-
     @Override
     public State getValue() {
         return State.CANCELLED;

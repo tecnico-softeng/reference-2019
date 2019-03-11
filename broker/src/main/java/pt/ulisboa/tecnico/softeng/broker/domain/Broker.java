@@ -8,8 +8,6 @@ import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*;
 
 public class Broker extends Broker_Base {
-    private static final Logger logger = LoggerFactory.getLogger(Broker.class);
-
     private final ActivityInterface activityInterface;
     private final HotelInterface hotelInterface;
     private final CarInterface carInterface;
