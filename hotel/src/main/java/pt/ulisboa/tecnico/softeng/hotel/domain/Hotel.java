@@ -13,8 +13,7 @@ import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
 public class Hotel extends Hotel_Base {
 	static final int CODE_SIZE = 7;
 
-	public Hotel(String code, String name, String nif, String iban,
-                 double priceSingle, double priceDouble, final Processor processor) {
+	public Hotel(String code, String name, String nif, String iban, double priceSingle, double priceDouble, Processor processor) {
 		checkArguments(code, name, nif, iban, priceSingle, priceDouble);
 
 		setCode(code);
@@ -158,8 +157,7 @@ public class Hotel extends Hotel_Base {
 
 	public Collection<? extends Booking> getBookings4BulkId(String bulkId) {
 		return getRoomSet().stream().flatMap(r -> r.getBookingSet().stream())
-				.filter(b -> b.getBulkId() != null && b.getBulkId().equals(bulkId))
-				.collect(Collectors.toSet());
+				.filter(b -> b.getBulkId() != null && b.getBulkId().equals(bulkId)).collect(Collectors.toSet());
 	}
 
 	public Booking reserveRoom(Room.Type type, LocalDate arrival, LocalDate departure, String buyerNif,

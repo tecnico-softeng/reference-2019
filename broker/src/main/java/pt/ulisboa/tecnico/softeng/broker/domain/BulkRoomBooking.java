@@ -1,14 +1,14 @@
 package pt.ulisboa.tecnico.softeng.broker.domain;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.joda.time.LocalDate;
+
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.HotelInterface;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBookingData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.HotelException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class BulkRoomBooking extends BulkRoomBooking_Base {
     public static final int MAX_HOTEL_EXCEPTIONS = 3;
@@ -54,7 +54,7 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
         }
 
         try {
-            for (String reference : HotelInterface.bulkBooking(getNumber(), getArrival(), getDeparture(), getBuyerNif(),
+            for (String reference : getBroker().getHotelInterface().bulkBooking(getNumber(), getArrival(), getDeparture(), getBuyerNif(),
                     getBuyerIban(), getId())) {
                 addReference(new Reference(this, reference));
             }
@@ -86,7 +86,7 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
         for (Reference reference : getReferenceSet()) {
             RestRoomBookingData data = null;
             try {
-                data = HotelInterface.getRoomBookingData(reference.getValue());
+                data = getBroker().getHotelInterface().getRoomBookingData(reference.getValue());
                 setNumberOfRemoteErrors(0);
             } catch (HotelException he) {
                 setNumberOfRemoteErrors(0);

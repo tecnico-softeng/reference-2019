@@ -1,247 +1,244 @@
 package pt.ulisboa.tecnico.softeng.broker.domain;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure.State;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.ActivityInterface;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.BankInterface;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.CarInterface;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.HotelInterface;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.TaxInterface;
+import pt.ulisboa.tecnico.softeng.broker.services.remote.*;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestBankOperationData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.BankException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
 
 @RunWith(JMockit.class)
 public class CancelledStateProcessMethodTest extends RollbackTestAbstractClass {
-	@Mocked
-	private TaxInterface taxInterface;
 
-	@Override
-	public void populate4Test() {
-		this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN);
-		this.client = new Client(this.broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
-		this.adventure = new Adventure(this.broker, this.BEGIN, this.END, this.client, MARGIN);
+    @Mocked
+    private TaxInterface taxInterface;
 
-		this.adventure.setState(State.CANCELLED);
-	}
 
-	@Test
-	public void didNotPayed(@Mocked final BankInterface bankInterface,
-			@Mocked final ActivityInterface activityInterface, @Mocked final HotelInterface hotelInterface) {
+    @Override
+    public void populate4Test() {
+        this.broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN, new ActivityInterface(), new HotelInterface(), new CarInterface(), new BankInterface(), this.taxInterface);
+        this.client = new Client(this.broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE);
+        this.adventure = new Adventure(this.broker, this.BEGIN, this.END, this.client, MARGIN);
 
-		this.adventure.process();
+        this.adventure.setState(State.CANCELLED);
+    }
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    @Test
+    public void didNotPayed(
+            @Mocked final ActivityInterface activityInterface, @Mocked final HotelInterface hotelInterface, @Mocked final BankInterface bankInterface) {
 
-		new Verifications() {
-			{
-				BankInterface.getOperationData(this.anyString);
-				this.times = 0;
+        this.adventure.process();
 
-				ActivityInterface.getActivityReservationData(this.anyString);
-				this.times = 0;
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
 
-				HotelInterface.getRoomBookingData(this.anyString);
-				this.times = 0;
-			}
-		};
-	}
+        new Verifications() {
+            {
+                bankInterface.getOperationData(this.anyString);
+                this.times = 0;
 
-	@Test
-	public void cancelledPaymentFirstBankException(@Mocked final BankInterface bankInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+                activityInterface.getActivityReservationData(this.anyString);
+                this.times = 0;
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
-				this.result = new BankException();
-			}
-		};
+                hotelInterface.getRoomBookingData(this.anyString);
+                this.times = 0;
+            }
+        };
+    }
 
-		this.adventure.process();
+    @Test
+    public void cancelledPaymentFirstBankException(@Mocked final BankInterface bankInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
+                this.result = new BankException();
+            }
+        };
 
-	@Test
-	public void cancelledPaymentFirstRemoteAccessException(@Mocked final BankInterface bankInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+        this.adventure.process();
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
-				this.result = new RemoteAccessException();
-			}
-		};
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
-		this.adventure.process();
+    @Test
+    public void cancelledPaymentFirstRemoteAccessException(@Mocked final BankInterface bankInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
+                this.result = new RemoteAccessException();
+            }
+        };
 
-	@Test
-	public void cancelledPaymentSecondBankException(@Mocked final BankInterface bankInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+        this.adventure.process();
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
-				this.result = new RestBankOperationData();
-				this.result = new BankException();
-			}
-		};
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
-		this.adventure.process();
+    @Test
+    public void cancelledPaymentSecondBankException(@Mocked final BankInterface bankInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
+                this.result = new RestBankOperationData();
+                this.result = new BankException();
+            }
+        };
 
-	@Test
-	public void cancelledPaymentSecondRemoteAccessException(@Mocked final BankInterface bankInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+        this.adventure.process();
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
-				this.result = new RestBankOperationData();
-				this.result = new RemoteAccessException();
-			}
-		};
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
-		this.adventure.process();
+    @Test
+    public void cancelledPaymentSecondRemoteAccessException(@Mocked final BankInterface bankInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
+                this.result = new RestBankOperationData();
+                this.result = new RemoteAccessException();
+            }
+        };
 
-	@Test
-	public void cancelledPayment(@Mocked final BankInterface bankInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+        this.adventure.process();
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
-				BankInterface.getOperationData(PAYMENT_CANCELLATION);
-			}
-		};
+    @Test
+    public void cancelledPayment(@Mocked final BankInterface bankInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
 
-		this.adventure.process();
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+                bankInterface.getOperationData(PAYMENT_CANCELLATION);
+            }
+        };
 
-	@Test
-	public void cancelledActivity(@Mocked final BankInterface bankInterface,
-			@Mocked final ActivityInterface activityInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
-		this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
-		this.adventure.setActivityCancellation(ACTIVITY_CANCELLATION);
+        this.adventure.process();
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
-				BankInterface.getOperationData(PAYMENT_CANCELLATION);
+    @Test
+    public void cancelledActivity(
+            @Mocked final ActivityInterface activityInterface, @Mocked final BankInterface bankInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+        this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
+        this.adventure.setActivityCancellation(ACTIVITY_CANCELLATION);
 
-				ActivityInterface.getActivityReservationData(ACTIVITY_CANCELLATION);
-			}
-		};
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
 
-		this.adventure.process();
+                bankInterface.getOperationData(PAYMENT_CANCELLATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+                activityInterface.getActivityReservationData(ACTIVITY_CANCELLATION);
+            }
+        };
 
-	@Test
-	public void cancelledRoom(@Mocked final BankInterface bankInterface,
-			@Mocked final ActivityInterface activityInterface, @Mocked final HotelInterface hotelInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
-		this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
-		this.adventure.setActivityCancellation(ACTIVITY_CANCELLATION);
-		this.adventure.setRoomConfirmation(ROOM_CONFIRMATION);
-		this.adventure.setRoomCancellation(ROOM_CANCELLATION);
+        this.adventure.process();
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
-				BankInterface.getOperationData(PAYMENT_CANCELLATION);
+    @Test
+    public void cancelledRoom(@Mocked final BankInterface bankInterface,
+                              @Mocked final ActivityInterface activityInterface, @Mocked final HotelInterface hotelInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+        this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
+        this.adventure.setActivityCancellation(ACTIVITY_CANCELLATION);
+        this.adventure.setRoomConfirmation(ROOM_CONFIRMATION);
+        this.adventure.setRoomCancellation(ROOM_CANCELLATION);
 
-				ActivityInterface.getActivityReservationData(ACTIVITY_CANCELLATION);
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
 
-				HotelInterface.getRoomBookingData(ROOM_CANCELLATION);
-			}
-		};
+                bankInterface.getOperationData(PAYMENT_CANCELLATION);
 
-		this.adventure.process();
+                activityInterface.getActivityReservationData(ACTIVITY_CANCELLATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+                hotelInterface.getRoomBookingData(ROOM_CANCELLATION);
+            }
+        };
 
-	@Test
-	public void cancelledRenting(@Mocked final BankInterface bankInterface,
-			@Mocked final ActivityInterface activityInterface, @Mocked final CarInterface carInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
-		this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
-		this.adventure.setActivityCancellation(ACTIVITY_CANCELLATION);
-		this.adventure.setRentingConfirmation(RENTING_CONFIRMATION);
-		this.adventure.setRentingCancellation(RENTING_CANCELLATION);
+        this.adventure.process();
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
-				BankInterface.getOperationData(PAYMENT_CANCELLATION);
-				ActivityInterface.getActivityReservationData(ACTIVITY_CANCELLATION);
-				CarInterface.getRentingData(RENTING_CANCELLATION);
-			}
-		};
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
-		this.adventure.process();
+    @Test
+    public void cancelledRenting(@Mocked final BankInterface bankInterface,
+                                 @Mocked final ActivityInterface activityInterface, @Mocked final CarInterface carInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+        this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
+        this.adventure.setActivityCancellation(ACTIVITY_CANCELLATION);
+        this.adventure.setRentingConfirmation(RENTING_CONFIRMATION);
+        this.adventure.setRentingCancellation(RENTING_CANCELLATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
+                bankInterface.getOperationData(PAYMENT_CANCELLATION);
+                activityInterface.getActivityReservationData(ACTIVITY_CANCELLATION);
+                carInterface.getRentingData(RENTING_CANCELLATION);
+            }
+        };
 
-	@Test
-	public void cancelledBookAndRenting(@Mocked final BankInterface bankInterface,
-			@Mocked final ActivityInterface activityInterface, @Mocked final HotelInterface hotelInterface,
-			@Mocked final CarInterface carInterface) {
-		this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
-		this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
-		this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
-		this.adventure.setActivityCancellation(ACTIVITY_CANCELLATION);
-		this.adventure.setRoomConfirmation(ROOM_CONFIRMATION);
-		this.adventure.setRoomCancellation(ROOM_CANCELLATION);
-		this.adventure.setRentingConfirmation(RENTING_CONFIRMATION);
-		this.adventure.setRentingCancellation(RENTING_CANCELLATION);
+        this.adventure.process();
 
-		new Expectations() {
-			{
-				BankInterface.getOperationData(PAYMENT_CONFIRMATION);
-				BankInterface.getOperationData(PAYMENT_CANCELLATION);
-				ActivityInterface.getActivityReservationData(ACTIVITY_CANCELLATION);
-				HotelInterface.getRoomBookingData(ROOM_CANCELLATION);
-				CarInterface.getRentingData(RENTING_CANCELLATION);
-			}
-		};
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
-		this.adventure.process();
+    @Test
+    public void cancelledBookAndRenting(@Mocked final BankInterface bankInterface,
+                                        @Mocked final ActivityInterface activityInterface, @Mocked final HotelInterface hotelInterface,
+                                        @Mocked final CarInterface carInterface) {
+        this.adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION);
+        this.adventure.setPaymentCancellation(PAYMENT_CANCELLATION);
+        this.adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION);
+        this.adventure.setActivityCancellation(ACTIVITY_CANCELLATION);
+        this.adventure.setRoomConfirmation(ROOM_CONFIRMATION);
+        this.adventure.setRoomCancellation(ROOM_CANCELLATION);
+        this.adventure.setRentingConfirmation(RENTING_CONFIRMATION);
+        this.adventure.setRentingCancellation(RENTING_CANCELLATION);
 
-		Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
-	}
+        new Expectations() {
+            {
+                bankInterface.getOperationData(PAYMENT_CONFIRMATION);
+                bankInterface.getOperationData(PAYMENT_CANCELLATION);
+                activityInterface.getActivityReservationData(ACTIVITY_CANCELLATION);
+                hotelInterface.getRoomBookingData(ROOM_CANCELLATION);
+                carInterface.getRentingData(RENTING_CANCELLATION);
+            }
+        };
+
+        this.adventure.process();
+
+        Assert.assertEquals(Adventure.State.CANCELLED, this.adventure.getState().getValue());
+    }
 
 }

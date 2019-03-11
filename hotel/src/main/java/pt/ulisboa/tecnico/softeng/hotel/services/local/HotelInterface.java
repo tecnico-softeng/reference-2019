@@ -26,20 +26,19 @@ import pt.ulisboa.tecnico.softeng.hotel.services.remote.dataobjects.RestRoomBook
 public class HotelInterface {
 
 	@Atomic(mode = TxMode.READ)
-	public List<HotelData> getHotels() {
-		return FenixFramework.getDomainRoot().getHotelSet().stream().map(HotelData::new)
+	public static List<HotelData> getHotels() {
+		return FenixFramework.getDomainRoot().getHotelSet().stream().map(h -> new HotelData(h))
 				.collect(Collectors.toList());
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public void createHotel(HotelData hotelData) {
-        final Processor processor = new Processor(new BankInterface(), new TaxInterface());
-        new Hotel(hotelData.getCode(), hotelData.getName(), hotelData.getNif(), hotelData.getIban(),
-				hotelData.getPriceSingle(), hotelData.getPriceDouble(), processor);
+	public static void createHotel(HotelData hotelData) {
+		new Hotel(hotelData.getCode(), hotelData.getName(), hotelData.getNif(), hotelData.getIban(),
+				hotelData.getPriceSingle(), hotelData.getPriceDouble(), new Processor(new BankInterface(), new TaxInterface()));
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public HotelData getHotelDataByCode(String code) {
+	public static HotelData getHotelDataByCode(String code) {
 		Hotel hotel = getHotelByCode(code);
 
 		if (hotel != null) {
@@ -50,12 +49,12 @@ public class HotelInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public void createRoom(String hotelCode, RoomData roomData) {
+	public static void createRoom(String hotelCode, RoomData roomData) {
 		new Room(getHotelByCode(hotelCode), roomData.getNumber(), roomData.getType());
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public RoomData getRoomDataByNumber(String code, String number) {
+	public static RoomData getRoomDataByNumber(String code, String number) {
 		Room room = getRoomByNumber(code, number);
 		if (room == null) {
 			return null;
@@ -65,7 +64,7 @@ public class HotelInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public void createBooking(String code, String number, RoomBookingData booking) {
+	public static void createBooking(String code, String number, RoomBookingData booking) {
 		Room room = getRoomByNumber(code, number);
 		if (room == null) {
 			throw new HotelException();
@@ -75,7 +74,7 @@ public class HotelInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public RestRoomBookingData reserveRoom(RestRoomBookingData roomBookingData) {
+	public static RestRoomBookingData reserveRoom(RestRoomBookingData roomBookingData) {
 		Booking booking = getBooking4AdventureId(roomBookingData.getAdventureId());
 		if (booking != null) {
 			return new RestRoomBookingData(booking);
@@ -92,7 +91,7 @@ public class HotelInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public String cancelBooking(String reference) {
+	public static String cancelBooking(String reference) {
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			Booking booking = hotel.getBooking(reference);
 			if (booking != null && booking.getCancellation() != null) {
@@ -105,7 +104,7 @@ public class HotelInterface {
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public RestRoomBookingData getRoomBookingData(String reference) {
+	public static RestRoomBookingData getRoomBookingData(String reference) {
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			for (Room room : hotel.getRoomSet()) {
 				Booking booking = room.getBooking(reference);
@@ -118,11 +117,11 @@ public class HotelInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public Set<String> bulkBooking(int number, LocalDate arrival, LocalDate departure, String buyerNif,
+	public static Set<String> bulkBooking(int number, LocalDate arrival, LocalDate departure, String buyerNif,
 			String buyerIban, String bulkId) {
 		Set<Booking> bookings = getBookings4BulkId(bulkId);
 		if (!bookings.isEmpty()) {
-			return bookings.stream().map(Booking::getReference).collect(Collectors.toSet());
+			return bookings.stream().map(b -> b.getReference()).collect(Collectors.toSet());
 		}
 
 		if (number < 1) {
@@ -145,11 +144,11 @@ public class HotelInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public void deleteHotels() {
-		FenixFramework.getDomainRoot().getHotelSet().stream().forEach(Hotel::delete);
+	public static void deleteHotels() {
+		FenixFramework.getDomainRoot().getHotelSet().stream().forEach(h -> h.delete());
 	}
 
-	 List<Room> getAvailableRooms(int number, LocalDate arrival, LocalDate departure) {
+	static List<Room> getAvailableRooms(int number, LocalDate arrival, LocalDate departure) {
 		List<Room> availableRooms = new ArrayList<>();
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			availableRooms.addAll(hotel.getAvailableRooms(arrival, departure));
@@ -160,12 +159,12 @@ public class HotelInterface {
 		return availableRooms;
 	}
 
-	private Hotel getHotelByCode(String code) {
+	private static Hotel getHotelByCode(String code) {
 		return FenixFramework.getDomainRoot().getHotelSet().stream().filter(h -> h.getCode().equals(code)).findFirst()
 				.orElse(null);
 	}
 
-	private Room getRoomByNumber(String code, String number) {
+	private static Room getRoomByNumber(String code, String number) {
 		Hotel hotel = getHotelByCode(code);
 		if (hotel == null) {
 			return null;
@@ -178,7 +177,7 @@ public class HotelInterface {
 		return room;
 	}
 
-	private Booking getBooking4AdventureId(String adventureId) {
+	private static Booking getBooking4AdventureId(String adventureId) {
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			Booking booking = hotel.getBooking4AdventureId(adventureId);
 			if (booking != null) {
@@ -188,8 +187,8 @@ public class HotelInterface {
 		return null;
 	}
 
-	private Set<Booking> getBookings4BulkId(String bulkId) {
-		Set<Booking> bookings = new HashSet<>();
+	private static Set<Booking> getBookings4BulkId(String bulkId) {
+		Set<Booking> bookings = new HashSet<Booking>();
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			bookings.addAll(hotel.getBookings4BulkId(bulkId));
 		}
