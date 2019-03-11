@@ -18,9 +18,9 @@ public class Processor extends Processor_Base {
 	private final TaxInterface taxInterface;
 
 	public Processor(BankInterface bankInterface, TaxInterface taxInterface) {
-		this.bankInterface = bankInterface;
-		this.taxInterface = taxInterface;
-	}
+        this.bankInterface = bankInterface;
+        this.taxInterface = taxInterface;
+    }
 
 	public void delete() {
 		setRentACar(null);

@@ -13,11 +13,14 @@ import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Booking;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Hotel;
+import pt.ulisboa.tecnico.softeng.hotel.domain.Processor;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Room;
 import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.RoomBookingData;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.RoomData;
+import pt.ulisboa.tecnico.softeng.hotel.services.remote.BankInterface;
+import pt.ulisboa.tecnico.softeng.hotel.services.remote.TaxInterface;
 import pt.ulisboa.tecnico.softeng.hotel.services.remote.dataobjects.RestRoomBookingData;
 
 public class HotelInterface {
@@ -30,8 +33,9 @@ public class HotelInterface {
 
 	@Atomic(mode = TxMode.WRITE)
 	public static void createHotel(HotelData hotelData) {
-		new Hotel(hotelData.getCode(), hotelData.getName(), hotelData.getNif(), hotelData.getIban(),
-				hotelData.getPriceSingle(), hotelData.getPriceDouble());
+        final Processor processor = new Processor(new BankInterface(), new TaxInterface());
+        new Hotel(hotelData.getCode(), hotelData.getName(), hotelData.getNif(), hotelData.getIban(),
+				hotelData.getPriceSingle(), hotelData.getPriceDouble(), processor);
 	}
 
 	@Atomic(mode = TxMode.READ)

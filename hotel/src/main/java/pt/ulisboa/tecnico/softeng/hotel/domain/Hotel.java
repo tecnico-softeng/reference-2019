@@ -13,7 +13,8 @@ import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
 public class Hotel extends Hotel_Base {
 	static final int CODE_SIZE = 7;
 
-	public Hotel(String code, String name, String nif, String iban, double priceSingle, double priceDouble) {
+	public Hotel(String code, String name, String nif, String iban,
+                 double priceSingle, double priceDouble, final Processor processor) {
 		checkArguments(code, name, nif, iban, priceSingle, priceDouble);
 
 		setCode(code);
@@ -23,7 +24,7 @@ public class Hotel extends Hotel_Base {
 		setPriceSingle(priceSingle);
 		setPriceDouble(priceDouble);
 
-		setProcessor(new Processor());
+		setProcessor(processor);
 
 		FenixFramework.getDomainRoot().addHotel(this);
 	}

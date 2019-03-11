@@ -13,7 +13,7 @@ import pt.ulisboa.tecnico.softeng.car.services.remote.exceptions.TaxException;
 public class TaxInterface {
 	private final Logger logger = LoggerFactory.getLogger(TaxInterface.class);
 
-	private final String ENDPOINT = "http://localhost:8086";
+	private static final String ENDPOINT = "http://localhost:8086";
 
 	public String submitInvoice(RestInvoiceData invoiceData) {
 		this.logger.info("submitInvoice buyerNif:{}, sellerNif:{}, itemType:{}, value:{}, date:{}, time:{}",
@@ -22,7 +22,7 @@ public class TaxInterface {
 
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-			ResponseEntity<String> result = restTemplate.postForEntity(this.ENDPOINT + "/rest/tax/submit", invoiceData,
+			ResponseEntity<String> result = restTemplate.postForEntity(ENDPOINT + "/rest/tax/submit", invoiceData,
 					String.class);
 			return result.getBody();
 		} catch (HttpClientErrorException e) {
@@ -43,7 +43,7 @@ public class TaxInterface {
 		this.logger.info("cancelInvoice invoiceReference:{}", invoiceReference);
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-			restTemplate.postForObject(this.ENDPOINT + "/rest/tax/cancel?reference=" + invoiceReference, null,
+			restTemplate.postForObject(ENDPOINT + "/rest/tax/cancel?reference=" + invoiceReference, null,
 					String.class);
 		} catch (HttpClientErrorException e) {
 			this.logger.info("cancelInvoice HttpClientErrorException invoiceReference:{}", invoiceReference);
