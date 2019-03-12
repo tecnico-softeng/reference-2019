@@ -19,11 +19,13 @@ import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityPr
 public class ActivityController {
 	private static Logger logger = LoggerFactory.getLogger(ActivityController.class);
 
+	private static final ActivityInterface ai = new ActivityInterface();
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String activityForm(Model model, @PathVariable String code) {
 		logger.info("activityForm providerCode:{}", code);
 
-		ActivityProviderData providerData = ActivityInterface.getProviderDataByCode(code);
+		ActivityProviderData providerData = ai.getProviderDataByCode(code);
 
 		if (providerData == null) {
 			model.addAttribute("error", "Error: it does not exist an activity provider with the code " + code);
@@ -44,11 +46,11 @@ public class ActivityController {
 				code, activity.getName(), activity.getMinAge(), activity.getMaxAge(), activity.getCapacity());
 
 		try {
-			ActivityInterface.createActivity(code, activity);
+			ai.createActivity(code, activity);
 		} catch (ActivityException be) {
 			model.addAttribute("error", "Error: it was not possible to create the activity");
 			model.addAttribute("activity", activity);
-			model.addAttribute("provider", ActivityInterface.getProviderDataByCode(code));
+			model.addAttribute("provider", ai.getProviderDataByCode(code));
 			return "activities";
 		}
 
