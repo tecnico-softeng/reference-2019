@@ -26,6 +26,8 @@ class ActivityInterfaceReserveActivityMethodSpockTest extends SpockRollbackTestA
     def bankInterface
     def taxInterface
 
+    def activityBookingData
+
     @Override
     def populate4Test() {
         bankInterface = Mock(BankInterface)
@@ -35,20 +37,18 @@ class ActivityInterfaceReserveActivityMethodSpockTest extends SpockRollbackTestA
         provider1 = new ActivityProvider("XtremX", "Adventure++", "NIF", IBAN, processor)
         provider2 = new ActivityProvider("Walker", "Sky", "NIF2", IBAN, processor)
         activityInterface = new ActivityInterface()
-    }
 
-    def 'success'() {
-        given: 'an activity booking data'
-        def activityBookingData = new RestActivityBookingData()
+        activityBookingData = new RestActivityBookingData()
         activityBookingData.setAge(20)
         activityBookingData.setBegin(new LocalDate(2018, 02, 19))
         activityBookingData.setEnd(new LocalDate(2018, 12, 20))
         activityBookingData.setIban(IBAN)
         activityBookingData.setNif(NIF)
+    }
 
-        and: 'given that activity and offer are available'
-        def activity = new Activity(provider1, "XtremX", MIN_AGE, MAX_AGE,
-                CAPACITY, new Processor(new BankInterface(), new TaxInterface()))
+    def 'success'() {
+        given: 'given that activity and offer are available'
+        def activity = new Activity(provider1, "XtremX", MIN_AGE, MAX_AGE, CAPACITY)
         new ActivityOffer(activity,
                 new LocalDate(2018, 02, 19),
                 new LocalDate(2018, 12, 20), 30)
@@ -62,14 +62,6 @@ class ActivityInterfaceReserveActivityMethodSpockTest extends SpockRollbackTestA
     }
 
     def 'no option to reserve activity'() {
-        given:
-        def activityBookingData = new RestActivityBookingData()
-        activityBookingData.setAge(20)
-        activityBookingData.setBegin(new LocalDate(2018, 02, 19))
-        activityBookingData.setEnd(new LocalDate(2018, 12, 20))
-        activityBookingData.setIban(IBAN)
-        activityBookingData.setNif(NIF)
-
         when:
         activityInterface.reserveActivity(activityBookingData)
 
