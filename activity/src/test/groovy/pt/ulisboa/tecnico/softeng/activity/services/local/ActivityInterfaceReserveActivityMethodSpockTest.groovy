@@ -4,6 +4,7 @@ import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.activity.domain.Activity
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityOffer
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityProvider
+import pt.ulisboa.tecnico.softeng.activity.domain.Processor
 import pt.ulisboa.tecnico.softeng.activity.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
 import pt.ulisboa.tecnico.softeng.activity.services.remote.BankInterface
@@ -22,13 +23,17 @@ class ActivityInterfaceReserveActivityMethodSpockTest extends SpockRollbackTestA
 
     def activityInterface
 
-    def bankInterface = Mock(BankInterface)
-    def taxInterface = Mock(TaxInterface)
+    def bankInterface
+    def taxInterface
 
     @Override
     def populate4Test() {
-        provider1 = new ActivityProvider("XtremX", "Adventure++", "NIF", IBAN)
-        provider2 = new ActivityProvider("Walker", "Sky", "NIF2", IBAN)
+        bankInterface = Mock(BankInterface)
+        taxInterface = Mock(TaxInterface)
+        def processor = new Processor(bankInterface, taxInterface)
+
+        provider1 = new ActivityProvider("XtremX", "Adventure++", "NIF", IBAN, processor)
+        provider2 = new ActivityProvider("Walker", "Sky", "NIF2", IBAN, processor)
         activityInterface = new ActivityInterface()
     }
 
@@ -42,8 +47,11 @@ class ActivityInterfaceReserveActivityMethodSpockTest extends SpockRollbackTestA
         activityBookingData.setNif(NIF)
 
         and: 'given that activity and offer are available'
-        def activity = new Activity(provider1, "XtremX", MIN_AGE, MAX_AGE, CAPACITY)
-        new ActivityOffer(activity, new LocalDate(2018, 02, 19), new LocalDate(2018, 12, 20), 30);
+        def activity = new Activity(provider1, "XtremX", MIN_AGE, MAX_AGE,
+                CAPACITY, new Processor(new BankInterface(), new TaxInterface()))
+        new ActivityOffer(activity,
+                new LocalDate(2018, 02, 19),
+                new LocalDate(2018, 12, 20), 30)
 
         when: 'a reserve is invoked'
         def bookingData = activityInterface.reserveActivity(activityBookingData)

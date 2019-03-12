@@ -5,6 +5,7 @@ import pt.ulisboa.tecnico.softeng.activity.domain.Activity
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityOffer
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityProvider
 import pt.ulisboa.tecnico.softeng.activity.domain.Booking
+import pt.ulisboa.tecnico.softeng.activity.domain.Processor
 import pt.ulisboa.tecnico.softeng.activity.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
 import pt.ulisboa.tecnico.softeng.activity.services.remote.BankInterface
@@ -16,14 +17,18 @@ class ActivityInterfaceCancelReservationMethodSpockTest extends SpockRollbackTes
     def provider
     def offer
 
-    def bankInterface = Mock(BankInterface)
-    def taxInterface = Mock(TaxInterface)
+    def bankInterface
+    def taxInterface
 
     def activityInterface = new ActivityInterface()
 
     @Override
     def populate4Test() {
-        provider = new ActivityProvider("XtremX", "ExtremeAdventure", "NIF", IBAN)
+        bankInterface = Mock(BankInterface)
+        taxInterface = Mock(TaxInterface)
+        def processor = new Processor(bankInterface, taxInterface)
+
+        provider = new ActivityProvider("XtremX", "ExtremeAdventure", "NIF", IBAN, processor)
         def activity = new Activity(provider, "Bush Walking", 18, 80, 3)
 
         def begin = new LocalDate(2016, 12, 19)
