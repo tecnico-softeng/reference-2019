@@ -41,8 +41,8 @@ class HotelInterfaceReserveRoomMethodSpockTest extends SpockRollbackTestAbstract
         bookingData.getReference().startsWith("XPTO123")
     }
 
-    def 'no vancancy'() {
-        given: 'the sigle room is booked'
+    def 'no vacancy'() {
+        given: 'the single room is booked'
         def bookingData = new RestRoomBookingData("SINGLE", ARRIVAL, new LocalDate(2016, 12, 25),
                 NIF_BUYER, IBAN_BUYER, ADVENTURE_ID)
         HotelInterface.reserveRoom(bookingData)
@@ -53,7 +53,7 @@ class HotelInterfaceReserveRoomMethodSpockTest extends SpockRollbackTestAbstract
         HotelInterface.reserveRoom(bookingData)
 
         then: 'throws an HotelException'
-        def error = thrown(HotelException)
+        thrown(HotelException)
     }
 
     def 'no hotels'() {
@@ -68,7 +68,7 @@ class HotelInterfaceReserveRoomMethodSpockTest extends SpockRollbackTestAbstract
         HotelInterface.reserveRoom(bookingData)
 
         then: 'throws an HotelException'
-        def error = thrown(HotelException)
+        thrown(HotelException)
     }
 
     def 'no rooms'() {
@@ -83,6 +83,6 @@ class HotelInterfaceReserveRoomMethodSpockTest extends SpockRollbackTestAbstract
         HotelInterface.reserveRoom(bookingData);
 
         then: 'throws an HotelException'
-        def error = thrown(HotelException)
+        thrown(HotelException)
     }
 }
