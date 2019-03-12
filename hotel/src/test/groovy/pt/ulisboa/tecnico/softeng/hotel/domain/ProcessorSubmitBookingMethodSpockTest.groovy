@@ -23,11 +23,10 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
     def hotel
     def room
     def booking
+    def booking2
 
     def bankInterface
     def taxInterface
-
-    def booking2
 
     @Override
     def populate4Test() {
@@ -100,8 +99,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'both invoke the tax interface'
         3 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
+        booking.paymentReference == PAYMENT_REFERENCE
+        booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
     }
@@ -126,8 +125,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'both invoke the tax interface'
         3 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
+        booking.paymentReference == PAYMENT_REFERENCE
+        booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
     }
@@ -152,8 +151,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'both invoke the tax interface'
         3 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
+        booking.paymentReference == PAYMENT_REFERENCE
+        booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
     }
