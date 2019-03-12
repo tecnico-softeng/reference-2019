@@ -62,22 +62,22 @@ class HotelInterfaceCancelBookingMethodSpockTest extends SpockRollbackTestAbstra
     }
 
     def 'success integration'() {
-        when:
+        when: 'when cancelling an existing booking'
         def cancel = hotelInterface.cancelBooking(booking.getReference())
 
-        then:
+        then: 'booking is cancelled and gets a cancellation reference'
         1 * taxInterface.cancelInvoice(_)
         with(booking) {
             isCancelled()
-            booking.getCancellation() == cancel
+            getCancellation() == cancel
         }
     }
 
     def 'does not exist integration'() {
-        when:
-        def cancel = hotelInterface.cancelBooking('XPTO')
+        when: 'when cancelling a non-existing booking'
+        hotelInterface.cancelBooking('XPTO')
 
-        then:
+        then: 'an exception is thrown'
         0 * taxInterface.cancelInvoice(_)
         thrown(HotelException)
     }
