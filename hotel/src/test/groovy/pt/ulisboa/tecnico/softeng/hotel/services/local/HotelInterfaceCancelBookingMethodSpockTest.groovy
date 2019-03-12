@@ -20,9 +20,18 @@ class HotelInterfaceCancelBookingMethodSpockTest extends SpockRollbackTestAbstra
     def room
     def booking
 
+    def taxInterface
+    def bankInterface
+
+    def hotelInterface = new HotelInterface()
+
     @Override
     def populate4Test() {
-        hotel = new Hotel("XPTO123", "Paris", "NIF", "IBAN", 20.0, 30.0, new Processor(new BankInterface(), new TaxInterface()))
+        bankInterface = Mock(BankInterface)
+        taxInterface = Mock(TaxInterface)
+        def processor = new Processor(bankInterface, taxInterface)
+        hotel = new Hotel("XPTO123", "Paris", "NIF", "IBAN",
+                20.0, 30.0, processor)
         room = new Room(hotel, "01", Type.DOUBLE)
         booking = room.reserve(Type.DOUBLE, ARRIVAL, DEPARTURE, NIF_BUYER, IBAN_BUYER)
     }
@@ -50,5 +59,26 @@ class HotelInterfaceCancelBookingMethodSpockTest extends SpockRollbackTestAbstra
         null      | 'null reference'
         ''        | 'empty reference'
         '   '     | 'bank reference'
+    }
+
+    def 'success integration'() {
+        when:
+        def cancel = hotelInterface.cancelBooking(booking.getReference())
+
+        then:
+        1 * taxInterface.cancelInvoice(_)
+        with(booking) {
+            isCancelled()
+            booking.getCancellation() == cancel
+        }
+    }
+
+    def 'does not exist integration'() {
+        when:
+        def cancel = hotelInterface.cancelBooking('XPTO')
+
+        then:
+        0 * taxInterface.cancelInvoice(_)
+        thrown(HotelException)
     }
 }
