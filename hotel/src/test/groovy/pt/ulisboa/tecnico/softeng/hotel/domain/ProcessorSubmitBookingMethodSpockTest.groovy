@@ -248,7 +248,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
         1 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
 
-        when: 'cancelling the bpplimg'
+        when: 'cancelling the booking'
         booking.cancel()
 
         then: 'the payment is cancelled'
