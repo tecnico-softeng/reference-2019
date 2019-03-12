@@ -94,6 +94,9 @@ public class ActivityInterface {
 
 		List<ActivityOffer> offers;
 		for (ActivityProvider provider : FenixFramework.getDomainRoot().getActivityProviderSet()) {
+			if (provider.getProcessor() == null) {
+				provider.setProcessor(new Processor(new BankInterface(), new TaxInterface()));
+			}
 			offers = provider.findOffer(activityBookingData.getBegin(), activityBookingData.getEnd(),
 					activityBookingData.getAge());
 			if (!offers.isEmpty()) {

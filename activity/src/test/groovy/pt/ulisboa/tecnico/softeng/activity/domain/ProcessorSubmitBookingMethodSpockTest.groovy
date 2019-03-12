@@ -22,6 +22,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
     def bankInterface
     def taxInterface
 
+    def booking2
+
     @Override
     def populate4Test() {
         bankInterface = Mock(BankInterface)
@@ -35,6 +37,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         def end = new LocalDate(2016, 12, 21)
         offer = new ActivityOffer(activity, begin, end, AMOUNT)
         booking = new Booking(provider, offer, NIF, IBAN)
+        booking2 = new Booking(provider, offer, NIF, IBAN)
     }
 
     def 'success'() {
@@ -55,7 +58,6 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking.invoiceReference == null
 
         when: 'doing another booking'
-        def booking2 = new Booking(provider, offer, NIF, IBAN)
         provider.getProcessor().submitBooking(booking2)
 
         then: 'only the second booking invokes the bank interface'
@@ -82,7 +84,6 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking.invoiceReference == null
 
         when: 'doing another booking'
-        def booking2 = new Booking(provider, offer, NIF, IBAN)
         provider.getProcessor().submitBooking(booking2)
 
         then: 'only the second booking invokes the bank interface'
@@ -109,7 +110,6 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking.invoiceReference == null
 
         when: 'doing another booking'
-        def booking2 = new Booking(provider, offer, NIF, IBAN)
         provider.getProcessor().submitBooking(booking2)
 
         then: 'only the second booking invokes the bank interface'
@@ -136,7 +136,6 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking.invoiceReference == null
 
         when: 'doing another booking'
-        def booking2 = new Booking(provider, offer, NIF, IBAN)
         provider.getProcessor().submitBooking(booking2)
 
         then: 'only the second booking invokes the bank interface'
@@ -191,7 +190,6 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         0 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
 
         when: 'a new booking is done'
-        def booking2 = new Booking(provider, offer, NIF, IBAN)
         provider.getProcessor().submitBooking(booking2)
 
         then: 'booking one is completely cancelled'
@@ -219,7 +217,6 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         0 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
 
         when: 'a new booking is done'
-        def booking2 = new Booking(provider, offer, NIF, IBAN)
         provider.getProcessor().submitBooking(booking2)
 
         then: 'booking one is completely cancelled'
@@ -247,7 +244,6 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         1 * taxInterface.cancelInvoice(INVOICE_REFERENCE) >> { throw new TaxException() }
 
         when: 'a new booking is done'
-        def booking2 = new Booking(provider, offer, NIF, IBAN)
         provider.getProcessor().submitBooking(booking2)
 
         then: 'booking one is completely cancelled'
@@ -275,7 +271,6 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         1 * taxInterface.cancelInvoice(INVOICE_REFERENCE) >> { throw new RemoteAccessException() }
 
         when: 'a new booking is done'
-        def booking2 = new Booking(provider, offer, NIF, IBAN)
         provider.getProcessor().submitBooking(booking2)
 
         then: 'booking one is completely cancelled'
