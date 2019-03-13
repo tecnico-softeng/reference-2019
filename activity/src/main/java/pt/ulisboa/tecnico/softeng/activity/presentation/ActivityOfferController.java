@@ -20,13 +20,13 @@ import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityPr
 public class ActivityOfferController {
 	private static Logger logger = LoggerFactory.getLogger(ActivityOfferController.class);
 
-	private static final ActivityInterface ai = new ActivityInterface();
+	private static final ActivityInterface activityInterface = new ActivityInterface();
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String offerForm(Model model, @PathVariable String codeProvider, @PathVariable String codeActivity) {
 		logger.info("offerForm codeProvider:{}, codeActivity:{}", codeProvider, codeActivity);
 
-		ActivityData activityData = ai.getActivityDataByCode(codeProvider, codeActivity);
+		ActivityData activityData = activityInterface.getActivityDataByCode(codeProvider, codeActivity);
 
 		if (activityData == null) {
 			model.addAttribute("error", "Error: it does not exist an activity with code " + codeActivity
@@ -48,11 +48,11 @@ public class ActivityOfferController {
 				offer.getBegin(), offer.getEnd());
 
 		try {
-			ai.createOffer(codeProvider, codeActivity, offer);
+			activityInterface.createOffer(codeProvider, codeActivity, offer);
 		} catch (ActivityException e) {
 			model.addAttribute("error", "Error: it was not possible to create de offer");
 			model.addAttribute("offer", offer);
-			model.addAttribute("activity", ai.getActivityDataByCode(codeProvider, codeActivity));
+			model.addAttribute("activity", activityInterface.getActivityDataByCode(codeProvider, codeActivity));
 			return "offers";
 		}
 

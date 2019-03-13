@@ -40,8 +40,8 @@ class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractCl
 		where:
 		n | label                     || res
 		1 | 'one booking'             || true
-		3 | 'booking is full'         || false
 		2 | 'booking is full minus 1' || true
+		3 | 'booking is full'         || false
 	}
 
 	def 'has cancelled bookings'() {

@@ -39,7 +39,6 @@ class ActivityInterfaceCancelReservationMethodSpockTest extends SpockRollbackTes
     def 'success'() {
         given: 'a booking'
         def booking = new Booking(provider, offer, NIF, IBAN)
-
         and: 'and a booking that was submitted'
         provider.getProcessor().submitBooking(booking)
 
