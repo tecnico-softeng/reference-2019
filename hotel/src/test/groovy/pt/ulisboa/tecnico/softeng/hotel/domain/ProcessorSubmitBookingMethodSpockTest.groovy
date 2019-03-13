@@ -71,7 +71,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         then: 'only the second booking invokes the bank interface'
         1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
         and: 'both invoke the tax interface'
-        3 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
+        2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
         booking.paymentReference == PAYMENT_REFERENCE
         booking.invoiceReference == INVOICE_REFERENCE
@@ -97,7 +97,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         then: 'only the second booking invokes the bank interface'
         1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
         and: 'both invoke the tax interface'
-        3 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
+        2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
         booking.paymentReference == PAYMENT_REFERENCE
         booking.invoiceReference == INVOICE_REFERENCE
@@ -123,7 +123,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         then: 'both invoke the bank interface'
         2 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
         and: 'both invoke the tax interface'
-        3 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
+        2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
         booking.paymentReference == PAYMENT_REFERENCE
         booking.invoiceReference == INVOICE_REFERENCE
@@ -149,7 +149,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         then: 'both invoke the bank interface'
         2 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
         and: 'both invoke the tax interface'
-        3 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
+        2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
         booking.paymentReference == PAYMENT_REFERENCE
         booking.invoiceReference == INVOICE_REFERENCE
@@ -205,8 +205,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         1 * bankInterface.cancelPayment(PAYMENT_REFERENCE) >> CANCEL_PAYMENT_REFERENCE
         1 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
         and: 'booking two is completed'
-        2 * bankInterface.processPayment(_)
-        2 * taxInterface.submitInvoice(_)
+        1 * bankInterface.processPayment(_)
+        1 * taxInterface.submitInvoice(_)
     }
 
     def 'one remote exception on cancel payment'() {
@@ -232,8 +232,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         1 * bankInterface.cancelPayment(PAYMENT_REFERENCE) >> CANCEL_PAYMENT_REFERENCE
         1 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
         and: 'booking two is completed'
-        2 * bankInterface.processPayment(_)
-        2 * taxInterface.submitInvoice(_)
+        1 * bankInterface.processPayment(_)
+        1 * taxInterface.submitInvoice(_)
     }
 
     def 'one tax exception on cancel invoice'() {
@@ -259,8 +259,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         0 * bankInterface.cancelPayment(PAYMENT_REFERENCE)
         1 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
         and: 'booking two is completed'
-        2 * bankInterface.processPayment(_)
-        2 * taxInterface.submitInvoice(_)
+        1 * bankInterface.processPayment(_)
+        1 * taxInterface.submitInvoice(_)
     }
 
     def 'one remote exception on cancel invoice'() {
@@ -286,7 +286,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         0 * bankInterface.cancelPayment(PAYMENT_REFERENCE)
         1 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
         and: 'booking two is completed'
-        2 * bankInterface.processPayment(_)
-        2 * taxInterface.submitInvoice(_)
+        1 * bankInterface.processPayment(_)
+        1 * taxInterface.submitInvoice(_)
     }
 }
