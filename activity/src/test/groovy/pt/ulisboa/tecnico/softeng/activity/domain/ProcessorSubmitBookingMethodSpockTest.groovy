@@ -18,12 +18,11 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
     def provider
     def offer
     def booking
+    def booking2
 
     def bankInterface
     def taxInterface
-
-    def booking2
-
+    
     @Override
     def populate4Test() {
         bankInterface = Mock(BankInterface)
