@@ -59,7 +59,7 @@ class ActivityInterfaceReserveActivityMethodSpockTest extends SpockRollbackTestA
 
         then: 'there should be a booking with the proper data'
         bookingData != null
-        //bookingData.getReference().startsWith("XtremX")
+        bookingData.getReference().startsWith("XtremX")
     }
 
     def 'no option to reserve activity'() {

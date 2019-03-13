@@ -12,12 +12,15 @@ class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractCl
 	def provider
 	def offer
 
-	def bankInterface = Mock(BankInterface)
-	def taxInterface = Mock(TaxInterface)
+	def bankInterface
+	def taxInterface
 
 	@Override
 	def populate4Test() {
-		def processor = new Processor(new BankInterface(), new TaxInterface())
+		bankInterface = Mock(BankInterface)
+		taxInterface = Mock(TaxInterface)
+		def processor = new Processor(bankInterface, taxInterface)
+
 		provider = new ActivityProvider("XtremX", "ExtremeAdventure", "NIF", IBAN, processor)
 		def activity = new Activity(provider, "Bush Walking", 18, 80, 3)
 
@@ -57,6 +60,8 @@ class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractCl
 
 		then:
 		offer.hasVacancy()
+		1 * taxInterface.cancelInvoice(_)
+		1 * bankInterface.cancelPayment(_)
 	}
 
 	def 'has cancelled bookings but full'() {
@@ -75,5 +80,7 @@ class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractCl
 
 		then:
 		!offer.hasVacancy()
+		1 * taxInterface.cancelInvoice(_)
+		1 * bankInterface.cancelPayment(_)
 	}
 }
