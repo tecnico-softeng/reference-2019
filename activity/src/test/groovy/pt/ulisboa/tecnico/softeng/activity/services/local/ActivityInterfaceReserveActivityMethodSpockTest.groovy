@@ -33,9 +33,10 @@ class ActivityInterfaceReserveActivityMethodSpockTest extends SpockRollbackTestA
         bankInterface = Mock(BankInterface)
         taxInterface = Mock(TaxInterface)
         def processor = new Processor(bankInterface, taxInterface)
+        def processor1 = new Processor(bankInterface, taxInterface)
 
         provider1 = new ActivityProvider("XtremX", "Adventure++", "NIF", IBAN, processor)
-        provider2 = new ActivityProvider("Walker", "Sky", "NIF2", IBAN, processor)
+        provider2 = new ActivityProvider("Walker", "Sky", "NIF2", IBAN, processor1)
         activityInterface = new ActivityInterface()
 
         activityBookingData = new RestActivityBookingData()
