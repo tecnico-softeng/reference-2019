@@ -48,6 +48,9 @@ class ActivityInterfaceCancelReservationMethodSpockTest extends SpockRollbackTes
         then: 'booking is cancelled'
         booking.isCancelled()
         cancel == booking.getCancel()
+        and:
+        1 * bankInterface.cancelPayment(_)
+        1 * taxInterface.cancelInvoice(_)
     }
 
     def 'booking does not exist'() {
@@ -59,6 +62,10 @@ class ActivityInterfaceCancelReservationMethodSpockTest extends SpockRollbackTes
 
         then:
         thrown(ActivityException)
+        and:
+        and:
+        0 * bankInterface.cancelPayment(_)
+        0 * taxInterface.cancelInvoice(_)
     }
 
 }

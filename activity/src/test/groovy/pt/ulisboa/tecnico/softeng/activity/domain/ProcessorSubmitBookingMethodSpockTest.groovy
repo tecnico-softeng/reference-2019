@@ -40,8 +40,16 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
     }
 
     def 'success'() {
-        expect: 'booking an activity works fine'
+        given:
+        bankInterface.processPayment(_) >> PAYMENT_REFERENCE
+        taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
+
+        when: 'booking an activity works fine'
         provider.getProcessor().submitBooking(booking)
+
+        then:
+        booking.getPaymentReference() == PAYMENT_REFERENCE
+        booking.getInvoiceReference() == INVOICE_REFERENCE
     }
 
     def 'one tax failure on submit invoice'() {
