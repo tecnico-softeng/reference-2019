@@ -1,8 +1,10 @@
 package pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import pt.ulisboa.tecnico.softeng.hotel.domain.Booking;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Room;
 
 public class RoomData {
@@ -21,8 +23,8 @@ public class RoomData {
 		this.number = room.getNumber();
 		this.type = room.getType();
 
-		this.bookings = room.getBookingSet().stream().sorted((b1, b2) -> b1.getArrival().compareTo(b2.getArrival()))
-				.map(b -> new RoomBookingData(b)).collect(Collectors.toList());
+		this.bookings = room.getBookingSet().stream().sorted(Comparator.comparing(Booking::getArrival))
+				.map(RoomBookingData::new).collect(Collectors.toList());
 	}
 
 	public String getHotelCode() {

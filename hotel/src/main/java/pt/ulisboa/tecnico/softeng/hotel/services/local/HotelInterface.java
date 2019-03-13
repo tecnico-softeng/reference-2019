@@ -27,7 +27,7 @@ public class HotelInterface {
 
 	@Atomic(mode = TxMode.READ)
 	public static List<HotelData> getHotels() {
-		return FenixFramework.getDomainRoot().getHotelSet().stream().map(h -> new HotelData(h))
+		return FenixFramework.getDomainRoot().getHotelSet().stream().map(HotelData::new)
 				.collect(Collectors.toList());
 	}
 
@@ -121,7 +121,7 @@ public class HotelInterface {
 			String buyerIban, String bulkId) {
 		Set<Booking> bookings = getBookings4BulkId(bulkId);
 		if (!bookings.isEmpty()) {
-			return bookings.stream().map(b -> b.getReference()).collect(Collectors.toSet());
+			return bookings.stream().map(Booking::getReference).collect(Collectors.toSet());
 		}
 
 		if (number < 1) {
@@ -145,7 +145,7 @@ public class HotelInterface {
 
 	@Atomic(mode = TxMode.WRITE)
 	public static void deleteHotels() {
-		FenixFramework.getDomainRoot().getHotelSet().stream().forEach(h -> h.delete());
+		FenixFramework.getDomainRoot().getHotelSet().stream().forEach(Hotel::delete);
 	}
 
 	static List<Room> getAvailableRooms(int number, LocalDate arrival, LocalDate departure) {
@@ -188,7 +188,7 @@ public class HotelInterface {
 	}
 
 	private static Set<Booking> getBookings4BulkId(String bulkId) {
-		Set<Booking> bookings = new HashSet<Booking>();
+		Set<Booking> bookings = new HashSet<>();
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
 			bookings.addAll(hotel.getBookings4BulkId(bulkId));
 		}
