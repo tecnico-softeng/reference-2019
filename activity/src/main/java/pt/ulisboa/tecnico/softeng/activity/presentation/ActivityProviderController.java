@@ -17,6 +17,8 @@ import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityPr
 public class ActivityProviderController {
 	private static Logger logger = LoggerFactory.getLogger(ActivityProviderController.class);
 
+	private static final ActivityInterface activityInterface = new ActivityInterface();
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String providerForm(Model model) {
 		logger.info("providerForm");
@@ -31,7 +33,7 @@ public class ActivityProviderController {
 				provider.getNif(), provider.getIban());
 
 		try {
-			ActivityInterface.createProvider(provider);
+			activityInterface.createProvider(provider);
 		} catch (ActivityException be) {
 			model.addAttribute("error", "Error: it was not possible to create the activity provider");
 			model.addAttribute("provider", provider);
@@ -46,7 +48,7 @@ public class ActivityProviderController {
 	public String deleteProviders(Model model) {
 		logger.info("deleteProviders");
 
-		ActivityInterface.deleteActivityProviders();
+		activityInterface.deleteActivityProviders();
 
 		return "redirect:/providers/";
 	}

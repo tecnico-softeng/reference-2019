@@ -1,19 +1,19 @@
 package pt.ulisboa.tecnico.softeng.activity.services.local;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
-import pt.ulisboa.tecnico.softeng.activity.domain.Activity;
-import pt.ulisboa.tecnico.softeng.activity.domain.ActivityOffer;
-import pt.ulisboa.tecnico.softeng.activity.domain.ActivityProvider;
-import pt.ulisboa.tecnico.softeng.activity.domain.Booking;
+import pt.ulisboa.tecnico.softeng.activity.domain.*;
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException;
 import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityData;
 import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityOfferData;
 import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityProviderData;
+import pt.ulisboa.tecnico.softeng.activity.services.remote.BankInterface;
+import pt.ulisboa.tecnico.softeng.activity.services.remote.TaxInterface;
 import pt.ulisboa.tecnico.softeng.activity.services.remote.dataobjects.RestActivityBookingData;
 
 public class ActivityInterface {
@@ -21,17 +21,18 @@ public class ActivityInterface {
 	@Atomic(mode = TxMode.READ)
 	public static List<ActivityProviderData> getProviders() {
 		return FenixFramework.getDomainRoot().getActivityProviderSet().stream()
-				.sorted((p1, p2) -> p1.getName().compareTo(p2.getName())).map(p -> new ActivityProviderData(p))
+				.sorted(Comparator.comparing(ActivityProvider::getName)).map(ActivityProviderData::new)
 				.collect(Collectors.toList());
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static void createProvider(ActivityProviderData provider) {
-		new ActivityProvider(provider.getCode(), provider.getName(), provider.getNif(), provider.getIban());
+	public void createProvider(ActivityProviderData provider) {
+		Processor processor = new Processor(new BankInterface(), new TaxInterface());
+		new ActivityProvider(provider.getCode(), provider.getName(), provider.getNif(), provider.getIban(), processor);
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public static ActivityProviderData getProviderDataByCode(String code) {
+	public ActivityProviderData getProviderDataByCode(String code) {
 		ActivityProvider provider = getProviderByCode(code);
 		if (provider == null) {
 			return null;
@@ -41,7 +42,7 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static void createActivity(String code, ActivityData activity) {
+	public void createActivity(String code, ActivityData activity) {
 		ActivityProvider provider = getProviderByCode(code);
 		if (provider == null) {
 			throw new ActivityException();
@@ -53,7 +54,7 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static ActivityData getActivityDataByCode(String codeProvider, String codeActivity) {
+	public ActivityData getActivityDataByCode(String codeProvider, String codeActivity) {
 		Activity activity = getActivityByCode(codeProvider, codeActivity);
 		if (activity == null) {
 			return null;
@@ -63,7 +64,7 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public static ActivityOfferData getActivityOfferDataByExternalId(String externalId) {
+	public ActivityOfferData getActivityOfferDataByExternalId(String externalId) {
 		ActivityOffer offer = FenixFramework.getDomainObject(externalId);
 
 		if (offer == null) {
@@ -74,7 +75,7 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static void createOffer(String codeProvider, String codeActivity, ActivityOfferData offer) {
+	public void createOffer(String codeProvider, String codeActivity, ActivityOfferData offer) {
 		Activity activity = getActivityByCode(codeProvider, codeActivity);
 		if (activity == null) {
 			throw new ActivityException();
@@ -85,7 +86,7 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static RestActivityBookingData reserveActivity(RestActivityBookingData activityBookingData) {
+	public RestActivityBookingData reserveActivity(RestActivityBookingData activityBookingData) {
 		Booking booking = getBookingByAdventureId(activityBookingData.getAdventureId());
 		if (booking != null) {
 			return new RestActivityBookingData(booking);
@@ -106,7 +107,7 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static void reserveActivity(String externalId, RestActivityBookingData bookingData) {
+	public void reserveActivity(String externalId, RestActivityBookingData bookingData) {
 		ActivityOffer offer = FenixFramework.getDomainObject(externalId);
 
 		if (offer == null) {
@@ -117,7 +118,7 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static String cancelReservation(String reference) {
+	public String cancelReservation(String reference) {
 		Booking booking = getBookingByReference(reference);
 		if (booking != null && booking.getCancel() == null) {
 			return booking.cancel();
@@ -126,7 +127,7 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public static RestActivityBookingData getActivityReservationData(String reference) {
+	public RestActivityBookingData getActivityReservationData(String reference) {
 		for (ActivityProvider provider : FenixFramework.getDomainRoot().getActivityProviderSet()) {
 			for (Activity activity : provider.getActivitySet()) {
 				for (ActivityOffer offer : activity.getActivityOfferSet()) {
@@ -141,8 +142,8 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static void deleteActivityProviders() {
-		FenixFramework.getDomainRoot().getActivityProviderSet().stream().forEach(p -> p.delete());
+	public void deleteActivityProviders() {
+		FenixFramework.getDomainRoot().getActivityProviderSet().stream().forEach(ActivityProvider::delete);
 	}
 
 	private static Booking getBookingByReference(String reference) {
@@ -155,7 +156,7 @@ public class ActivityInterface {
 		return null;
 	}
 
-	private static Booking getBookingByAdventureId(String adventureId) {
+	private Booking getBookingByAdventureId(String adventureId) {
 		for (ActivityProvider provider : FenixFramework.getDomainRoot().getActivityProviderSet()) {
 			Booking booking = provider.getBookingByAdventureId(adventureId);
 			if (booking != null) {
@@ -165,12 +166,12 @@ public class ActivityInterface {
 		return null;
 	}
 
-	public static ActivityProvider getProviderByCode(String code) {
+	public ActivityProvider getProviderByCode(String code) {
 		return FenixFramework.getDomainRoot().getActivityProviderSet().stream().filter(p -> p.getCode().equals(code))
 				.findFirst().orElse(null);
 	}
 
-	private static Activity getActivityByCode(String codeProvider, String codeActivity) {
+	private Activity getActivityByCode(String codeProvider, String codeActivity) {
 		ActivityProvider provider = getProviderByCode(codeProvider);
 		if (provider == null) {
 			return null;

@@ -2,6 +2,8 @@ package pt.ulisboa.tecnico.softeng.activity.domain
 import org.joda.time.LocalDate
 
 import pt.ist.fenixframework.FenixFramework
+import pt.ulisboa.tecnico.softeng.activity.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.activity.services.remote.TaxInterface
 
 class ActivityPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 	def ADVENTURE_ID = 'AdventureId'
@@ -19,7 +21,8 @@ class ActivityPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
 	@Override
 	def whenCreateInDatabase() {
-		def activityProvider = new ActivityProvider(PROVIDER_CODE,PROVIDER_NAME,NIF,IBAN)
+		def processor = new Processor(new BankInterface(), new TaxInterface())
+		def activityProvider = new ActivityProvider(PROVIDER_CODE,PROVIDER_NAME,NIF,IBAN,processor)
 
 		def activity = new Activity(activityProvider,ACTIVITY_NAME,18,65,CAPACITY)
 

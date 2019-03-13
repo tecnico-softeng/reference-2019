@@ -3,6 +3,8 @@ package pt.ulisboa.tecnico.softeng.activity.domain
 import org.joda.time.LocalDate
 
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
+import pt.ulisboa.tecnico.softeng.activity.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.activity.services.remote.TaxInterface
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -15,7 +17,8 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Override
 	def populate4Test() {
-		provider = new ActivityProvider('XtremX','ExtremeAdventure','NIF',IBAN)
+		def processor = new Processor(new BankInterface(), new TaxInterface())
+		provider = new ActivityProvider('XtremX','ExtremeAdventure','NIF',IBAN, processor)
 
 		def activity = new Activity(provider,'Bush Walking',18,80,3)
 
