@@ -11,9 +11,9 @@ import pt.ulisboa.tecnico.softeng.hotel.services.remote.exceptions.RemoteAccessE
 import pt.ulisboa.tecnico.softeng.hotel.services.remote.exceptions.TaxException;
 
 public class TaxInterface {
-	private static Logger logger = LoggerFactory.getLogger(TaxInterface.class);
+	private final Logger logger = LoggerFactory.getLogger(TaxInterface.class);
 
-	private static String ENDPOINT = "http://localhost:8086";
+	private static final String ENDPOINT = "http://localhost:8086";
 
 	public String submitInvoice(RestInvoiceData invoiceData) {
 		logger.info("submitInvoice buyerNif:{}, sellerNif:{}, itemType:{}, value:{}, date:{}, time:{}",

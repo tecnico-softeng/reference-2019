@@ -21,13 +21,15 @@ import pt.ulisboa.tecnico.softeng.hotel.services.remote.dataobjects.RestRoomBook
 public class HotelRestController {
 	private static Logger logger = LoggerFactory.getLogger(HotelRestController.class);
 
+	private static final HotelInterface hi = new HotelInterface();
+
 	@RequestMapping(value = "/reserve", method = RequestMethod.POST)
 	public ResponseEntity<RestRoomBookingData> reserve(@RequestBody RestRoomBookingData roomBookingData) {
 		logger.info("reserve type:{}, arrival:{}, departure:{}, nif:{}, iba:{}, adventureId:{}",
 				roomBookingData.getRoomType(), roomBookingData.getArrival(), roomBookingData.getDeparture(),
 				roomBookingData.getBuyerNif(), roomBookingData.getBuyerIban(), roomBookingData.getAdventureId());
 		try {
-			return new ResponseEntity<RestRoomBookingData>(HotelInterface.reserveRoom(roomBookingData), HttpStatus.OK);
+			return new ResponseEntity<RestRoomBookingData>(hi.reserveRoom(roomBookingData), HttpStatus.OK);
 		} catch (HotelException be) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -37,7 +39,7 @@ public class HotelRestController {
 	public ResponseEntity<String> cancel(@RequestParam String reference) {
 		logger.info("cancel reference:{}", reference);
 		try {
-			return new ResponseEntity<>(HotelInterface.cancelBooking(reference), HttpStatus.OK);
+			return new ResponseEntity<>(hi.cancelBooking(reference), HttpStatus.OK);
 		} catch (HotelException be) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -47,7 +49,7 @@ public class HotelRestController {
 	public ResponseEntity<RestRoomBookingData> booking(@RequestParam String reference) {
 		logger.info("booking reference:{}", reference);
 		try {
-			return new ResponseEntity<>(HotelInterface.getRoomBookingData(reference), HttpStatus.OK);
+			return new ResponseEntity<>(hi.getRoomBookingData(reference), HttpStatus.OK);
 		} catch (HotelException be) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -61,7 +63,7 @@ public class HotelRestController {
 		logger.info("bulk number:{}, arrival:{}, departure:{}, nif:{}, iban:{}, bulkId:{}", number, arrival, departure,
 				nif, iban, bulkId);
 		try {
-			return new ResponseEntity<>(HotelInterface.bulkBooking(number, arrival, departure, nif, iban, bulkId)
+			return new ResponseEntity<>(hi.bulkBooking(number, arrival, departure, nif, iban, bulkId)
 					.stream().toArray(size -> new String[size]), HttpStatus.OK);
 		} catch (HotelException be) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

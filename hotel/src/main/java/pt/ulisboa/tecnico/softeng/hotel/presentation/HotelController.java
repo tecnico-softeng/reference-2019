@@ -17,11 +17,13 @@ import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData;
 public class HotelController {
 	private static Logger logger = LoggerFactory.getLogger(HotelController.class);
 
+	private static final HotelInterface hotelInterface = new HotelInterface();
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String hotelForm(Model model) {
 		logger.info("hotelForm");
 		model.addAttribute("hotel", new HotelData());
-		model.addAttribute("hotels", HotelInterface.getHotels());
+		model.addAttribute("hotels", hotelInterface.getHotels());
 		return "hotels";
 	}
 
@@ -32,11 +34,11 @@ public class HotelController {
 				hotelData.getPriceDouble());
 
 		try {
-			HotelInterface.createHotel(hotelData);
+			hotelInterface.createHotel(hotelData);
 		} catch (HotelException be) {
 			model.addAttribute("error", "Error: it was not possible to create the hotel");
 			model.addAttribute("hotel", hotelData);
-			model.addAttribute("hotels", HotelInterface.getHotels());
+			model.addAttribute("hotels", hotelInterface.getHotels());
 			return "hotels";
 		}
 
@@ -47,7 +49,7 @@ public class HotelController {
 	public String deleteHotels(Model model) {
 		logger.info("deleteHotels");
 
-		HotelInterface.deleteHotels();
+		hotelInterface.deleteHotels();
 
 		return "redirect:/hotels";
 	}

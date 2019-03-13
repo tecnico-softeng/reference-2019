@@ -19,16 +19,18 @@ import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.RoomData;
 public class RoomController {
 	private static Logger logger = LoggerFactory.getLogger(RoomController.class);
 
+	private static final HotelInterface hi = new HotelInterface();
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String roomForm(Model model, @PathVariable String code) {
 		logger.info("roomForm hotelCode:{}", code);
 
-		HotelData hotelData = HotelInterface.getHotelDataByCode(code);
+		HotelData hotelData = hi.getHotelDataByCode(code);
 
 		if (hotelData == null) {
 			model.addAttribute("error", "Error: it does not exist a hotel with the code " + code);
 			model.addAttribute("hotel", new HotelData());
-			model.addAttribute("hotels", HotelInterface.getHotels());
+			model.addAttribute("hotels", hi.getHotels());
 			return "hotels";
 		} else {
 			model.addAttribute("room", new RoomData());
@@ -42,11 +44,11 @@ public class RoomController {
 		logger.info("roomSubmit hotelCode:{}, number:{}, type:{}", code, roomData.getNumber(), roomData.getType());
 
 		try {
-			HotelInterface.createRoom(code, roomData);
+			hi.createRoom(code, roomData);
 		} catch (HotelException be) {
 			model.addAttribute("error", "Error: it was not possible to create the room");
 			model.addAttribute("room", roomData);
-			model.addAttribute("hotel", HotelInterface.getHotelDataByCode(code));
+			model.addAttribute("hotel", hi.getHotelDataByCode(code));
 			return "rooms";
 		}
 

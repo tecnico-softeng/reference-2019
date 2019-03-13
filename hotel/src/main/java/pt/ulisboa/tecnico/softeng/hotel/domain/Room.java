@@ -5,7 +5,7 @@ import org.joda.time.LocalDate;
 import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
 
 public class Room extends Room_Base {
-	public static enum Type {
+	public enum Type {
 		SINGLE, DOUBLE
 	}
 
@@ -61,9 +61,7 @@ public class Room extends Room_Base {
 			throw new HotelException();
 		}
 
-		Booking booking = new Booking(this, arrival, departure, buyerNIF, buyerIban);
-
-		return booking;
+		return new Booking(this, arrival, departure, buyerNIF, buyerIban);
 	}
 
 	public Booking getBooking(String reference) {

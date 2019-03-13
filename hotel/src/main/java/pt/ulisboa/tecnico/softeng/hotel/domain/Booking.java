@@ -77,11 +77,7 @@ public class Booking extends Booking_Base {
 			return true;
 		}
 
-		if (arrival.isBefore(getArrival()) && departure.isAfter(getDeparture())) {
-			return true;
-		}
-
-		return false;
+		return arrival.isBefore(getArrival()) && departure.isAfter(getDeparture());
 	}
 
 	public String cancel() {
