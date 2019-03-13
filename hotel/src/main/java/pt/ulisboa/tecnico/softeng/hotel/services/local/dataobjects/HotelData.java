@@ -1,9 +1,11 @@
 package pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.ulisboa.tecnico.softeng.hotel.domain.Hotel;
+import pt.ulisboa.tecnico.softeng.hotel.domain.Room;
 
 public class HotelData {
 	private String code;
@@ -21,8 +23,8 @@ public class HotelData {
 		this.code = hotel.getCode();
 		this.name = hotel.getName();
 
-		this.rooms = hotel.getRoomSet().stream().sorted((r1, r2) -> r1.getNumber().compareTo(r2.getNumber()))
-				.map(r -> new RoomData(r)).collect(Collectors.toList());
+		this.rooms = hotel.getRoomSet().stream().sorted(Comparator.comparing(Room::getNumber))
+				.map(RoomData::new).collect(Collectors.toList());
 	}
 
 	public String getCode() {
