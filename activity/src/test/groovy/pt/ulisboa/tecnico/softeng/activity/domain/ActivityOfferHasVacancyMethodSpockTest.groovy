@@ -34,7 +34,7 @@ class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractCl
 	@Unroll('success: #label')
 	def 'success'() {
 		when:
-		for(int i = 0; i < n; i++) {
+		1.upto(n) {
 			new Booking(provider, offer, NIF, IBAN)
 		}
 
