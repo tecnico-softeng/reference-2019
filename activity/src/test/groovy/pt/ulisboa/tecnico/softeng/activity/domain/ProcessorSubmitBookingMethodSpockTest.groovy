@@ -6,6 +6,7 @@ import pt.ulisboa.tecnico.softeng.activity.services.remote.TaxInterface
 import pt.ulisboa.tecnico.softeng.activity.services.remote.exceptions.BankException
 import pt.ulisboa.tecnico.softeng.activity.services.remote.exceptions.RemoteAccessException
 import pt.ulisboa.tecnico.softeng.activity.services.remote.exceptions.TaxException
+import spock.lang.Unroll
 
 class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractClass {
     def CANCEL_PAYMENT_REFERENCE = 'CancelPaymentReference'
@@ -52,14 +53,15 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking.getInvoiceReference() == INVOICE_REFERENCE
     }
 
-    def 'one tax failure on submit invoice'() {
+    @Unroll('one #label failure on submit invoice')
+    def 'one #label failure on submit invoice'() {
         when: 'booking an activity'
         provider.getProcessor().submitBooking(booking)
 
         then: 'the process payment succeeds'
         1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
         and: 'the tax interface throws a TaxException'
-        1 * taxInterface.submitInvoice(_) >> { throw new TaxException() }
+        1 * taxInterface.submitInvoice(_) >> { throw exception }
         and: 'booking contains payment reference but not the invoice reference'
         booking.paymentReference == PAYMENT_REFERENCE
         booking.invoiceReference == null
@@ -76,40 +78,20 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
+
+        where:
+        exception                    | label
+        new TaxException()           | 'tax'
+        new RemoteAccessException()  | 'remote'
     }
 
-    def 'one remote failure on submit invoice'() {
+    @Unroll('one #label failure on process payment')
+    def 'one #label failure on process payment'() {
         when: 'booking an activity'
         provider.getProcessor().submitBooking(booking)
 
         then: 'the process payment succeeds'
-        1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
-        and: 'the tax interface throws a TaxException'
-        1 * taxInterface.submitInvoice(_) >> { throw new RemoteAccessException() }
-        and: 'booking contains payment reference but not the invoice reference'
-        booking.paymentReference == PAYMENT_REFERENCE
-        booking.invoiceReference == null
-
-        when: 'doing another booking'
-        provider.getProcessor().submitBooking(booking2)
-
-        then: 'only the second booking invokes the bank interface'
-        1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
-        and: 'both invoke the tax interface'
-        2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
-        and: 'both bookings succeed'
-        booking.paymentReference == PAYMENT_REFERENCE
-        booking.invoiceReference == INVOICE_REFERENCE
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
-    }
-
-    def 'one bank failure on process payment'() {
-        when: 'booking an activity'
-        provider.getProcessor().submitBooking(booking)
-
-        then: 'the process payment succeeds'
-        1 * bankInterface.processPayment(_) >> { throw new BankException() }
+        1 * bankInterface.processPayment(_) >> { throw exception }
         and: 'the tax interface throws a TaxException'
         0 * taxInterface.submitInvoice(_)
         and: 'booking contains payment reference but not the invoice reference'
@@ -128,32 +110,11 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
-    }
 
-    def 'one remote failure on process payment'() {
-        when: 'booking an activity'
-        provider.getProcessor().submitBooking(booking)
-
-        then: 'the process payment succeeds'
-        1 * bankInterface.processPayment(_) >> { throw new RemoteAccessException() }
-        and: 'the tax interface throws a TaxException'
-        0 * taxInterface.submitInvoice(_)
-        and: 'booking contains payment reference but not the invoice reference'
-        booking.paymentReference == null
-        booking.invoiceReference == null
-
-        when: 'doing another booking'
-        provider.getProcessor().submitBooking(booking2)
-
-        then: 'only the second booking invokes the bank interface'
-        2 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
-        and: 'both invoke the tax interface'
-        2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
-        and: 'both bookings succeed'
-        booking.paymentReference == PAYMENT_REFERENCE
-        booking.invoiceReference == INVOICE_REFERENCE
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
+        where:
+        exception                    | label
+        new BankException()          | 'bank'
+        new RemoteAccessException()  | 'remote'
     }
 
     def 'successful cancel'() {
