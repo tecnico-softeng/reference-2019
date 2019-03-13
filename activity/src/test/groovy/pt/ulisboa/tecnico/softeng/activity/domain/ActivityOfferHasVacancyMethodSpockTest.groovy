@@ -1,9 +1,10 @@
 package pt.ulisboa.tecnico.softeng.activity.domain
 
 import org.joda.time.LocalDate
+import spock.lang.Unroll
+
 import pt.ulisboa.tecnico.softeng.activity.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.activity.services.remote.TaxInterface
-import spock.lang.Unroll
 
 class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def IBAN = "IBAN"
