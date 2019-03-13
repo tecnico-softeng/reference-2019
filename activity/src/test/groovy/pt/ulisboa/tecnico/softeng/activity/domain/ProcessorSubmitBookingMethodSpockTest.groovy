@@ -65,8 +65,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'both invoke the tax interface'
         2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
+        booking.paymentReference == PAYMENT_REFERENCE
+        booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
     }
@@ -91,8 +91,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'both invoke the tax interface'
         2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
+        booking.paymentReference == PAYMENT_REFERENCE
+        booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
     }
@@ -117,8 +117,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'both invoke the tax interface'
         2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
+        booking.paymentReference == PAYMENT_REFERENCE
+        booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
     }
@@ -143,8 +143,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'both invoke the tax interface'
         2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
         and: 'both bookings succeed'
-        booking2.paymentReference == PAYMENT_REFERENCE
-        booking2.invoiceReference == INVOICE_REFERENCE
+        booking.paymentReference == PAYMENT_REFERENCE
+        booking.invoiceReference == INVOICE_REFERENCE
         booking2.paymentReference == PAYMENT_REFERENCE
         booking2.invoiceReference == INVOICE_REFERENCE
     }
