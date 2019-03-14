@@ -11,7 +11,7 @@ import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 
 class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollbackTestAbstractClass {
-	def ADVENTURE_ID = "AdventureId"
+	def ADVENTURE_ID = 'AdventureId'
 	def NAME1 = 'eartz'
 	def NAME2 = 'eartz'
 	def PLATE_CAR1 = 'aa-00-11'
@@ -48,10 +48,10 @@ class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollb
 
 	def 'only cars'() {
 		given:
-		def car1 = new Car(PLATE_CAR1,10,10,this.rentACar1)
+		def car1 = new Car(PLATE_CAR1,10,10, rentACar1)
 		car1.rent(DRIVING_LICENSE,date1,date2,NIF,IBAN_BUYER,ADVENTURE_ID)
-		def car2 = new Car(PLATE_CAR2,10,10,this.rentACar2)
-		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
+		def car2 = new Car(PLATE_CAR2,10,10, rentACar2)
+		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10, rentACar1)
 
 		when:
 		def cars = rentACarInterface.getAllAvailableCars(date3,date4)
@@ -78,8 +78,8 @@ class RentACarInterfaceGetAllAvailableVehiclesMethodSpockTest extends SpockRollb
 
 	def 'only motorcycles'() {
 		given: 'creating one car, and one motorcycle'
-		def car = new Car(PLATE_CAR1,10,10,this.rentACar1)
-		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10,this.rentACar1)
+		def car = new Car(PLATE_CAR1,10,10, rentACar1)
+		def motorcycle = new Motorcycle(PLATE_MOTORCYCLE,10,10, rentACar1)
 
 		when: 'when fetching available motorcycle'
 		def cars = rentACarInterface.getAllAvailableMotorcycles(date3,date4)

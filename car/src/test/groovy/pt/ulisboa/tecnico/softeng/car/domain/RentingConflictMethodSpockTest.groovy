@@ -1,12 +1,13 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
+import spock.lang.Shared
+import spock.lang.Unroll
 
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
-import spock.lang.Shared
-import spock.lang.Unroll
+
 
 class RentingConflictMethodSpockTest extends SpockRollbackTestAbstractClass {
 	def PLATE_CAR = '22-33-HZ'

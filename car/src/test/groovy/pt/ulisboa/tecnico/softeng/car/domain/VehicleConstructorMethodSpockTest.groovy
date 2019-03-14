@@ -1,10 +1,12 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
+import spock.lang.Shared
+import spock.lang.Unroll
+
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
-import spock.lang.Shared
-import spock.lang.Unroll
+
 
 class VehicleConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	@Shared def PLATE_CAR = '22-33-HZ'
@@ -77,13 +79,13 @@ class VehicleConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'duplicated plate different rent a car'() {
-		given: 'create a car in rentacar'
+		given: 'create a car in rent-a-car'
 		new Car(PLATE_CAR, 0, 10, rentACar)
 		and: 'another rent a car'
 		def rentACar2 = new RentACar(RENT_A_CAR_NAME + '2', NIF + "1", IBAN,
 				new Processor(new BankInterface(), new TaxInterface()))
 
-		when: 'creating a car in the other rent a car with the same plate'
+		when: 'creating a car in the other rent-a-car with the same plate'
 		new Car(PLATE_CAR, 2, 10, rentACar2)
 
 		then: 'throws an exception'

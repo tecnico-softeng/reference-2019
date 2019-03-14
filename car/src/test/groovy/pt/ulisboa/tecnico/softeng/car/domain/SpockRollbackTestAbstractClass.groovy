@@ -1,11 +1,11 @@
-package pt.ulisboa.tecnico.softeng.car.domain;
-
-import pt.ist.fenixframework.FenixFramework
-import pt.ist.fenixframework.core.WriteOnReadError
-import spock.lang.Specification
+package pt.ulisboa.tecnico.softeng.car.domain
 
 import javax.transaction.NotSupportedException
 import javax.transaction.SystemException
+import spock.lang.Specification
+
+import pt.ist.fenixframework.FenixFramework
+import pt.ist.fenixframework.core.WriteOnReadError
 
 
 abstract class SpockRollbackTestAbstractClass extends Specification {

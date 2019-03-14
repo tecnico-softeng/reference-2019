@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.softeng.car.services.local
 
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.car.domain.Car
 import pt.ulisboa.tecnico.softeng.car.domain.Processor
 import pt.ulisboa.tecnico.softeng.car.domain.RentACar
@@ -10,7 +11,7 @@ import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 
 class RentACarInterfaceGetRentingDataMethodSpockTest extends SpockRollbackTestAbstractClass {
-    def ADVENTURE_ID = "AdventureId"
+    def ADVENTURE_ID = 'AdventureId'
     def NAME1 = 'eartz'
     def PLATE_CAR1 = 'aa-00-11'
     def DRIVING_LICENSE = 'br123'

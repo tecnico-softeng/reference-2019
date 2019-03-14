@@ -48,7 +48,7 @@ class VehicleRentMethodSpockTest extends SpockRollbackTestAbstractClass {
 		given: 'given a car available'
 		def car = new Car(PLATE_CAR,10,10,rentACar)
 
-		when: 'wrong parameters for rentingOne'
+		when: 'wrong parameters for renting'
 		car.rent(DRIVING_LICENSE, begin, end, NIF + "1", IBAN_BUYER, ADVENTURE_ID)
 
 		then: 'throws an exception'

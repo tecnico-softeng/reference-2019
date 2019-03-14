@@ -1,10 +1,11 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
+import spock.lang.Shared
+import spock.lang.Unroll
+
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
-import spock.lang.Shared
-import spock.lang.Unroll
 
 
 class RentACarConstructorSpockTest extends SpockRollbackTestAbstractClass {
@@ -22,7 +23,7 @@ class RentACarConstructorSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'success'() {
-		when: 'creating a new rent a car'
+		when: 'creating a new RentACar'
 		def rentACar = new RentACar(NAME, NIF, IBAN, processor)
 
 		then: 'should succeed'

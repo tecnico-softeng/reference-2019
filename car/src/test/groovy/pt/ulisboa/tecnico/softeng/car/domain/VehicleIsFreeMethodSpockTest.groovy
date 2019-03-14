@@ -1,14 +1,15 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
-
-import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
-import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import spock.lang.Shared
 import spock.lang.Unroll
 
+import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
+import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
+
+
 class VehicleIsFreeMethodSpockTest extends SpockRollbackTestAbstractClass {
-	def ADVENTURE_ID = "AdventureId"
+	def ADVENTURE_ID = 'AdventureId'
 	def PLATE_CAR='22-33-HZ'
 	def RENT_A_CAR_NAME='Eartz'
 	def DRIVING_LICENSE='lx1423'

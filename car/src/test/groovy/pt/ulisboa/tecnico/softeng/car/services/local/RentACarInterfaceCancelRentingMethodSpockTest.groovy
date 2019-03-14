@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.softeng.car.services.local
 
 import org.joda.time.LocalDate
+import spock.lang.Unroll
 
 import pt.ulisboa.tecnico.softeng.car.domain.Car
 import pt.ulisboa.tecnico.softeng.car.domain.Processor
@@ -9,10 +10,9 @@ import pt.ulisboa.tecnico.softeng.car.domain.SpockRollbackTestAbstractClass
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
-import spock.lang.Unroll
 
 class RentACarInterfaceCancelRentingMethodSpockTest extends SpockRollbackTestAbstractClass {
-	def ADVENTURE_ID = "AdventureId"
+	def ADVENTURE_ID = 'AdventureId'
 	def PLATE_CAR='22-33-HZ'
 	def RENT_A_CAR_NAME='Eartz'
 	def DRIVING_LICENSE='lx1423'
@@ -59,18 +59,9 @@ class RentACarInterfaceCancelRentingMethodSpockTest extends SpockRollbackTestAbs
 		thrown(CarException)
 
 		where:
-		label | ref
+		label         | ref
 		'missing ref' | 'MISSING_REFERENCE'
 		'null ref'    | null
 		'empty ref'   | ''
-	}
-
-
-	def 'does not exist reference'() {
-		when:
-		rentACarInterface.cancelRenting('MISSING_REFERENCE')
-
-		then:
-		thrown(CarException)
 	}
 }

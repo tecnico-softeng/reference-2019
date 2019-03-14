@@ -1,11 +1,13 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
+
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.exceptions.BankException
 import pt.ulisboa.tecnico.softeng.car.services.remote.exceptions.RemoteAccessException
 import pt.ulisboa.tecnico.softeng.car.services.remote.exceptions.TaxException
+
 
 class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractClass {
     def INVOICE_REFERENCE = 'InvoiceReference'
