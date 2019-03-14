@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.softeng.broker.domain
 
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*
+import spock.lang.Unroll
 
 class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
     def activityInterface
@@ -42,9 +43,10 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getPaymentCancellation() == PAYMENT_CANCELLATION
     }
 
-    def 'fail revert payment bank exception'() {
-        given: 'a bank cancel payment throws a bank exception'
-        bankInterface.cancelPayment(PAYMENT_CONFIRMATION) >> { throw new BankException() }
+    @Unroll('#mock_exception exception')
+    def 'fail revert payment #mock_exception exception'() {
+        given: 'a bank cancel payment throws an exception'
+        bankInterface.cancelPayment(PAYMENT_CONFIRMATION) >> { throw mock_exception }
         and: 'the adventure has a payment confirmation'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
 
@@ -55,21 +57,11 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getState().getValue() == Adventure.State.UNDO
         and: 'the adventure payment cancellation is null'
         adventure.getPaymentCancellation() == null
-    }
 
-    def 'fail revert payment remote access exception'() {
-        given: 'a bank cancel payment throws a remote access exception'
-        bankInterface.cancelPayment(PAYMENT_CONFIRMATION) >> { throw new RemoteAccessException() }
-        and: 'the adventure has a payment confirmation'
-        adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
-
-        when: 'the adventure is processed'
-        adventure.process()
-
-        then: 'the adventure state does not change'
-        adventure.getState().getValue() == Adventure.State.UNDO
-        and: 'the adventure payment cancellation is null'
-        adventure.getPaymentCancellation() == null
+        where:
+        mock_exception              | exception
+        new BankException()         | 'BankException'
+        new RemoteAccessException() | 'RemoteAccessException'
     }
 
     def 'success revert activity'() {
@@ -90,9 +82,10 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getActivityCancellation() == ACTIVITY_CANCELLATION
     }
 
-    def 'fail revert activity due to activity exception'() {
-        given: 'an activity cancel reservation throws an activity exception'
-        activityInterface.cancelReservation(ACTIVITY_CONFIRMATION) >> { throw new ActivityException() }
+    @Unroll('#mock_exception exception')
+    def 'fail revert activity due to #mock_exception exception'() {
+        given: 'an activity cancel reservation throws an exception'
+        activityInterface.cancelReservation(ACTIVITY_CONFIRMATION) >> { throw mock_exception }
         and: 'the adventure has cancelled the payment'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
         adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
@@ -106,24 +99,11 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getState().getValue() == Adventure.State.UNDO
         and: 'the adventure activity cancellation token is null'
         adventure.getActivityCancellation() == null
-    }
 
-    def 'fail revert activity remote exception'() {
-        given: 'an activity cancel reservation throws a remote access exception'
-        activityInterface.cancelReservation(ACTIVITY_CONFIRMATION) >> { throw new RemoteAccessException() }
-        and: 'the adventure has cancelled the payment'
-        adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
-        adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
-        and: 'has an activity confirmation'
-        adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION)
-
-        when: 'the adventure is processed'
-        adventure.process()
-
-        then: 'the adventure state does not change'
-        adventure.getState().getValue() == Adventure.State.UNDO
-        and: 'the adventure activity cancellation token is null'
-        adventure.getActivityCancellation() == null
+        where:
+        mock_exception              | exception
+        new ActivityException()     | 'ActivityException'
+        new RemoteAccessException() | 'RemoteAccessException'
     }
 
     def 'success revert room booking'() {
@@ -147,9 +127,10 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getRoomCancellation() == ROOM_CANCELLATION
     }
 
-    def 'success revert room booking hotel exception'() {
-        given: 'a hotel cancel booking throws a hotel exception'
-        hotelInterface.cancelBooking(ROOM_CONFIRMATION) >> { throw new HotelException() }
+    @Unroll('#mock_exception exception')
+    def 'success revert room booking #mock_exception exception'() {
+        given: 'a hotel cancel booking throws an exception'
+        hotelInterface.cancelBooking(ROOM_CONFIRMATION) >> { throw mock_exception }
         and: 'the adventure has cancelled the payment'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
         adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
@@ -166,27 +147,11 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getState().getValue() == Adventure.State.UNDO
         and: 'the adventure room cancellation token is null'
         adventure.getRoomCancellation() == null
-    }
 
-    def 'success revert room booking remote exception'() {
-        given: 'a hotel cancel booking throws a remote access exception'
-        hotelInterface.cancelBooking(ROOM_CONFIRMATION) >> { throw new RemoteAccessException() }
-        and: 'the adventure has cancelled the payment'
-        adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
-        adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
-        and: 'has cancelled activity'
-        adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION)
-        adventure.setActivityCancellation(ACTIVITY_CANCELLATION)
-        and: 'has a room confirmation'
-        adventure.setRoomConfirmation(ROOM_CONFIRMATION)
-
-        when: 'the adventure is processed'
-        adventure.process()
-
-        then: 'the adventure state does not change'
-        adventure.getState().getValue() == Adventure.State.UNDO
-        and: 'the adventure room cancellation token is null'
-        adventure.getRoomCancellation() == null
+        where:
+        mock_exception              | exception
+        new HotelException()        | 'HotelException'
+        new RemoteAccessException() | 'RemoteAccessException'
     }
 
     def 'success revert rent car'() {
@@ -213,9 +178,10 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getRentingCancellation() == RENTING_CANCELLATION
     }
 
-    def 'fail revert rent car car exception'() {
+    @Unroll('#mock_exception exception')
+    def 'fail revert rent car #mock_exception exception'() {
         given: 'a car cancel renting throws a car exception'
-        carInterface.cancelRenting(RENTING_CONFIRMATION) >> { throw new CarException() }
+        carInterface.cancelRenting(RENTING_CONFIRMATION) >> { throw mock_exception }
         and: 'the adventure has cancelled the payment'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
         adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
@@ -235,30 +201,11 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getState().getValue() == Adventure.State.UNDO
         and: 'the adventure renting cancellation token is null'
         adventure.getRentingCancellation() == null
-    }
 
-    def 'fail revert rent car remote exception'() {
-        given: 'a car cancel renting throws a remote access exception'
-        carInterface.cancelRenting(RENTING_CONFIRMATION) >> { throw new RemoteAccessException() }
-        and: 'the adventure has cancelled the payment'
-        adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
-        adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
-        and: 'has cancelled activity'
-        adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION)
-        adventure.setActivityCancellation(ACTIVITY_CANCELLATION)
-        and: 'has cancelled room'
-        adventure.setRoomConfirmation(ROOM_CONFIRMATION)
-        adventure.setRoomCancellation(ROOM_CANCELLATION)
-        and: 'has a car renting confirmation'
-        adventure.setRentingConfirmation(RENTING_CONFIRMATION)
-
-        when: 'the adventure is processed'
-        adventure.process()
-
-        then: 'the adventure state does not change'
-        adventure.getState().getValue() == Adventure.State.UNDO
-        and: 'the adventure renting cancellation token is null'
-        adventure.getRentingCancellation() == null
+        where:
+        mock_exception              | exception
+        new CarException()          | 'CarException'
+        new RemoteAccessException() | 'RemoteAccessException'
     }
 
     def 'success cancel invoice'() {
@@ -288,9 +235,10 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getInvoiceCancelled()
     }
 
-    def 'fail cancel invoice tax exception'() {
-        given: 'an invoice cancel throws a tax exception'
-        taxInterface.cancelInvoice(INVOICE_REFERENCE) >> { throw new TaxException() }
+    @Unroll('#mock_exception exception')
+    def 'fail cancel invoice #mock_exception exception'() {
+        given: 'an invoice cancel throws an exception'
+        taxInterface.cancelInvoice(INVOICE_REFERENCE) >> { throw mock_exception }
         and: 'the adventure has cancelled the payment'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
         adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
@@ -313,33 +261,11 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getState().getValue() == Adventure.State.UNDO
         and: 'the invoice is not cancelled'
         !adventure.getInvoiceCancelled()
-    }
 
-    def 'fail cancel invoice remote access exception'() {
-        given: 'an invoice cancel throws a remote accesss exception'
-        taxInterface.cancelInvoice(INVOICE_REFERENCE) >> { throw new RemoteAccessException() }
-        and: 'the adventure has cancelled the payment'
-        adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
-        adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
-        and: 'has cancelled activity'
-        adventure.setActivityConfirmation(ACTIVITY_CONFIRMATION)
-        adventure.setActivityCancellation(ACTIVITY_CANCELLATION)
-        and: 'has cancelled room'
-        adventure.setRoomConfirmation(ROOM_CONFIRMATION)
-        adventure.setRoomCancellation(ROOM_CANCELLATION)
-        and: 'has cancelled car renting'
-        adventure.setRentingConfirmation(RENTING_CONFIRMATION)
-        adventure.setRentingCancellation(RENTING_CANCELLATION)
-        and: 'has a invoice reference'
-        adventure.setInvoiceReference(INVOICE_REFERENCE)
-
-        when: 'the adventure is processed'
-        adventure.process()
-
-        then: 'the adventure state does not change'
-        adventure.getState().getValue() == Adventure.State.UNDO
-        and: 'the invoice is not cancelled'
-        !adventure.getInvoiceCancelled()
+        where:
+        mock_exception              | exception
+        new TaxException()          | 'TaxException'
+        new RemoteAccessException() | 'RemoteAccessException'
     }
 
 }

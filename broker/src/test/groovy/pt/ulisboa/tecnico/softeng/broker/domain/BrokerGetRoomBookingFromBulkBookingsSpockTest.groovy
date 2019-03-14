@@ -4,6 +4,7 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBookingData
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.HotelException
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException
+import spock.lang.Unroll
 
 class BrokerGetRoomBookingFromBulkBookingsSpockTest extends SpockRollbackTestAbstractClass {
     def broker
@@ -80,26 +81,22 @@ class BrokerGetRoomBookingFromBulkBookingsSpockTest extends SpockRollbackTestAbs
         bookingData == null
     }
 
-    def 'fail a hotel exception is thrown'() {
-        given: 'that the hotel interface throws a hotel exception'
-        hotelInterface.getRoomBookingData(_) >> { throw new HotelException() }
+    @Unroll('#exception is thrown')
+    def 'fail and an #exception exception is thrown'() {
+        given: 'that the hotel interface throws an exception'
+        hotelInterface.getRoomBookingData(_) >> { throw mock_exception }
 
         when: 'it is requested a SINGLE room from the set of bulked booked rooms'
         def bookingData = broker.getRoomBookingFromBulkBookings(SINGLE, BEGIN, END)
 
         then: 'a null is returned'
         bookingData == null
-    }
 
-    def 'fail a remote access exception is thrown'() {
-        given: 'that the hotel interface throws a remote access exception'
-        hotelInterface.getRoomBookingData(_) >> { throw new RemoteAccessException() }
+        where:
+        mock_exception              | exception
+        new HotelException()        | 'HotelException'
+        new RemoteAccessException() | 'RemoteAccessException'
 
-        when: 'it is requested a SINGLE room from the set of bulked booked rooms'
-        def bookingData = broker.getRoomBookingFromBulkBookings(SINGLE, BEGIN, END)
-
-        then: 'a null is returned'
-        bookingData == null
     }
 
 }
