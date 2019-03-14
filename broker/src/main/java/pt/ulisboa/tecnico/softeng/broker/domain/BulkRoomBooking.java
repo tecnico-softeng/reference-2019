@@ -1,14 +1,13 @@
 package pt.ulisboa.tecnico.softeng.broker.domain;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.joda.time.LocalDate;
-
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBookingData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.HotelException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BulkRoomBooking extends BulkRoomBooking_Base {
     public static final int MAX_HOTEL_EXCEPTIONS = 3;
@@ -45,11 +44,11 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
     }
 
     public Set<String> getReferences() {
-        return getReferenceSet().stream().map(r -> r.getValue()).collect(Collectors.toSet());
+        return getReferenceSet().stream().map(Reference::getValue).collect(Collectors.toSet());
     }
 
     public void processBooking() {
-        if (getCancelled() || getReferenceSet().size() != 0) {
+        if (getCancelled() || !getReferenceSet().isEmpty()) {
             return;
         }
 
@@ -60,25 +59,22 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
             }
             setNumberOfHotelExceptions(0);
             setNumberOfRemoteErrors(0);
-            return;
         } catch (HotelException he) {
             setNumberOfHotelExceptions(getNumberOfHotelExceptions() + 1);
             if (getNumberOfHotelExceptions() == MAX_HOTEL_EXCEPTIONS) {
                 setCancelled(true);
             }
             setNumberOfRemoteErrors(0);
-            return;
         } catch (RemoteAccessException rae) {
             setNumberOfRemoteErrors(getNumberOfRemoteErrors() + 1);
             if (getNumberOfRemoteErrors() == MAX_REMOTE_ERRORS) {
                 setCancelled(true);
             }
             setNumberOfHotelExceptions(0);
-            return;
         }
     }
 
-    public RestRoomBookingData getRoomBookingData4Type(String type) {
+    public RestRoomBookingData getRoomBookingData4Type(String type, LocalDate arrival, LocalDate departure) {
         if (getCancelled()) {
             return null;
         }
@@ -97,7 +93,8 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
                 }
             }
 
-            if (data != null && data.getRoomType().equals(type)) {
+            if (data != null && data.getRoomType().equals(type) && data.getArrival().equals(arrival)
+                    && data.getDeparture().equals(departure)) {
                 removeReference(reference);
                 return data;
             }

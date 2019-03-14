@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class HotelInterface {
-    public static enum Type {
+    public enum Type {
         SINGLE, DOUBLE
     }
 
@@ -31,12 +31,12 @@ public class HotelInterface {
             return restTemplate.postForObject(ENDPOINT + "/rest/hotels/reserve", roomBookingData,
                     RestRoomBookingData.class);
         } catch (HttpClientErrorException e) {
-            logger.info("reserveRoom HttpClientErrorException arrival:{}, departure:{}, adventureId:{}",
+            logger.info("reserveRoom HttpClientErrorException arrival:{}, departure:{}, nif:{}, iban:{}, adventureId:{}",
                     roomBookingData.getArrival(), roomBookingData.getDeparture(), roomBookingData.getBuyerNif(),
                     roomBookingData.getBuyerIban(), roomBookingData.getAdventureId());
             throw new HotelException();
         } catch (Exception e) {
-            logger.info("reserveRoom Exception arrival:{}, departure:{}, adventureId:{}", roomBookingData.getArrival(),
+            logger.info("reserveRoom Exception arrival:{}, departure:{}, nif:{}, iban:{},, adventureId:{}", roomBookingData.getArrival(),
                     roomBookingData.getDeparture(), roomBookingData.getBuyerNif(), roomBookingData.getBuyerIban(),
                     roomBookingData.getAdventureId());
             throw new RemoteAccessException();
@@ -62,9 +62,8 @@ public class HotelInterface {
         logger.info("getRoomBookingData reference:{}", reference);
         RestTemplate restTemplate = new RestTemplate();
         try {
-            RestRoomBookingData result = restTemplate
+            return restTemplate
                     .getForObject(ENDPOINT + "/rest/hotels/booking?reference=" + reference, RestRoomBookingData.class);
-            return result;
         } catch (HttpClientErrorException e) {
             logger.info("getRoomBookingData HttpClientErrorException reference:{}", reference);
             throw new HotelException();

@@ -23,12 +23,14 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
     def 'success SINGLE room'() {
         def roomBookingData = new RestRoomBookingData()
         roomBookingData.setRoomType(SINGLE)
+        roomBookingData.setArrival(BEGIN)
+        roomBookingData.setDeparture(END)
 
         given: 'that the hotel interface returns a booking data for a single room'
         hotelInterface.getRoomBookingData(_) >> roomBookingData
 
         when: 'it is requested a SINGLE room from the set of bulked booked rooms'
-        def bookingData = bulk.getRoomBookingData4Type(SINGLE)
+        def bookingData = bulk.getRoomBookingData4Type(SINGLE, BEGIN, END)
 
         then: 'a the booking of a single room is returned'
         bookingData.getRoomType() == SINGLE
@@ -41,12 +43,14 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
     def 'success DOUBLE room'() {
         def roomBookingData = new RestRoomBookingData()
         roomBookingData.setRoomType(DOUBLE)
+        roomBookingData.setArrival(BEGIN)
+        roomBookingData.setDeparture(END)
 
         given: 'that the hotel interface returns a booking data for a double room'
         hotelInterface.getRoomBookingData(_) >> roomBookingData
 
         when: 'it is requested a double room from the set of bulked booked rooms'
-        def bookingData = bulk.getRoomBookingData4Type(DOUBLE)
+        def bookingData = bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
 
         then: 'a the booking of a double room is returned'
         bookingData.getRoomType() == DOUBLE
@@ -61,7 +65,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         hotelInterface.getRoomBookingData(_) >> { throw new HotelException() }
 
         when: 'it is requested a double room from the set of bulked booked rooms'
-        def bookingData = bulk.getRoomBookingData4Type(DOUBLE)
+        def bookingData = bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
 
         then: 'no booking is returned'
         bookingData == null
@@ -76,7 +80,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         hotelInterface.getRoomBookingData(_) >> { throw new RemoteAccessException() }
 
         when: 'it is requested a double room from the set of bulked booked rooms'
-        def bookingData = bulk.getRoomBookingData4Type(DOUBLE)
+        def bookingData = bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
 
         then: 'no booking is returned'
         bookingData == null
@@ -92,7 +96,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
 
         when: 'the request until the max number of exceptions, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue(); i++) {
-            bulk.getRoomBookingData4Type(DOUBLE)
+            bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
         }
 
         then: 'the set of references is not changed'
@@ -104,13 +108,15 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
     def 'max minus one remote exception'() {
         def roomBookingData = new RestRoomBookingData()
         roomBookingData.setRoomType(DOUBLE)
+        roomBookingData.setArrival(BEGIN)
+        roomBookingData.setDeparture(END)
 
         given: 'that the hotel interface returns remote access exceptions'
         hotelInterface.getRoomBookingData(_) >> { throw new RemoteAccessException() }
 
         when: 'the request is done until max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
-            bulk.getRoomBookingData4Type(DOUBLE)
+            bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
         }
 
         then: 'the set of references is not changed'
@@ -119,7 +125,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         !bulk.getCancelled()
 
         when: 'another request is done'
-        bulk.getRoomBookingData4Type(DOUBLE)
+        bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
 
         then: 'the interface returns booking data'
         hotelInterface.getRoomBookingData(_) >> roomBookingData
@@ -132,13 +138,15 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
     def 'remote exception value is reset by success'() {
         def roomBookingData = new RestRoomBookingData()
         roomBookingData.setRoomType(DOUBLE)
+        roomBookingData.setArrival(BEGIN)
+        roomBookingData.setDeparture(END)
 
         given: 'that the hotel interface returns remote access exceptions'
         hotelInterface.getRoomBookingData(_) >> { throw new RemoteAccessException() }
 
         when: 'the request is done until max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
-            bulk.getRoomBookingData4Type(DOUBLE)
+            bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
         }
 
         then: 'the set of references is not changed'
@@ -147,7 +155,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         !bulk.getCancelled()
 
         when: 'another request is done'
-        bulk.getRoomBookingData4Type(DOUBLE)
+        bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
 
         then: 'the interface returns booking data'
         hotelInterface.getRoomBookingData(_) >> roomBookingData
@@ -158,7 +166,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
 
         when: 'the request is done until max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
-            bulk.getRoomBookingData4Type(DOUBLE)
+            bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
         }
 
         then: 'the hotel interface returns remote access exceptions'
@@ -173,7 +181,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
 
         when: 'the request is done until max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
-            bulk.getRoomBookingData4Type(DOUBLE)
+            bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
         }
 
         then: 'the set of references is not changed'
@@ -182,7 +190,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
         !bulk.getCancelled()
 
         when: 'another request is done'
-        bulk.getRoomBookingData4Type(DOUBLE)
+        bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
 
         then: 'the interface throws an hotel exception'
         hotelInterface.getRoomBookingData(_) >> { throw new HotelException() }
@@ -193,7 +201,7 @@ class BulkRoomBookingGetRoomBookingData4TypeMethodSpockTest extends SpockRollbac
 
         when: 'the request is until done max number of exceptions - 1, two exceptions per request'
         for (int i = 0; i < (BulkRoomBooking.MAX_REMOTE_ERRORS / 2).intValue() - 1; i++) {
-            bulk.getRoomBookingData4Type(DOUBLE)
+            bulk.getRoomBookingData4Type(DOUBLE, BEGIN, END)
         }
 
         then: 'the hotel interface returns remote access exceptions'

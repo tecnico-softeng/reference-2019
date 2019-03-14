@@ -1,17 +1,16 @@
 package pt.ulisboa.tecnico.softeng.broker.domain;
 
 public class Reference extends Reference_Base {
+    public Reference(BulkRoomBooking bulk, String value) {
+        setValue(value);
 
-	public Reference(BulkRoomBooking bulk, String value) {
-		setValue(value);
+        setBulkRoomBooking(bulk);
+    }
 
-		setBulkRoomBooking(bulk);
-	}
+    public void delete() {
+        setBulkRoomBooking(null);
 
-	public void delete() {
-		setBulkRoomBooking(null);
-
-		deleteDomainObject();
-	}
+        deleteDomainObject();
+    }
 
 }

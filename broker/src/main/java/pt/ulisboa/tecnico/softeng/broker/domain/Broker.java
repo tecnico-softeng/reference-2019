@@ -1,11 +1,12 @@
 package pt.ulisboa.tecnico.softeng.broker.domain;
 
 import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*;
+import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBookingData;
+
+import java.util.Objects;
 
 public class Broker extends Broker_Base {
     private final ActivityInterface activityInterface;
@@ -103,6 +104,12 @@ public class Broker extends Broker_Base {
         return counter;
     }
 
+    public RestRoomBookingData getRoomBookingFromBulkBookings(String type, LocalDate arrival, LocalDate departure) {
+        return getRoomBulkBookingSet().stream().map(bulkRoomBooking -> bulkRoomBooking.getRoomBookingData4Type(type, arrival, departure)).
+                filter(Objects::nonNull).findAny().orElse(null);
+    }
+
+
     public ActivityInterface getActivityInterface() {
         return this.activityInterface;
     }
@@ -123,4 +130,5 @@ public class Broker extends Broker_Base {
     public TaxInterface getTaxInterface() {
         return this.taxInterface;
     }
+
 }

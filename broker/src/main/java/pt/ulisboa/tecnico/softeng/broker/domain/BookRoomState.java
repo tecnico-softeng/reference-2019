@@ -17,23 +17,29 @@ public class BookRoomState extends BookRoomState_Base {
 
     @Override
     public void process() {
-        HotelInterface hotelInterface = getAdventure().getBroker().getHotelInterface();
-        try {
-            RestRoomBookingData bookingData = hotelInterface.reserveRoom(new RestRoomBookingData(Type.SINGLE,
-                    getAdventure().getBegin(), getAdventure().getEnd(), getAdventure().getBroker().getNifAsBuyer(),
-                    getAdventure().getBroker().getIban(), getAdventure().getID()));
-            getAdventure().setRoomConfirmation(bookingData.getReference());
-            getAdventure().incAmountToPay(bookingData.getPrice());
-        } catch (HotelException he) {
-            getAdventure().setState(State.UNDO);
-            return;
-        } catch (RemoteAccessException rae) {
-            incNumOfRemoteErrors();
-            if (getNumOfRemoteErrors() == MAX_REMOTE_ERRORS) {
+        RestRoomBookingData bookingData = getAdventure().getBroker().getRoomBookingFromBulkBookings(Type.SINGLE.toString(), getAdventure().getBegin(), getAdventure().getEnd());
+
+        if (bookingData == null) {
+            HotelInterface hotelInterface = getAdventure().getBroker().getHotelInterface();
+            try {
+                bookingData = hotelInterface.reserveRoom(new RestRoomBookingData(Type.SINGLE,
+                        getAdventure().getBegin(), getAdventure().getEnd(), getAdventure().getBroker().getNifAsBuyer(),
+                        getAdventure().getBroker().getIban(), getAdventure().getID()));
+            } catch (HotelException he) {
                 getAdventure().setState(State.UNDO);
+                return;
+            } catch (RemoteAccessException rae) {
+                incNumOfRemoteErrors();
+                if (getNumOfRemoteErrors() == MAX_REMOTE_ERRORS) {
+                    getAdventure().setState(State.UNDO);
+                }
+                return;
             }
-            return;
         }
+
+        getAdventure().setRoomConfirmation(bookingData.getReference());
+        getAdventure().incAmountToPay(bookingData.getPrice());
+
 
         if (getAdventure().shouldRentVehicle()) {
             getAdventure().setState(State.RENT_VEHICLE);

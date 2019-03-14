@@ -17,14 +17,33 @@ class BookRoomStateMethodSpockTest extends SpockRollbackTestAbstractClass {
         hotelInterface = Mock(HotelInterface)
         broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN,
                 new ActivityInterface(), hotelInterface, new CarInterface(), new BankInterface(), new TaxInterface())
+        def bulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, BEGIN, END, NIF_AS_BUYER, CLIENT_IBAN)
+        new Reference(bulk, REF_ONE)
+        new Reference(bulk, REF_TWO)
         client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
         adventure = new Adventure(broker, BEGIN, END, client, MARGIN)
 
         bookingData = new RestRoomBookingData()
+        bookingData.setRoomType(SINGLE)
+        bookingData.setArrival(BEGIN)
+        bookingData.setDeparture(END)
         bookingData.setReference(ROOM_CONFIRMATION)
         bookingData.setPrice(80.0)
 
         adventure.setState(Adventure.State.BOOK_ROOM)
+    }
+
+    def 'success book room fom bulk booking move to payment'() {
+        given: 'get the write booking from a bulk booked room is successful'
+        hotelInterface.getRoomBookingData(_) >> bookingData
+
+        when: 'a next step in the adventure is processed'
+        adventure.process()
+
+        then: 'the adventure state progresses to process payment'
+        adventure.getState().getValue() == Adventure.State.PROCESS_PAYMENT
+        and: 'the room is confirmed'
+        adventure.getRoomConfirmation() == ROOM_CONFIRMATION
     }
 
     def 'success book room move to payment'() {
