@@ -6,6 +6,7 @@ import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.exceptions.BankException
 import pt.ulisboa.tecnico.softeng.car.services.remote.exceptions.RemoteAccessException
 import pt.ulisboa.tecnico.softeng.car.services.remote.exceptions.TaxException
+import spock.lang.Unroll
 
 class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractClass {
     def INVOICE_REFERENCE = 'InvoiceReference'
@@ -54,14 +55,15 @@ class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractCla
         rentingOne.invoiceReference == INVOICE_REFERENCE
     }
 
-    def 'one tax failure on submit invoice'() {
+    @Unroll('the #failure occurred')
+    def 'one failure on submit invoice'() {
         when: 'renting a car'
         rentACar.getProcessor().submitRenting(rentingOne)
 
         then: 'the process payment succeeds'
         1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
         and: 'the tax interface throws a TaxException'
-        1 * taxInterface.submitInvoice(_) >> { throw new TaxException() }
+        1 * taxInterface.submitInvoice(_) >> { throw exception }
         and: 'renting contains payment reference but not the invoice reference'
         rentingOne.paymentReference == PAYMENT_REFERENCE
         rentingOne.invoiceReference == null
@@ -78,40 +80,20 @@ class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractCla
         rentingOne.invoiceReference == INVOICE_REFERENCE
         rentingTwo.paymentReference == PAYMENT_REFERENCE
         rentingTwo.invoiceReference == INVOICE_REFERENCE
+
+        where:
+        exception                   | failure
+        new TaxException()          | 'tax exception'
+        new RemoteAccessException() | 'remote access exception'
     }
 
-    def 'one remote failure on submit invoice'() {
-        when: 'renting a car'
-        rentACar.getProcessor().submitRenting(rentingOne)
-
-        then: 'the process payment succeeds'
-        1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
-        and: 'the tax interface throws a RemoteAccessException'
-        1 * taxInterface.submitInvoice(_) >> { throw new RemoteAccessException() }
-        and: 'renting contains payment reference but not the invoice reference'
-        rentingOne.paymentReference == PAYMENT_REFERENCE
-        rentingOne.invoiceReference == null
-
-        when: 'doing another renting'
-        rentACar.getProcessor().submitRenting(rentingTwo)
-
-        then: 'only the second renting invokes the bank interface'
-        1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
-        and: 'both invoke the tax interface'
-        2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
-        and: 'both rentings succeed'
-        rentingOne.paymentReference == PAYMENT_REFERENCE
-        rentingOne.invoiceReference == INVOICE_REFERENCE
-        rentingTwo.paymentReference == PAYMENT_REFERENCE
-        rentingTwo.invoiceReference == INVOICE_REFERENCE
-    }
-
-    def 'one bank failure on process payment'() {
+    @Unroll('the #failure occurred')
+    def 'one failure on process payment'() {
         when: 'renting a car'
         rentACar.getProcessor().submitRenting(rentingOne)
 
         then: 'the process payment throws a BankException'
-        1 * bankInterface.processPayment(_) >> { throw new BankException() }
+        1 * bankInterface.processPayment(_) >> { throw exception }
         and: 'the tax interface is not invoked'
         0 * taxInterface.submitInvoice(_)
         and: 'both references are null'
@@ -130,32 +112,11 @@ class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractCla
         rentingOne.invoiceReference == INVOICE_REFERENCE
         rentingTwo.paymentReference == PAYMENT_REFERENCE
         rentingTwo.invoiceReference == INVOICE_REFERENCE
-    }
 
-    def 'one remote failure on process payment'() {
-        when: 'renting a car'
-        rentACar.getProcessor().submitRenting(rentingOne)
-
-        then: 'the process payment throws a RemoteAccessException'
-        1 * bankInterface.processPayment(_) >> { throw new RemoteAccessException() }
-        and: 'the tax interface is not invoked'
-        0 * taxInterface.submitInvoice(_)
-        and: 'both references are null'
-        rentingOne.paymentReference == null
-        rentingOne.invoiceReference == null
-
-        when: 'doing another renting'
-        rentACar.getProcessor().submitRenting(rentingTwo)
-
-        then: 'both invoke the bank interface'
-        2 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
-        and: 'both invoke the tax interface'
-        2 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
-        and: 'both rentings succeed'
-        rentingOne.paymentReference == PAYMENT_REFERENCE
-        rentingOne.invoiceReference == INVOICE_REFERENCE
-        rentingTwo.paymentReference == PAYMENT_REFERENCE
-        rentingTwo.invoiceReference == INVOICE_REFERENCE
+        where:
+        exception                   | failure
+        new BankException()         | 'tax exception'
+        new RemoteAccessException() | 'remote access exception'
     }
 
     def 'successful cancel'() {
@@ -182,7 +143,8 @@ class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractCla
         rentingOne.invoiceReference == INVOICE_REFERENCE
     }
 
-    def 'one bank exception on cancel payment'() {
+    @Unroll('the #failure occurred')
+    def 'one failure on cancel payment'() {
         when: 'a successful renting'
         rentACar.getProcessor().submitRenting(rentingOne)
 
@@ -194,7 +156,7 @@ class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractCla
         rentingOne.cancel()
 
         then: 'a BankException is thrown'
-        1 * bankInterface.cancelPayment(PAYMENT_REFERENCE) >> { throw new BankException() }
+        1 * bankInterface.cancelPayment(PAYMENT_REFERENCE) >> { throw exception }
         and: 'the cancel of the invoice is not done'
         0 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
 
@@ -207,36 +169,15 @@ class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'renting two is completed'
         1 * bankInterface.processPayment(_)
         1 * taxInterface.submitInvoice(_)
+
+        where:
+        exception                   | failure
+        new BankException()         | 'bank exception'
+        new RemoteAccessException() | 'remote access exception'
     }
 
-    def 'one remote exception on cancel payment'() {
-        when: 'a successful renting'
-        rentACar.getProcessor().submitRenting(rentingOne)
-
-        then: 'the remote invocations succeed'
-        1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
-        1 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
-
-        when: 'cancelling the renting'
-        rentingOne.cancel()
-
-        then: 'a RemoteAccessException is thrown'
-        1 * bankInterface.cancelPayment(PAYMENT_REFERENCE) >> { throw new RemoteAccessException() }
-        and: 'the cancel of the invoice is not done'
-        0 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
-
-        when: 'a new renting is done'
-        rentACar.getProcessor().submitRenting(rentingTwo)
-
-        then: 'renting one is completely cancelled'
-        1 * bankInterface.cancelPayment(PAYMENT_REFERENCE) >> CANCEL_PAYMENT_REFERENCE
-        1 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
-        and: 'renting two is completed'
-        1 * bankInterface.processPayment(_)
-        1 * taxInterface.submitInvoice(_)
-    }
-
-    def 'one tax exception on cancel invoice'() {
+    @Unroll('the #failure occurred')
+    def 'one failure on cancel invoice'() {
         when: 'a successful renting'
         rentACar.getProcessor().submitRenting(rentingOne)
 
@@ -250,7 +191,7 @@ class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractCla
         then: 'the payment is cancelled'
         1 * bankInterface.cancelPayment(PAYMENT_REFERENCE) >> CANCEL_PAYMENT_REFERENCE
         and: 'the cancel of the invoice throws a TaxException'
-        1 * taxInterface.cancelInvoice(INVOICE_REFERENCE) >> { throw new TaxException() }
+        1 * taxInterface.cancelInvoice(INVOICE_REFERENCE) >> { throw exception }
 
         when: 'a new renting is done'
         rentACar.getProcessor().submitRenting(rentingTwo)
@@ -261,32 +202,11 @@ class ProcessorSubmitRentingMethodSpockTest extends SpockRollbackTestAbstractCla
         and: 'renting two is completed'
         1 * bankInterface.processPayment(_)
         1 * taxInterface.submitInvoice(_)
+
+        where:
+        exception                   | failure
+        new TaxException()          | 'tax exception'
+        new RemoteAccessException() | 'remote access exception'
     }
 
-    def 'one remote exception on cancel invoice'() {
-        when: 'a successful renting'
-        rentACar.getProcessor().submitRenting(rentingOne)
-
-        then: 'the remote invocations succeed'
-        1 * bankInterface.processPayment(_) >> PAYMENT_REFERENCE
-        1 * taxInterface.submitInvoice(_) >> INVOICE_REFERENCE
-
-        when: 'cancelling the renting'
-        rentingOne.cancel()
-
-        then: 'the payment is cancelled'
-        1 * bankInterface.cancelPayment(PAYMENT_REFERENCE) >> CANCEL_PAYMENT_REFERENCE
-        and: 'the cancel of the invoice throws a RemoteAccessException'
-        1 * taxInterface.cancelInvoice(INVOICE_REFERENCE) >> { throw new RemoteAccessException() }
-
-        when: 'a new renting is done'
-        rentACar.getProcessor().submitRenting(rentingTwo)
-
-        then: 'renting one is completely cancelled'
-        0 * bankInterface.cancelPayment(PAYMENT_REFERENCE)
-        1 * taxInterface.cancelInvoice(INVOICE_REFERENCE)
-        and: 'renting two is completed'
-        1 * bankInterface.processPayment(_)
-        1 * taxInterface.submitInvoice(_)
-    }
 }
