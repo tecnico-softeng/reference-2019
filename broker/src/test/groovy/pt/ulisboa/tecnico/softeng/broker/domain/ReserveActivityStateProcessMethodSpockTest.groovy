@@ -8,7 +8,6 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*
 
 class ReserveActivityStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
     def activityInterface
-    def taxInterface
     def broker
     def client
     def adventure
@@ -17,10 +16,9 @@ class ReserveActivityStateProcessMethodSpockTest extends SpockRollbackTestAbstra
     @Override
     def populate4Test() {
         activityInterface = Mock(ActivityInterface)
-        taxInterface = Mock(TaxInterface)
         broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN,
                             activityInterface, new HotelInterface(), new CarInterface(), new BankInterface(),
-                            taxInterface)
+                            new TaxInterface())
         client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
 
         adventure = new Adventure(broker, BEGIN, END, client, MARGIN)
