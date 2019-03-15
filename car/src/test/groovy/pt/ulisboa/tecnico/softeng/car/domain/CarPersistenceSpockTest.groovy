@@ -6,7 +6,6 @@ import pt.ist.fenixframework.FenixFramework
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 
-
 class CarPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
     def ADVENTURE_ID = 'AdventureId'
@@ -28,49 +27,50 @@ class CarPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
         def rentACar = new RentACar(NAME1, NIF, IBAN, processor)
         def car = new Car(PLATE_CAR1, 10, 10, rentACar)
+        def motorcycle = new Motorcycle(PLATE_CAR2, 20, 5, rentACar)
         car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
     }
 
     @Override
     def thenAssert() {
-        FenixFramework.getDomainRoot().getRentACarSet().size() == 1
+        assert FenixFramework.getDomainRoot().getRentACarSet().size() == 1
 
         def rentACar = new ArrayList<>(FenixFramework.getDomainRoot().getRentACarSet()).get(0)
-        rentACar.getVehicleSet().size() == 2
+        assert rentACar.getVehicleSet().size() == 2
         def processor = rentACar.getProcessor()
-        rentACar.getName().equals(NAME1)
-        rentACar.getNif().equals(NIF)
-        rentACar.getIban().equals(IBAN)
-        processor != null
-        processor.getRentingSet().size() == 1
+        assert rentACar.getName().equals(NAME1)
+        assert rentACar.getNif().equals(NIF)
+        assert rentACar.getIban().equals(IBAN)
+        assert processor != null
+        assert processor.getRentingSet().size() == 1
 
         for (def vehicle : rentACar.getVehicleSet()) {
             if (vehicle instanceof Car) {
-                vehicle.getPlate().equals(PLATE_CAR1.toUpperCase())
-                vehicle.getKilometers().intValue() == 10
-                vehicle.getPrice() == 10
+                assert vehicle.getPlate().equals(PLATE_CAR1.toUpperCase())
+                assert vehicle.getKilometers().intValue() == 10
+                assert vehicle.getPrice() == 10
             }
             if (vehicle instanceof Motorcycle) {
-                vehicle.getPlate().equals(PLATE_CAR2.toUpperCase())
-                vehicle.getKilometers().intValue() == 20
-                vehicle.getPrice() == 5
+                assert vehicle.getPlate().equals(PLATE_CAR2.toUpperCase())
+                assert vehicle.getKilometers().intValue() == 20
+                assert vehicle.getPrice() == 5
             }
         }
 
         for (def vehicle : rentACar.getVehicleSet()) {
             if (vehicle instanceof Car) {
-                vehicle.getRentingSet().size() == 1
+                assert vehicle.getRentingSet().size() == 1
                 def renting = new ArrayList<>(vehicle.getRentingSet()).get(0)
-                renting.getDrivingLicense().equals(DRIVING_LICENSE)
-                renting.getBegin() == date1
-                renting.getEnd() == date2
-                renting.getClientNif().equals(NIF)
-                renting.getClientIban().equals(IBAN)
-                renting.getTime() != null
-                renting.getProcessor() != null
+                assert renting.getDrivingLicense().equals(DRIVING_LICENSE)
+                assert renting.getBegin() == date1
+                assert renting.getEnd() == date2
+                assert renting.getClientNif().equals(NIF)
+                assert renting.getClientIban().equals(IBAN)
+                assert renting.getTime() != null
+                assert renting.getProcessor() != null
             }
             if (vehicle instanceof Motorcycle) {
-                vehicle.getRentingSet().size() == 0
+                assert vehicle.getRentingSet().size() == 0
             }
         }
     }
