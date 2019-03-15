@@ -1,22 +1,23 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
+
 import pt.ist.fenixframework.FenixFramework
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 
 class CarPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
 
-    def ADVENTURE_ID = "AdventureId"
-    def NAME1 = "eartz"
-    def PLATE_CAR1 = "aa-00-11"
-    def PLATE_CAR2 = "aa-00-12"
-    def DRIVING_LICENSE = "br123"
-    def date1 = LocalDate.parse("2018-01-06")
-    def date2 = LocalDate.parse("2018-01-07")
-    def NIF = "NIF"
-    def IBAN = "IBAN"
-    def IBAN_BUYER = "IBAN"
+    def ADVENTURE_ID = 'AdventureId'
+    def NAME1 = 'eartz'
+    def PLATE_CAR1 = 'aa-00-11'
+    def PLATE_CAR2 = 'aa-00-12'
+    def DRIVING_LICENSE = 'br123'
+    def date1 = LocalDate.parse('2018-01-06')
+    def date2 = LocalDate.parse('2018-01-07')
+    def NIF = 'NIF'
+    def IBAN = 'IBAN'
+    def IBAN_BUYER = 'IBAN'
 
     @Override
     def whenCreateInDatabase() {
@@ -46,7 +47,7 @@ class CarPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
         for (def vehicle : rentACar.getVehicleSet()) {
             if (vehicle instanceof Car) {
                 assert vehicle.getPlate().equals(PLATE_CAR1.toUpperCase())
-                assert 10, vehicle.getKilometers().intValue() == 10
+                assert vehicle.getKilometers().intValue() == 10
                 assert vehicle.getPrice() == 10
             }
             if (vehicle instanceof Motorcycle) {

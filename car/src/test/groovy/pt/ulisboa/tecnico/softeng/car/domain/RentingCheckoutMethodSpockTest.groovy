@@ -6,8 +6,9 @@ import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
 
+
 class RentingCheckoutMethodSpockTest extends SpockRollbackTestAbstractClass {
-	def ADVENTURE_ID = "AdventureId"
+	def ADVENTURE_ID = 'AdventureId'
 	def NAME1='eartz'
 	def PLATE_CAR1='aa-00-11'
 	def DRIVING_LICENSE='br123'
@@ -29,10 +30,10 @@ class RentingCheckoutMethodSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'checkout'() {
-		given: 'given a rentingOne'
+		given: 'given a renting'
 		def renting = car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-		when: 'when checkingout with a valid number of km'
+		when: 'when checking out with a valid number of km'
 		renting.checkout(100)
 
 		then: 'then car is updated with that number'
@@ -40,10 +41,10 @@ class RentingCheckoutMethodSpockTest extends SpockRollbackTestAbstractClass {
 	}
 
 	def 'fail checkout'() {
-		given: 'given a rentingOne'
+		given: 'given a renting'
 		def renting = car.rent(DRIVING_LICENSE, date1, date2, NIF, IBAN_BUYER, ADVENTURE_ID)
 
-		when: 'when checing out with a negative number of km'
+		when: 'when checking out with a negative number of km'
 		renting.checkout(-10)
 
 		then: 'an exception is thrown'

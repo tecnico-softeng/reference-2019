@@ -1,12 +1,13 @@
 package pt.ulisboa.tecnico.softeng.car.domain
 
 import org.joda.time.LocalDate
+import spock.lang.Shared
+import spock.lang.Unroll
 
 import pt.ulisboa.tecnico.softeng.car.exception.CarException
 import pt.ulisboa.tecnico.softeng.car.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.car.services.remote.TaxInterface
-import spock.lang.Shared
-import spock.lang.Unroll
+
 
 class RentingConstructorSpockTest extends SpockRollbackTestAbstractClass {
 	def RENT_A_CAR_NAME = 'Eartz'
