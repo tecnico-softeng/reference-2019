@@ -4,6 +4,7 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBookingData
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.HotelException
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException
+import spock.lang.Unroll
 
 class BookRoomStateMethodSpockTest extends SpockRollbackTestAbstractClass {
     def broker
@@ -76,80 +77,41 @@ class BookRoomStateMethodSpockTest extends SpockRollbackTestAbstractClass {
         adv.getRoomConfirmation() == ROOM_CONFIRMATION
     }
 
-    def 'hotel exception'() {
+    @Unroll('#process_iterations #exception is thrown')
+    def '#process_iterations #exception exception'() {
         given: 'the hotel reservation throws a hotel exception'
-        hotelInterface.reserveRoom(_) >> { throw new HotelException() }
+        hotelInterface.reserveRoom(_) >> { throw mock_exception }
 
         when: 'a next step in the adventure is processed'
-        adventure.process()
+        1.upto(process_iterations) { adventure.process() }
 
         then: 'the adventure state progresses to undo'
-        adventure.getState().getValue() == Adventure.State.UNDO
+        adventure.getState().getValue() == state
         and: 'the room confirmation is null'
         adventure.getRoomConfirmation() == null
-    }
 
-    def 'one remote access exception'() {
-        given: 'the hotel reservation throws a remote access exception'
-        hotelInterface.reserveRoom(_) >> { throw new RemoteAccessException() }
-
-        when: 'a next step in the adventure is processed'
-        adventure.process()
-
-        then: 'the adventure state do not state'
-        adventure.getState().getValue() == Adventure.State.BOOK_ROOM
-        and: 'the number of errors is 1'
-        adventure.getState().getNumOfRemoteErrors() == 1
-    }
-
-    def 'max remote access exception'() {
-        given: 'the hotel reservation throws a remote access exception'
-        hotelInterface.reserveRoom(_) >> { throw new RemoteAccessException() }
-
-        when: 'the adventure is processed max remote errors'
-        for (int i = 0; i < BookRoomState.MAX_REMOTE_ERRORS; i++) {
-            adventure.process()
-        }
-
-        then: 'the adventure state change to undo'
-        adventure.getState().getValue() == Adventure.State.UNDO
-    }
-
-    def 'max -1 remote access exception'() {
-        given: 'the hotel reservation throws a remote access exception'
-        hotelInterface.reserveRoom(_) >> { throw new RemoteAccessException() }
-
-        when: 'the adventure is processed max -1 remote errors'
-        for (int i = 0; i < BookRoomState.MAX_REMOTE_ERRORS - 1; i++) {
-            adventure.process()
-        }
-
-        then: 'the adventure state is book room'
-        adventure.getState().getValue() == Adventure.State.BOOK_ROOM
-        and: 'the number of errors is max remote errors - 1'
-        adventure.getState().getNumOfRemoteErrors() == BookRoomState.MAX_REMOTE_ERRORS - 1
+        where:
+        mock_exception              | state                     | process_iterations                  | exception
+        new HotelException()        | Adventure.State.UNDO      | 1                                   | 'HotelException'
+        new RemoteAccessException() | Adventure.State.BOOK_ROOM | 1                                   | 'RemoteAccessException'
+        new RemoteAccessException() | Adventure.State.BOOK_ROOM | BookRoomState.MAX_REMOTE_ERRORS - 1 | 'RemoteAccessException'
+        new RemoteAccessException() | Adventure.State.UNDO      | BookRoomState.MAX_REMOTE_ERRORS     | 'RemoteAccessException'
     }
 
     def 'five remote access exception one success'() {
         given: 'the hotel reservation throws a remote access exception'
-        hotelInterface.reserveRoom(_) >> { throw new RemoteAccessException() }
+        hotelInterface.reserveRoom(_) >>
+                { throw new RemoteAccessException() } >>
+                { throw new RemoteAccessException() } >>
+                { throw new RemoteAccessException() } >>
+                { throw new RemoteAccessException() } >>
+                { throw new RemoteAccessException() } >>
+                bookingData
 
-        when: 'the adventure is processed 5 times'
-        for (int i = 0; i < 5; i++) {
-            adventure.process()
-        }
+        when: 'the adventure is processed 6 times'
+        1.upto(6) { adventure.process() }
 
-        then: 'the adventure state is book room'
-        adventure.getState().getValue() == Adventure.State.BOOK_ROOM
-        and: 'the number of errors is 5'
-        adventure.getState().getNumOfRemoteErrors() == 5
-
-        when: 'the adventure is processed again'
-        adventure.process()
-
-        then: 'the hotel reservation is successful'
-        hotelInterface.reserveRoom(_) >> bookingData
-        and: 'the adventure state progresses to process payment'
+        then: 'the adventure state progresses to process payment'
         adventure.getState().getValue() == Adventure.State.PROCESS_PAYMENT
         and: 'the room is confirmed'
         adventure.getRoomConfirmation() == ROOM_CONFIRMATION
