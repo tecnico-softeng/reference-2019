@@ -43,8 +43,8 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getPaymentCancellation() == PAYMENT_CANCELLATION
     }
 
-    @Unroll('#mock_exception exception')
-    def 'fail revert payment #mock_exception exception'() {
+    @Unroll('#exception exception')
+    def 'fail revert payment #exception exception'() {
         given: 'a bank cancel payment throws an exception'
         bankInterface.cancelPayment(PAYMENT_CONFIRMATION) >> { throw mock_exception }
         and: 'the adventure has a payment confirmation'
@@ -127,8 +127,8 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getRoomCancellation() == ROOM_CANCELLATION
     }
 
-    @Unroll('#mock_exception exception')
-    def 'success revert room booking #mock_exception exception'() {
+    @Unroll('#exception exception')
+    def 'success revert room booking #exception exception'() {
         given: 'a hotel cancel booking throws an exception'
         hotelInterface.cancelBooking(ROOM_CONFIRMATION) >> { throw mock_exception }
         and: 'the adventure has cancelled the payment'
@@ -178,8 +178,8 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getRentingCancellation() == RENTING_CANCELLATION
     }
 
-    @Unroll('#mock_exception exception')
-    def 'fail revert rent car #mock_exception exception'() {
+    @Unroll('#exception exception')
+    def 'fail revert rent car #exception exception'() {
         given: 'a car cancel renting throws a car exception'
         carInterface.cancelRenting(RENTING_CONFIRMATION) >> { throw mock_exception }
         and: 'the adventure has cancelled the payment'

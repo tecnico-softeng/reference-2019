@@ -108,10 +108,8 @@ class BookRoomStateMethodSpockTest extends SpockRollbackTestAbstractClass {
                 { throw new RemoteAccessException() } >>
                 bookingData
 
-        when: 'the adventure is processed 5 times'
-        1.upto(6) {
-            adventure.process()
-        }
+        when: 'the adventure is processed 6 times'
+        1.upto(6) { adventure.process() }
 
         then: 'the adventure state progresses to process payment'
         adventure.getState().getValue() == Adventure.State.PROCESS_PAYMENT

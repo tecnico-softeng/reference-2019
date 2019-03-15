@@ -73,9 +73,7 @@ class BulkRoomBookingProcessBookingMethodSpockTest extends SpockRollbackTestAbst
                 bulk.getId()) >> { throw new HotelException() }
 
         when: 'processBooking is invoked max number of hotel exceptions'
-        1.upto(BulkRoomBooking.MAX_HOTEL_EXCEPTIONS) {
-            bulk.processBooking()
-        }
+        1.upto(BulkRoomBooking.MAX_HOTEL_EXCEPTIONS) { bulk.processBooking() }
 
         then: 'the bulk booking is cancelled'
         bulk.getCancelled()
@@ -83,9 +81,7 @@ class BulkRoomBookingProcessBookingMethodSpockTest extends SpockRollbackTestAbst
 
     def 'max minus one hotel exception'() {
         when: 'processBooking is invoked max number of hotel exceptions'
-        1.upto(BulkRoomBooking.MAX_HOTEL_EXCEPTIONS) {
-            bulk.processBooking()
-        }
+        1.upto(BulkRoomBooking.MAX_HOTEL_EXCEPTIONS) { bulk.processBooking() }
 
         then: 'the first max hotel error -1 invocations return an exception'
         (BulkRoomBooking.MAX_HOTEL_EXCEPTIONS - 1) * hotelInterface.bulkBooking(NUMBER_OF_BULK, ARRIVAL, DEPARTURE, NIF_AS_BUYER, IBAN_BUYER,
@@ -141,9 +137,7 @@ class BulkRoomBookingProcessBookingMethodSpockTest extends SpockRollbackTestAbst
                 bulk.getId()) >> { throw new RemoteAccessException() }
 
         when: 'processBooking is invoked max number of hotel exceptions'
-        1.upto(BulkRoomBooking.MAX_REMOTE_ERRORS) {
-            bulk.processBooking()
-        }
+        1.upto(BulkRoomBooking.MAX_REMOTE_ERRORS) { bulk.processBooking() }
 
         then: 'the bulk booking is cancelled'
         bulk.getCancelled()
