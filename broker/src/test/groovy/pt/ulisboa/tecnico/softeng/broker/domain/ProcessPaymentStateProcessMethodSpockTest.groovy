@@ -37,7 +37,7 @@ class ProcessPaymentStateProcessMethodSpockTest extends SpockRollbackTestAbstrac
 
         then: 'the adventure state progresses to tax payment'
         adventure.getState().getValue() == Adventure.State.TAX_PAYMENT
-        and: 'the tax is confirmed'
+        and: 'the payment is confirmed'
         adventure.getPaymentConfirmation() == PAYMENT_CONFIRMATION
     }
 
@@ -49,16 +49,16 @@ class ProcessPaymentStateProcessMethodSpockTest extends SpockRollbackTestAbstrac
         when: 'a next step in the adventure is processed'
         1.upto(process_iterations) { adventure.process() }
 
-        then: 'the adventure state progresses to undo'
+        then: 'the adventure state progresses to either undo or process payment'
         adventure.getState().getValue() == state
-        and: 'the tax confirmation is null'
+        and: 'the payment confirmation is null'
         adventure.getPaymentConfirmation() == null
 
         where:
         mock_exception              | state                           | process_iterations                        | exception
-        new BankException()         | Adventure.State.CANCELLED       | 2                                         | 'BankException'
+        new BankException()         | Adventure.State.UNDO            | 1                                         | 'BankException'
         new RemoteAccessException() | Adventure.State.PROCESS_PAYMENT | 1                                         | 'RemoteAccessException'
-        new RemoteAccessException() | Adventure.State.CANCELLED       | 4                                         | 'RemoteAccessException'
+        new RemoteAccessException() | Adventure.State.UNDO            | 3                                         | 'RemoteAccessException'
         new RemoteAccessException() | Adventure.State.PROCESS_PAYMENT | ProcessPaymentState.MAX_REMOTE_ERRORS - 1 | 'RemoteAccessException'
         new RemoteAccessException() | Adventure.State.UNDO            | ProcessPaymentState.MAX_REMOTE_ERRORS     | 'RemoteAccessException'
     }
@@ -70,8 +70,8 @@ class ProcessPaymentStateProcessMethodSpockTest extends SpockRollbackTestAbstrac
                 { throw new RemoteAccessException() } >>
                 PAYMENT_CONFIRMATION
 
-        when: 'the adventure is processed 4 times'
-        1.upto(4) { adventure.process() }
+        when: 'the adventure is processed 3 times'
+        1.upto(3) { adventure.process() }
 
         then: 'the adventure state progresses to confirmed'
         adventure.getState().getValue() == Adventure.State.TAX_PAYMENT
@@ -80,7 +80,7 @@ class ProcessPaymentStateProcessMethodSpockTest extends SpockRollbackTestAbstrac
     }
 
     def 'one remote access exception and one bank exception'() {
-        given: 'the tax payment throws a remote access exception'
+        given: 'the payment throws a remote access exception'
         bankInterface.processPayment(_) >> { throw new RemoteAccessException() }
 
         when: 'the adventure is processed'
@@ -94,11 +94,11 @@ class ProcessPaymentStateProcessMethodSpockTest extends SpockRollbackTestAbstrac
         when: 'the adventure is processed again'
         adventure.process()
 
-        then: 'the tax payment throws a tax exception'
+        then: 'the payment throws a bank exception'
         bankInterface.processPayment(_) >> { throw new BankException() }
         and: 'the adventure state progresses to undo'
         adventure.getState().getValue() == Adventure.State.UNDO
-        and: 'the tax payment confirmation is null'
+        and: 'the payment confirmation is null'
         adventure.getPaymentConfirmation() == null
     }
 }
