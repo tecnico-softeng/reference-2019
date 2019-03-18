@@ -55,7 +55,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
     def 'cancelled payment first exception' () {
 
         given: 'that the hotel interface throws an exception'
-        bankInterface.getOperationData(PAYMENT_CONFIRMATION) >> {throw mock_expection}
+        bankInterface.getOperationData(PAYMENT_CONFIRMATION) >> {throw mock_exception}
 
         and: 'payment confirmation and payment cancellation are set'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
@@ -68,7 +68,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         adventure.getState().getValue() == Adventure.State.CANCELLED
 
         where:
-        mock_expection                  | expection
+        mock_exception                  | exception
         new BankException()             | 'BankException'
         new RemoteAccessException()     | 'RemoteAccessException'
 
