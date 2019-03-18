@@ -43,11 +43,11 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         then: 'the adventure state progresses to cancelled'
         adventure.getState().getValue() == Adventure.State.CANCELLED
         and: 'get operation data from bank interface runs 0 times'
-        0 * bankInterface.getOperationData(*_)
+        0 * bankInterface.getOperationData(_ as String)
         and: 'get activity reservation data from activity interface runs 0 times'
-        0 * activityInterface.getActivityReservationData(*_)
+        0 * activityInterface.getActivityReservationData(_ as String)
         and: 'get room booking data from hotel interface runs 0 times'
-        0 * hotelInterface.getRoomBookingData(*_)
+        0 * hotelInterface.getRoomBookingData(_ as String)
 
     }
 
