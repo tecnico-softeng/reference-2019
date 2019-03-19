@@ -6,6 +6,8 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.*
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*
 
+import spock.lang.Unroll
+
 public class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
     def taxInterface
     def bankInterface
@@ -50,98 +52,48 @@ public class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         rentingData.setInvoiceReference(INVOICE_REFERENCE)
     }
 
-    def 'success sequence'() {
-        given: 'an adventure'
-        def adventure = new Adventure(broker, ARRIVAL, DEPARTURE, client, MARGIN, true)
+	@Unroll
+    def 'success sequence with car #car, hotel #hotel'() {
+        given: 'an adventure with rent vehicle as #rentVehicle'
+        def adventure = new Adventure(broker, ARRIVAL, end, client, MARGIN, car)
         and: 'an activity reservation'
         activityInterface.reserveActivity(_) >> bookingActivityData
-        and: 'a room booking'
-        hotelInterface.reserveRoom(_) >> bookingRoomData
-        and: 'a car renting'
-        carInterface.rentCar(*_) >> rentingData
+		
+		and: 'a room booking'
+		if(hotel) {
+			hotelInterface.reserveRoom(_) >> bookingRoomData
+		}
+		and: 'a car renting'
+		if(car) {
+			carInterface.rentCar(*_) >> rentingData
+		}
+		
         and: 'a bank payment'
         bankInterface.processPayment(_) >> PAYMENT_CONFIRMATION
         and: 'a tax payment'
         taxInterface.submitInvoice(_) >> INVOICE_DATA
         and: 'the correct return of the data associated with each reservation and payment'
         activityInterface.getActivityReservationData(ACTIVITY_CONFIRMATION) >> bookingActivityData
-        carInterface.getRentingData(RENTING_CONFIRMATION) >> rentingData
-        hotelInterface.getRoomBookingData(ROOM_CONFIRMATION) >> bookingRoomData
+		if(car) {
+			carInterface.getRentingData(RENTING_CONFIRMATION) >> rentingData
+		}
+		if(hotel) {
+			hotelInterface.getRoomBookingData(ROOM_CONFIRMATION) >> bookingRoomData
+		}
         bankInterface.getOperationData(PAYMENT_CONFIRMATION)
 
         when: 'the life cycle of the adventure'
-        1.upto(6) { adventure.process() }
+        1.upto(cycles) { adventure.process() }
 
         then: 'the final state is confirmed'
         adventure.getState().getValue() == State.CONFIRMED
-    }
-
-
-    def 'success sequence one no car'() {
-        given:
-        given: 'an adventure'
-		def adventure = new Adventure(broker, ARRIVAL, DEPARTURE, client, MARGIN)
-        and: 'an activity reservation'
-        activityInterface.reserveActivity(_) >> bookingActivityData
-        and: 'a room booking'
-        hotelInterface.reserveRoom(_) >> bookingRoomData
-        and: 'a bank payment'
-        bankInterface.processPayment(_) >> PAYMENT_CONFIRMATION
-        and: 'a tax payment'
-        taxInterface.submitInvoice(_) >> INVOICE_DATA
-        and: 'the correct return of the data associated with each reservation and payment'
-        activityInterface.getActivityReservationData(ACTIVITY_CONFIRMATION) >> bookingActivityData
-        hotelInterface.getRoomBookingData(ROOM_CONFIRMATION) >> bookingRoomData
-        bankInterface.getOperationData(PAYMENT_CONFIRMATION)
-
-		when: 'the life cycle of the adventure'
-        1.upto(5) { adventure.process() }
-
-        then: 'the final state is confirmed'
-        State.CONFIRMED == adventure.getState().getValue()
-    }
-
-    def 'success sequence no hotel'() {
-        given: 'an adventure with rent vehicle'
-        def adventure = new Adventure(broker, ARRIVAL, ARRIVAL, client, MARGIN, true)
-        and: 'an activity reservation'
-        activityInterface.reserveActivity(_) >> bookingActivityData
-        and: 'a car renting'
-        carInterface.rentCar(*_) >> rentingData
-        and: 'a bank payment'
-        bankInterface.processPayment(_) >> PAYMENT_CONFIRMATION
-        and: 'a tax payment'
-        taxInterface.submitInvoice(_) >> INVOICE_DATA
-		and: 'the correct return of the data associated with each reservation and payment'
-        bankInterface.getOperationData(PAYMENT_CONFIRMATION)
-        activityInterface.getActivityReservationData(ACTIVITY_CONFIRMATION) >> bookingActivityData
-        carInterface.getRentingData(RENTING_CONFIRMATION) >> rentingData
-
-        when: 'the life cycle of the adventure'
-        1.upto(5) { adventure.process() }
 		
-		then: 'the final state is confirmed'
-        State.CONFIRMED == adventure.getState().getValue()
-    }
-
-    def 'success sequence no hotel no car'() {
-        given: 'an adventure'
-        def adventure = new Adventure(broker, ARRIVAL, ARRIVAL, client, MARGIN)
-        and: 'an activity reservation'
-        activityInterface.reserveActivity(_) >> bookingActivityData
-        and: 'a bank payment'
-        bankInterface.processPayment(_) >> PAYMENT_CONFIRMATION
-        and: 'a tax payment'
-        taxInterface.submitInvoice(_) >> INVOICE_DATA
-		and: 'the correct return of the data associated with each reservation and payment'
-        bankInterface.getOperationData(PAYMENT_CONFIRMATION)
-        activityInterface.getActivityReservationData(ACTIVITY_CONFIRMATION) >> bookingActivityData
-
-        when: 'the life cycle of the adventure'
-        1.upto(4) { adventure.process() }
-
-        then: 'the final state is confirmed'
-        State.CONFIRMED == adventure.getState().getValue()
+		where:
+		cycles	| car	| hotel	| end
+		6		| true	| true	| DEPARTURE
+		5		| false	| true	| DEPARTURE
+		5		| true	| false	| ARRIVAL
+		4		| false	| false	| ARRIVAL
     }
 
     def 'unsuccess sequence fail activity'() {
