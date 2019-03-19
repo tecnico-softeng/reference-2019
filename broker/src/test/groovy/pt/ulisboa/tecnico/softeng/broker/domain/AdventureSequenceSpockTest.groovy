@@ -54,7 +54,7 @@ public class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
 
 	@Unroll
     def 'success sequence with car #car, hotel #hotel'() {
-        given: 'an adventure with rent vehicle as #rentVehicle'
+        given: 'an adventure with rent vehicle as #car'
         def adventure = new Adventure(broker, ARRIVAL, end, client, MARGIN, car)
         and: 'an activity reservation'
         activityInterface.reserveActivity(_) >> bookingActivityData
