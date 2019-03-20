@@ -40,7 +40,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         when: 'a next step is processed'
         adventure.process()
 
-        then: 'the adventure state progresses to cancelled'
+        then: 'the adventure state remains in cancelled'
         adventure.getState().getValue() == Adventure.State.CANCELLED
         and: 'get operation data from bank interface runs 0 times'
         0 * bankInterface.getOperationData(_)
