@@ -88,11 +88,11 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         adventure.getState().getValue() == State.CONFIRMED
 
         where:
-        cycles	| car	| hotel	| end
-        6		| true	| true	| DEPARTURE
-        5		| false	| true	| DEPARTURE
-        5		| true	| false	| ARRIVAL
-        4		| false	| false	| ARRIVAL
+        cycles | car   | hotel | end
+        6      | true  | true  | DEPARTURE
+        5      | false | true  | DEPARTURE
+        5      | true  | false | ARRIVAL
+        4      | false | false | ARRIVAL
     }
 
     def 'unsuccess sequence fail activity'() {
