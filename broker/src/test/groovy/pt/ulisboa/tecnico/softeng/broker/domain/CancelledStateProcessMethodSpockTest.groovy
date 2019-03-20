@@ -48,7 +48,8 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         0 * activityInterface.getActivityReservationData(_)
         and: 'get room booking data from hotel interface runs 0 times'
         0 * hotelInterface.getRoomBookingData(_)
-
+        and: 'get car renting data from car interface runs 0 times'
+        0 * carInterface.getRentingData(_)
     }
 
     @Unroll('#expection is thrown')
