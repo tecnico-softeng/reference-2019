@@ -67,6 +67,12 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
 
         then: 'the adventure state progresses to cancelled'
         adventure.getState().getValue() == Adventure.State.CANCELLED
+        and: 'get activity reservation data from activity interface runs 0 times'
+        0 * activityInterface.getActivityReservationData(_)
+        and: 'get room booking data from hotel interface runs 0 times'
+        0 * hotelInterface.getRoomBookingData(_)
+        and: 'get car renting data from car interface runs 0 times'
+        0 * carInterface.getRentingData(_)
 
         where:
         mock_exception                  | exception
@@ -79,9 +85,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
     def 'cancelled payment second exception'() {
 
         given: 'that the hotel interface throws an exception in second'
-        bankInterface.getOperationData(PAYMENT_CONFIRMATION) >>
-                {new RestBankOperationData()} >>
-                {throw mock_expection}
+        bankInterface.getOperationData(PAYMENT_CONFIRMATION) >> {new RestBankOperationData()} >> {throw mock_expection}
         and: 'payment confirmation and payment cancellation are set'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
         adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
@@ -90,6 +94,12 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         adventure.process()
         then: 'the adventure state progresses to cancelled'
         adventure.getState().getValue() == Adventure.State.CANCELLED
+        and: 'get activity reservation data from activity interface runs 0 times'
+        0 * activityInterface.getActivityReservationData(_)
+        and: 'get room booking data from hotel interface runs 0 times'
+        0 * hotelInterface.getRoomBookingData(_)
+        and: 'get car renting data from car interface runs 0 times'
+        0 * carInterface.getRentingData(_)
 
         where:
         mock_expection                  | expection
@@ -108,6 +118,12 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         adventure.process()
         then: 'the adventure state progresses to cancelled'
         adventure.getState().getValue() == Adventure.State.CANCELLED
+        and: 'get activity reservation data from activity interface runs 0 times'
+        0 * activityInterface.getActivityReservationData(_)
+        and: 'get room booking data from hotel interface runs 0 times'
+        0 * hotelInterface.getRoomBookingData(_)
+        and: 'get car renting data from car interface runs 0 times'
+        0 * carInterface.getRentingData(_)
     }
 
     def 'cancelled activity' () {
@@ -125,6 +141,10 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         adventure.process()
         then: 'the adventure state progresses to cancelled'
         adventure.getState().getValue() == Adventure.State.CANCELLED
+        and: 'get room booking data from hotel interface runs 0 times'
+        0 * hotelInterface.getRoomBookingData(_)
+        and: 'get car renting data from car interface runs 0 times'
+        0 * carInterface.getRentingData(_)
     }
 
 
@@ -149,6 +169,8 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         adventure.process()
         then: 'the adventure state progresses to cancelled'
         adventure.getState().getValue() == Adventure.State.CANCELLED
+        and: 'get car renting data from car interface runs 0 times'
+        0 * carInterface.getRentingData(_)
     }
 
     def 'cancelled renting' () {
@@ -171,6 +193,8 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         adventure.process()
         then: 'the adventure state progresses to cancelled'
         adventure.getState().getValue() == Adventure.State.CANCELLED
+        and: 'get room booking data from hotel interface runs 0 times'
+        0 * hotelInterface.getRoomBookingData(_)
     }
 
     def 'cancelled book and renting' () {
