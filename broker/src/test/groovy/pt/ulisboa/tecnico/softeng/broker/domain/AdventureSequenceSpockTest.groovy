@@ -51,7 +51,7 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         rentingData.setInvoiceReference(INVOICE_REFERENCE)
     }
 
-	@Unroll
+    @Unroll
     def 'success sequence with car #car, hotel #hotel'() {
         given: 'an adventure with rent vehicle as #car'
         def adventure = new Adventure(broker, ARRIVAL, end, client, MARGIN, car)
@@ -59,26 +59,26 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         activityInterface.reserveActivity(_) >> bookingActivityData
 
         and: 'a room booking'
-		if(hotel) {
-			hotelInterface.reserveRoom(_) >> bookingRoomData
-		}
-		and: 'a car renting'
+        if(hotel) {
+          hotelInterface.reserveRoom(_) >> bookingRoomData
+        }
+        and: 'a car renting'
         if(car) {
-			carInterface.rentCar(*_) >> rentingData
-		}
-		
+          carInterface.rentCar(*_) >> rentingData
+        }
+
         and: 'a bank payment'
         bankInterface.processPayment(_) >> PAYMENT_CONFIRMATION
         and: 'a tax payment'
         taxInterface.submitInvoice(_) >> INVOICE_DATA
         and: 'the correct return of the data associated with each reservation and payment'
         activityInterface.getActivityReservationData(ACTIVITY_CONFIRMATION) >> bookingActivityData
-		if(car) {
-			carInterface.getRentingData(RENTING_CONFIRMATION) >> rentingData
-		}
-		if(hotel) {
-			hotelInterface.getRoomBookingData(ROOM_CONFIRMATION) >> bookingRoomData
-		}
+        if(car) {
+          carInterface.getRentingData(RENTING_CONFIRMATION) >> rentingData
+        }
+        if(hotel) {
+          hotelInterface.getRoomBookingData(ROOM_CONFIRMATION) >> bookingRoomData
+        }
         bankInterface.getOperationData(PAYMENT_CONFIRMATION)
 
         when: 'the life cycle of the adventure'
@@ -86,13 +86,13 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
 
         then: 'the final state is confirmed'
         adventure.getState().getValue() == State.CONFIRMED
-		
-		where:
-		cycles	| car	| hotel	| end
-		6		| true	| true	| DEPARTURE
-		5		| false	| true	| DEPARTURE
-		5		| true	| false	| ARRIVAL
-		4		| false	| false	| ARRIVAL
+
+        where:
+        cycles	| car	| hotel	| end
+        6		| true	| true	| DEPARTURE
+        5		| false	| true	| DEPARTURE
+        5		| true	| false	| ARRIVAL
+        4		| false	| false	| ARRIVAL
     }
 
     def 'unsuccess sequence fail activity'() {
@@ -115,7 +115,7 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         activityInterface.reserveActivity(_) >> bookingActivityData
         and: 'an hotel exception'
         hotelInterface.reserveRoom(_) >> { throw new HotelException() }
-		and: 'an activity reservation cancelation'
+        and: 'an activity reservation cancelation'
         activityInterface.cancelReservation(ACTIVITY_CONFIRMATION) >> ACTIVITY_CANCELLATION
 
         when: 'the life cycle of the adventure'
@@ -127,12 +127,12 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
 
     def 'unsuccess sequence fail car'() {
         given: 'an adventure with rent vehicle'
-        def adventure = new Adventure(broker, ARRIVAL, ARRIVAL, client, MARGIN, true) 
-		and: 'an activity reservation'
+        def adventure = new Adventure(broker, ARRIVAL, ARRIVAL, client, MARGIN, true)
+        and: 'an activity reservation'
         activityInterface.reserveActivity(_) >> bookingActivityData
-		and: 'a car exception'
+        and: 'a car exception'
         carInterface.rentCar(*_) >> { throw new CarException() }
-		and: 'an activity reservation cancelation'
+        and: 'an activity reservation cancelation'
         activityInterface.cancelReservation(ACTIVITY_CONFIRMATION) >> ACTIVITY_CANCELLATION
 
         when: 'the life cycle of the adventure'
@@ -145,15 +145,15 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
     def 'unsuccess sequence fail payment'() {
         given: 'an adventure with rent vehicle'
         def adventure = new Adventure(broker, ARRIVAL, DEPARTURE, client, MARGIN, true)
-		and: 'an activity reservation'
+        and: 'an activity reservation'
         activityInterface.reserveActivity(_) >> bookingActivityData
         and: 'a room booking'
         hotelInterface.reserveRoom(_) >> bookingRoomData
-		and: 'a car rental'
+        and: 'a car rental'
         carInterface.rentCar(*_) >> rentingData
-		and: 'a bank exception'
+        and: 'a bank exception'
         bankInterface.processPayment(_) >> { throw new BankException() }
-		and: 'the correct return of the data associated with each cancelation'
+        and: 'the correct return of the data associated with each cancelation'
         activityInterface.cancelReservation(_) >> ACTIVITY_CANCELLATION
         hotelInterface.cancelBooking(ROOM_CONFIRMATION) >> ROOM_CANCELLATION
         carInterface.cancelRenting(RENTING_CONFIRMATION) >> RENTING_CANCELLATION
@@ -168,17 +168,17 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
     def 'unsuccess sequence fail tax'() {
         given: 'an adventure with rent vehicle'
         def adventure = new Adventure(broker, ARRIVAL, DEPARTURE, client, MARGIN, true)
-		and: 'an activity reservation'
+        and: 'an activity reservation'
         activityInterface.reserveActivity(_) >> bookingActivityData
-		and: 'a room booking'
+        and: 'a room booking'
         hotelInterface.reserveRoom(_) >> bookingRoomData
-		and: 'a car rental'
+        and: 'a car rental'
         carInterface.rentCar(CarInterface.Type.CAR, *_) >> rentingData
-		and: 'a bank payment'
+        and: 'a bank payment'
         bankInterface.processPayment(_) >> PAYMENT_CONFIRMATION
-		and: 'a tax exception'
+        and: 'a tax exception'
         taxInterface.submitInvoice(_) >> { throw new TaxException() }
-		and: 'the correct return of the data associated with each cancelation'
+        and: 'the correct return of the data associated with each cancelation'
         activityInterface.cancelReservation(ACTIVITY_CONFIRMATION) >> ACTIVITY_CANCELLATION
         hotelInterface.cancelBooking(ROOM_CONFIRMATION) >> ROOM_CANCELLATION
         carInterface.cancelRenting(RENTING_CONFIRMATION) >> RENTING_CANCELLATION
