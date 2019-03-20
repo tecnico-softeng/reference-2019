@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.softeng.broker.domain
 
-import org.joda.time.LocalDate
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure.State
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.*
@@ -8,7 +7,7 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*
 
 import spock.lang.Unroll
 
-public class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
+class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
     def taxInterface
     def bankInterface
     def activityInterface
@@ -58,13 +57,13 @@ public class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         def adventure = new Adventure(broker, ARRIVAL, end, client, MARGIN, car)
         and: 'an activity reservation'
         activityInterface.reserveActivity(_) >> bookingActivityData
-		
-		and: 'a room booking'
+
+        and: 'a room booking'
 		if(hotel) {
 			hotelInterface.reserveRoom(_) >> bookingRoomData
 		}
 		and: 'a car renting'
-		if(car) {
+        if(car) {
 			carInterface.rentCar(*_) >> rentingData
 		}
 		
