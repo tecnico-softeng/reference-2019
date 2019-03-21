@@ -60,7 +60,7 @@ class ConfirmedStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         roomBookingData.getInvoiceReference() >> REFERENCE
 
         when: 'the adventure is processed'
-       adventure.process()
+        adventure.process()
 
         then: 'the adventure is confirmed'
         Adventure.State.CONFIRMED == adventure.getState().getValue()
