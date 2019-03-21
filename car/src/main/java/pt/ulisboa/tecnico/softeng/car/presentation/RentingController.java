@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.softeng.car.presentation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,10 +15,12 @@ import pt.ulisboa.tecnico.softeng.car.services.local.dataobjects.RentingData;
 @Controller
 @RequestMapping(value = "/rentacars/rentacar/{code}/vehicles/vehicle/{plate}/rentings/{reference}")
 public class RentingController {
+    private static final Logger logger = LoggerFactory.getLogger(RentingController.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String rentingForm(final Model model, @PathVariable final String code, @PathVariable final String plate,
                               @PathVariable final String reference) {
+        logger.debug("rentingForm");
 
         final RentACarInterface rentACarInterface = new RentACarInterface();
 
@@ -31,6 +35,7 @@ public class RentingController {
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)
     public String cancelSubmit(final Model model, @PathVariable final String code, @PathVariable final String plate,
                                @PathVariable final String reference) {
+        logger.debug("cancelSubmit");
 
         final RentACarInterface rentACarInterface = new RentACarInterface();
 
@@ -58,6 +63,7 @@ public class RentingController {
     @RequestMapping(value = "/checkout", method = RequestMethod.POST)
     public String checkoutSubmit(final Model model, @PathVariable final String code, @PathVariable final String plate,
                                  @PathVariable final String reference, @ModelAttribute final RentingData rentingData) {
+        logger.debug("checkoutSubmit");
 
         final RentACarInterface rentACarInterface = new RentACarInterface();
 

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import pt.ulisboa.tecnico.softeng.car.exception.CarException;
 import pt.ulisboa.tecnico.softeng.car.services.local.RentACarInterface;
 import pt.ulisboa.tecnico.softeng.car.services.local.dataobjects.VehicleData;
@@ -16,36 +15,37 @@ import pt.ulisboa.tecnico.softeng.car.services.local.dataobjects.VehicleData;
 @Controller
 @RequestMapping(value = "/rentacars/rentacar/{code}/vehicles")
 public class VehiclesController {
-	private static Logger logger = LoggerFactory.getLogger(VehiclesController.class);
+    private static final Logger logger = LoggerFactory.getLogger(VehiclesController.class);
 
-	public String rentacarForm(Model model, @PathVariable String code) {
-		logger.info("rentacar");
+    @RequestMapping(method = RequestMethod.GET)
+    public String vehiclesForm(Model model, @PathVariable String code) {
+        logger.info("vehiclesForm");
 
-		RentACarInterface rentACarInterface = new RentACarInterface();
+        RentACarInterface rentACarInterface = new RentACarInterface();
 
-		model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
-		model.addAttribute("vehicle", new VehicleData());
-		model.addAttribute("vehicles", rentACarInterface.getVehicles(code));
-		return "vehiclesView";
-	}
+        model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
+        model.addAttribute("vehicle", new VehicleData());
+        model.addAttribute("vehicles", rentACarInterface.getVehicles(code));
+        return "vehiclesView";
+    }
 
-	@RequestMapping(value = "/vehicle", method = RequestMethod.POST)
-	public String rentacarSubmit(Model model, @PathVariable String code, @ModelAttribute VehicleData vehicleData) {
-		logger.info("vehicleSubmit plate:{}, km:{}, price:{}, type:{}", vehicleData.getPlate(),
-				vehicleData.getKilometers(), vehicleData.getPrice(), vehicleData.getType());
+    @RequestMapping(value = "/vehicle", method = RequestMethod.POST)
+    public String vehicleSubmit(Model model, @PathVariable String code, @ModelAttribute VehicleData vehicleData) {
+        logger.info("vehicleSubmit plate:{}, km:{}, price:{}, type:{}", vehicleData.getPlate(),
+                vehicleData.getKilometers(), vehicleData.getPrice(), vehicleData.getType());
 
-		RentACarInterface rentACarInterface = new RentACarInterface();
+        RentACarInterface rentACarInterface = new RentACarInterface();
 
-		try {
-			rentACarInterface.createVehicle(code, vehicleData);
-		} catch (CarException be) {
-			model.addAttribute("error", "Error: it was not possible to create the Rent-A-Car");
-			model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
-			model.addAttribute("vehicle", vehicleData);
-			model.addAttribute("vehicles", rentACarInterface.getVehicles(code));
-			return "vehiclesView";
-		}
+        try {
+            rentACarInterface.createVehicle(code, vehicleData);
+        } catch (CarException be) {
+            model.addAttribute("error", "Error: it was not possible to create the Rent-A-Car");
+            model.addAttribute("rentacar", rentACarInterface.getRentACarData(code));
+            model.addAttribute("vehicle", vehicleData);
+            model.addAttribute("vehicles", rentACarInterface.getVehicles(code));
+            return "vehiclesView";
+        }
 
-		return "redirect:/rentacars/rentacar/" + code + "/vehicles";
-	}
+        return "redirect:/rentacars/rentacar/" + code + "/vehicles";
+    }
 }
