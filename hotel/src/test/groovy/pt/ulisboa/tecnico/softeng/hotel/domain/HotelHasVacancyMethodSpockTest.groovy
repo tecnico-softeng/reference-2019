@@ -25,7 +25,7 @@ class HotelHasVacancyMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     @Override
     def populate4Test() {
-        hotel = new Hotel("XPTO123", "Paris", NIF_HOTEL, "IBAN", 20.0, 30.0, new Processor(new BankInterface(), new TaxInterface()))
+        hotel = new Hotel("XPTO123", "Paris", NIF_HOTEL, "IBAN", 20, 30, new Processor(new BankInterface(), new TaxInterface()))
         room = new Room(hotel, "01", Type.DOUBLE)
     }
 
@@ -51,7 +51,7 @@ class HotelHasVacancyMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     def "no vacancy empty room set"() {
         given: "an hotel without rooms"
-        def otherHotel = new Hotel("XPTO124", "Paris Germain", "NIF2", "IBAN", 25.0, 35.0, new Processor(new BankInterface(), new TaxInterface()))
+        def otherHotel = new Hotel("XPTO124", "Paris Germain", "NIF2", "IBAN", 25, 35, new Processor(new BankInterface(), new TaxInterface()))
 
         when: "looking for a vancancy"
         room = otherHotel.hasVacancy(Type.DOUBLE, ARRIVAL, DEPARTURE)

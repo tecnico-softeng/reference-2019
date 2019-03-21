@@ -17,9 +17,9 @@ class HotelConstructorSpockTest extends SpockRollbackTestAbstractClass {
     @Shared
     def HOTEL_CODE = 'XPTO123'
     @Shared
-    def PRICE_SINGLE = 20.0
+    def PRICE_SINGLE = 20
     @Shared
-    def PRICE_DOUBLE = 30.0
+    def PRICE_DOUBLE = 30
 
     @Override
     def populate4Test() {
@@ -44,7 +44,7 @@ class HotelConstructorSpockTest extends SpockRollbackTestAbstractClass {
         new Hotel(code, name, nif, iban, priceSingle, priceDouble, new Processor(new BankInterface(), new TaxInterface()))
 
         then: 'an HotelException is thrown'
-        def error = thrown(HotelException)
+        thrown(HotelException)
 
         where:
         code       | name       | nif | iban | priceSingle  | priceDouble
@@ -56,8 +56,8 @@ class HotelConstructorSpockTest extends SpockRollbackTestAbstractClass {
         HOTEL_CODE | ''         | NIF | IBAN | PRICE_SINGLE | PRICE_DOUBLE
         '123456'   | HOTEL_NAME | NIF | IBAN | PRICE_SINGLE | PRICE_DOUBLE
         '12345678' | HOTEL_NAME | NIF | IBAN | PRICE_SINGLE | PRICE_DOUBLE
-        HOTEL_CODE | HOTEL_NAME | NIF | IBAN | -1.0         | PRICE_DOUBLE
-        HOTEL_CODE | HOTEL_NAME | NIF | IBAN | PRICE_SINGLE | -1.0
+        HOTEL_CODE | HOTEL_NAME | NIF | IBAN | -1           | PRICE_DOUBLE
+        HOTEL_CODE | HOTEL_NAME | NIF | IBAN | PRICE_SINGLE | -1
     }
 
     def 'code not unique'() {
