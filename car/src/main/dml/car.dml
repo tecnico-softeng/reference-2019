@@ -82,3 +82,4 @@ relation ProcessorManagesRentings {
 		multiplicity 0..*;
 	}
 }
+
