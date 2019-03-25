@@ -12,9 +12,9 @@ class InvoiceConstructorSpockTest extends SpockRollbackTestAbstractClass {
     @Shared def VALUE = 16
     def TAX = 23
     @Shared def date = new LocalDate(2018, 02, 13)
-    @Shared def seller
-    @Shared def buyer
-    @Shared def itemType
+    def seller
+    def buyer
+    def itemType
 
     @Override
     def populate4Test() {
@@ -48,20 +48,20 @@ class InvoiceConstructorSpockTest extends SpockRollbackTestAbstractClass {
     @Unroll('testing exceptions: #value, #dt, #it, #sel, #buy')
     def 'testing exceptions'() {
         when:
-        new Invoice(value, dt, it, getTaxPayer(sel), getTaxPayer(buy))
+        new Invoice(value, dt, getItemType(it), getTaxPayer(sel), getTaxPayer(buy))
 
         then:
         thrown(TaxException)
 
         where:
-        value  | dt                          | it       | sel  | buy  | label
-        VALUE  | date                        | itemType | null | 'B'  | 'null seller'
-        VALUE  | date                        | itemType | 'S'  | null | 'null buyer'
-        VALUE  | date                        | null     | 'S'  | 'B'  | 'null item'
-        0      | date                        | null     | 'S'  | 'B'  | '0 value'
-        -23.6f | date                        | null     | 'S'  | 'B'  | 'negative value'
-        VALUE  | null                        | itemType | 'S'  | 'B'  | 'null date'
-        VALUE  | new LocalDate(1969, 12, 31) | itemType | 'S'  | 'B'  | 'incorrect date'
+        value  | dt                          | it    | sel  | buy  | label
+        VALUE  | date                        | true  | null | 'B'  | 'null seller'
+        VALUE  | date                        | true  | 'S'  | null | 'null buyer'
+        VALUE  | date                        | false | 'S'  | 'B'  | 'null item'
+        0      | date                        | true  | 'S'  | 'B'  | '0 value'
+        -23.6f | date                        | true  | 'S'  | 'B'  | 'negative value'
+        VALUE  | null                        | true  | 'S'  | 'B'  | 'null date'
+        VALUE  | new LocalDate(1969, 12, 31) | true  | 'S'  | 'B'  | 'incorrect date'
     }
 
     def getTaxPayer(type) {
@@ -72,6 +72,12 @@ class InvoiceConstructorSpockTest extends SpockRollbackTestAbstractClass {
         } else {
             return null
         }
+    }
 
+    def getItemType(value) {
+        if (value) {
+            return itemType
+        }
+        return null
     }
 }
