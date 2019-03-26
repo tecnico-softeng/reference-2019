@@ -19,7 +19,7 @@ relation DomainRootHasBankApplication {
 
 class Client {
 	String name;
-	String ID;
+	String id;
 }
 
 relation BankHasClients {
@@ -32,7 +32,7 @@ relation BankHasClients {
 }
 
 class Account {
-	String IBAN;
+	String iban;
 	double balance;
 }
 
@@ -57,9 +57,18 @@ relation ClientHasAccounts {
 class Operation {
 	String reference;
 	String cancellation;
-	OperationType type;
-	double value;
 	DateTime time;
+}
+
+class SingleOperation extends Operation {
+	double value;
+}
+
+class DepositOperation extends SingleOperation;
+
+class WithdrawOperation extends SingleOperation;
+
+class TransferOperation extends Operation {
 	String transactionSource;
 	String transactionReference;
 }
@@ -73,11 +82,29 @@ relation BankHasOperation {
 	}
 }
 
-relation AccountHasOperation {
+relation AccountHasSingleOperation {
 	Account playsRole account {
 		multiplicity 1..1;
 	}
-	Operation playsRole operation {
+	SingleOperation playsRole singleOperation {
 		multiplicity 0..*;
+	}
+}
+
+relation TransferOperationHasDepositOperation {
+	TransferOperation playsRole transferOperationAsDeposit {
+		multiplicity 0..1;
+	}
+	DepositOperation playsRole depositOperation {
+		multiplicity 1..1;
+	}
+}
+
+relation TransferOperationHasWithdrawOperation {
+	TransferOperation playsRole transferOperationAsWithdraw {
+		multiplicity 0..1;
+	}
+	WithdrawOperation playsRole withdrawOperation {
+		multiplicity 1..1;
 	}
 }

@@ -4,56 +4,61 @@ import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 
 public class Account extends Account_Base {
 
-	public Account(Bank bank, Client client) {
-		checkArguments(bank, client);
+    public Account(Bank bank, Client client) {
+        checkArguments(bank, client);
 
-		setIBAN(bank.getCode() + Integer.toString(bank.getCounter()));
-		setBalance(0);
+        setIban(bank.getCode() + bank.getCounter());
+        setBalance(0);
 
-		setClient(client);
-		setBank(bank);
-	}
+        setClient(client);
+        setBank(bank);
+    }
 
-	public void delete() {
-		setBank(null);
-		setClient(null);
+    public void delete() {
+        setBank(null);
+        setClient(null);
 
-		for (Operation operation : getOperationSet()) {
-			operation.delete();
-		}
+        for (Operation operation : getSingleOperationSet()) {
+            operation.delete();
+        }
 
-		deleteDomainObject();
-	}
+        deleteDomainObject();
+    }
 
-	private void checkArguments(Bank bank, Client client) {
-		if (bank == null || client == null) {
-			throw new BankException();
-		}
+    private void checkArguments(Bank bank, Client client) {
+        if (bank == null || client == null) {
+            throw new BankException();
+        }
 
-		if (!bank.getClientSet().contains(client)) {
-			throw new BankException();
-		}
+        if (!bank.getClientSet().contains(client)) {
+            throw new BankException();
+        }
+    }
 
-	}
+    public DepositOperation deposit(double amount) {
+        if (amount <= 0) {
+            throw new BankException();
+        }
 
-	public Operation deposit(double amount) {
-		if (amount <= 0) {
-			throw new BankException();
-		}
+        setBalance(getBalance() + amount);
 
-		setBalance(getBalance() + amount);
+        DepositOperation depositOperation = new DepositOperation();
+        depositOperation.init(this, amount);
 
-		return new Operation(Operation.Type.DEPOSIT, this, amount);
-	}
+        return depositOperation;
+    }
 
-	public Operation withdraw(double amount) {
-		if (amount <= 0 || amount > getBalance()) {
-			throw new BankException();
-		}
+    public WithdrawOperation withdraw(double amount) {
+        if (amount <= 0 || amount > getBalance()) {
+            throw new BankException();
+        }
 
-		setBalance(getBalance() - amount);
+        setBalance(getBalance() - amount);
 
-		return new Operation(Operation.Type.WITHDRAW, this, amount);
-	}
+        WithdrawOperation withdrawOperation = new WithdrawOperation();
+        withdrawOperation.init(this, amount);
+
+        return withdrawOperation;
+    }
 
 }
