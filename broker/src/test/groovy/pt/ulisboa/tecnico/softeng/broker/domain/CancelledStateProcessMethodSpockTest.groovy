@@ -1,10 +1,10 @@
 package pt.ulisboa.tecnico.softeng.broker.domain
 
-import spock.lang.Unroll
-
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*
-import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.*
-import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*
+import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestBankOperationData
+import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.BankException
+import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException
+import spock.lang.Unroll
 
 class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
 
@@ -24,7 +24,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         hotelInterface = Mock(HotelInterface)
         carInterface = Mock(CarInterface)
 
-        broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN,
+        broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF, BROKER_IBAN,
                 activityInterface, hotelInterface, carInterface, bankInterface,
                 new TaxInterface())
 
@@ -35,7 +35,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
 
     }
 
-    def 'did not payed' () {
+    def 'did not payed'() {
 
         when: 'a next step is processed'
         adventure.process()
@@ -53,10 +53,10 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
     }
 
     @Unroll('#expection is thrown')
-    def 'cancelled payment first exception' () {
+    def 'cancelled payment first exception'() {
 
         given: 'that the hotel interface throws an exception'
-        bankInterface.getOperationData(PAYMENT_CONFIRMATION) >> {throw mock_exception}
+        bankInterface.getOperationData(PAYMENT_CONFIRMATION) >> { throw mock_exception }
 
         and: 'payment confirmation and payment cancellation are set'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
@@ -75,9 +75,9 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         0 * carInterface.getRentingData(_)
 
         where:
-        mock_exception                  | exception
-        new BankException()             | 'BankException'
-        new RemoteAccessException()     | 'RemoteAccessException'
+        mock_exception              | exception
+        new BankException()         | 'BankException'
+        new RemoteAccessException() | 'RemoteAccessException'
 
     }
 
@@ -85,7 +85,9 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
     def 'cancelled payment second exception'() {
 
         given: 'that the hotel interface throws an exception in second'
-        bankInterface.getOperationData(PAYMENT_CONFIRMATION) >> {new RestBankOperationData()} >> {throw mock_expection}
+        bankInterface.getOperationData(PAYMENT_CONFIRMATION) >> { new RestBankOperationData() } >> {
+            throw mock_expection
+        }
         and: 'payment confirmation and payment cancellation are set'
         adventure.setPaymentConfirmation(PAYMENT_CONFIRMATION)
         adventure.setPaymentCancellation(PAYMENT_CANCELLATION)
@@ -102,13 +104,13 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         0 * carInterface.getRentingData(_)
 
         where:
-        mock_expection                  | expection
-        new BankException()             | 'BankException'
-        new RemoteAccessException()     | 'RemoteAccessException'
+        mock_expection              | expection
+        new BankException()         | 'BankException'
+        new RemoteAccessException() | 'RemoteAccessException'
 
     }
 
-    def 'cancelled payment' () {
+    def 'cancelled payment'() {
         given: 'the bank interface payment operation data'
         bankInterface.getOperationData(PAYMENT_CONFIRMATION)
         bankInterface.getOperationData(PAYMENT_CANCELLATION)
@@ -126,7 +128,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         0 * carInterface.getRentingData(_)
     }
 
-    def 'cancelled activity' () {
+    def 'cancelled activity'() {
         given: 'the bank interface payment operation data'
         bankInterface.getOperationData(PAYMENT_CONFIRMATION)
         bankInterface.getOperationData(PAYMENT_CANCELLATION)
@@ -148,8 +150,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
     }
 
 
-
-    def 'cancelled room' () {
+    def 'cancelled room'() {
         given: 'the bank interface payment operation data'
         bankInterface.getOperationData(PAYMENT_CONFIRMATION)
         bankInterface.getOperationData(PAYMENT_CANCELLATION)
@@ -173,7 +174,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         0 * carInterface.getRentingData(_)
     }
 
-    def 'cancelled renting' () {
+    def 'cancelled renting'() {
         given: 'the bank interface payment operation data'
         bankInterface.getOperationData(PAYMENT_CONFIRMATION)
         bankInterface.getOperationData(PAYMENT_CANCELLATION)
@@ -197,7 +198,7 @@ class CancelledStateProcessMethodSpockTest extends SpockRollbackTestAbstractClas
         0 * hotelInterface.getRoomBookingData(_)
     }
 
-    def 'cancelled book and renting' () {
+    def 'cancelled book and renting'() {
         given: 'the bank interface payment operation data'
         bankInterface.getOperationData(PAYMENT_CONFIRMATION)
         bankInterface.getOperationData(PAYMENT_CANCELLATION)

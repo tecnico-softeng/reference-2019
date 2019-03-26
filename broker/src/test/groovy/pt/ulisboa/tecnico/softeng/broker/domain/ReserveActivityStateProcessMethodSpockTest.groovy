@@ -1,10 +1,10 @@
 package pt.ulisboa.tecnico.softeng.broker.domain
 
-import spock.lang.Unroll
-
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*
-import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.*
-import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*
+import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestActivityBookingData
+import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.ActivityException
+import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException
+import spock.lang.Unroll
 
 class ReserveActivityStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
     def activityInterface
@@ -16,9 +16,9 @@ class ReserveActivityStateProcessMethodSpockTest extends SpockRollbackTestAbstra
     @Override
     def populate4Test() {
         activityInterface = Mock(ActivityInterface)
-        broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN,
-                            activityInterface, new HotelInterface(), new CarInterface(), new BankInterface(),
-                            new TaxInterface())
+        broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF, BROKER_IBAN,
+                activityInterface, new HotelInterface(), new CarInterface(), new BankInterface(),
+                new TaxInterface())
         client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
 
         adventure = new Adventure(broker, BEGIN, END, client, MARGIN)
@@ -63,7 +63,7 @@ class ReserveActivityStateProcessMethodSpockTest extends SpockRollbackTestAbstra
     @Unroll('#label: #mock_exception')
     def 'exceptional states'() {
         given: 'activity reservation throws exception'
-        activityInterface.reserveActivity(_) >> {throw mock_exception}
+        activityInterface.reserveActivity(_) >> { throw mock_exception }
 
         when: 'adventure is processed #process_iterations time(s)'
         1.upto(process_iterations) {
@@ -85,13 +85,13 @@ class ReserveActivityStateProcessMethodSpockTest extends SpockRollbackTestAbstra
     def 'two remote access exception and success'() {
         given: 'activity reservation fails with two remote exceptions and then succeeds'
         activityInterface.reserveActivity(_) >>
-                {throw new RemoteAccessException()} >>
-                {throw new RemoteAccessException()}  >>
+                { throw new RemoteAccessException() } >>
+                { throw new RemoteAccessException() } >>
                 bookingData
 
         when: 'adventure is processes 3 times'
         1.upto(3) {
-          adventure.process()
+            adventure.process()
         }
 
         then: 'state of adventure is as expected'
@@ -101,8 +101,8 @@ class ReserveActivityStateProcessMethodSpockTest extends SpockRollbackTestAbstra
     def 'one remote access exception and one activity exception'() {
         given: 'activity reservation fails with a remote exception followed by an activity exception'
         activityInterface.reserveActivity(_) >>
-                {throw new RemoteAccessException()} >>
-                {throw new ActivityException()}
+                { throw new RemoteAccessException() } >>
+                { throw new ActivityException() }
 
         when: 'adventure is processes 2 times'
         1.upto(2) {

@@ -2,50 +2,108 @@ package pt.ulisboa.tecnico.softeng.tax.domain;
 
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException;
 
-public abstract class TaxPayer extends TaxPayer_Base {
-	protected TaxPayer() {
-		// this is a FenixFramework artifact; if not present, compilation fails.
-		// the empty constructor is used by the base class to materialize objects from
-		// the database, and in this case the classes Seller_Base and Buyer_Base, which
-		// extend this class, have the empty constructor, which need to be present in
-		// their superclass
-		super();
-	}
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-	public TaxPayer(IRS irs, String NIF, String name, String address) {
-		checkArguments(irs, NIF, name, address);
+public class TaxPayer extends TaxPayer_Base {
+    private final static int PERCENTAGE = 5;
 
-		setNif(NIF);
-		setName(name);
-		setAddress(address);
+    protected TaxPayer() {
+        // this is a FenixFramework artifact; if not present, compilation fails.
+        // the empty constructor is used by the base class to materialize objects from
+        // the database, and in this case the classes Seller_Base and Buyer_Base, which
+        // extend this class, have the empty constructor, which need to be present in
+        // their superclass
+        super();
+    }
 
-		irs.addTaxPayer(this);
-	}
+    public TaxPayer(IRS irs, String nif, String name, String address) {
+        checkArguments(irs, nif, name, address);
 
-	public void delete() {
-		setIrs(null);
+        setNif(nif);
+        setName(name);
+        setAddress(address);
 
-		deleteDomainObject();
-	}
+        irs.addTaxPayer(this);
+    }
 
-	protected void checkArguments(IRS irs, String NIF, String name, String address) {
-		if (NIF == null || NIF.length() != 9) {
-			throw new TaxException();
-		}
+    public void delete() {
+        setIrs(null);
 
-		if (name == null || name.length() == 0) {
-			throw new TaxException();
-		}
+        getAllInvoices().forEach(invoice -> invoice.delete());
 
-		if (address == null || address.length() == 0) {
-			throw new TaxException();
-		}
+        deleteDomainObject();
+    }
 
-		if (irs.getTaxPayerByNIF(NIF) != null) {
-			throw new TaxException();
-		}
+    protected void checkArguments(IRS irs, String nif, String name, String address) {
+        if (nif == null || nif.length() != 9) {
+            throw new TaxException();
+        }
 
-	}
+        if (name == null || name.length() == 0) {
+            throw new TaxException();
+        }
 
-	public abstract Invoice getInvoiceByReference(String invoiceReference);
+        if (address == null || address.length() == 0) {
+            throw new TaxException();
+        }
+
+        if (irs.getTaxPayerByNif(nif) != null) {
+            throw new TaxException();
+        }
+
+    }
+
+    public Invoice getInvoiceByReference(String invoiceReference) {
+        if (invoiceReference == null || invoiceReference.isEmpty()) {
+            throw new TaxException();
+        }
+
+        return getAllInvoices()
+                .filter(invoice -> invoice.getReference().equals(invoiceReference)).findAny().orElse(null);
+    }
+
+    private Stream<Invoice> getAllInvoices() {
+        return Stream.concat(getBuyerInvoiceSet().stream(), getSellerInvoiceSet().stream()).distinct();
+    }
+
+    public double toPay(int year) {
+        if (year < 1970) {
+            throw new TaxException();
+        }
+
+        double result = 0;
+        for (Invoice invoice : getSellerInvoiceSet()) {
+            if (!invoice.isCancelled() && invoice.getDate().getYear() == year) {
+                result = result + invoice.getIva();
+            }
+        }
+        return result;
+    }
+
+    public Map<Integer, Double> getToPayPerYear() {
+        return getSellerInvoiceSet().stream().map(i -> i.getDate().getYear()).distinct()
+                .collect(Collectors.toMap(y -> y, y -> toPay(y)));
+    }
+
+    public double taxReturn(int year) {
+        if (year < 1970) {
+            throw new TaxException();
+        }
+
+        double result = 0;
+        for (Invoice invoice : getBuyerInvoiceSet()) {
+            if (!invoice.isCancelled() && invoice.getDate().getYear() == year) {
+                result = result + invoice.getIva() * PERCENTAGE / 100;
+            }
+        }
+        return result;
+    }
+
+    public Map<Integer, Double> getTaxReturnPerYear() {
+        return getBuyerInvoiceSet().stream().map(i -> i.getDate().getYear()).distinct()
+                .collect(Collectors.toMap(y -> y, y -> taxReturn(y)));
+    }
+
 }

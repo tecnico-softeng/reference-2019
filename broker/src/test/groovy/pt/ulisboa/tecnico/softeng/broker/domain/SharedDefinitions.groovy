@@ -9,7 +9,7 @@ trait SharedDefinitions {
     @Shared def BROKER_IBAN = "BROKER_IBAN"
     @Shared def BROKER_NIF_AS_BUYER = "buyerNIF"
     @Shared def NIF_AS_BUYER = "buyerNIF"
-    @Shared def BROKER_NIF_AS_SELLER = "sellerNIF"
+    @Shared def BROKER_NIF = "sellerNIF"
     @Shared def IBAN_BUYER = "IBAN"
     @Shared def NIF_CUSTOMER = "123456789"
     @Shared def OTHER_NIF = "987654321"

@@ -3,8 +3,7 @@ package pt.ulisboa.tecnico.softeng.broker.domain;
 class Broker {
 	String code;
 	String name;
-	String nifAsSeller;
-	String nifAsBuyer;
+	String nif;
 	String iban;
 	int counter;
 }

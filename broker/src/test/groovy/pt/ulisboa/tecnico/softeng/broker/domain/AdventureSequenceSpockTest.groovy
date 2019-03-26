@@ -2,9 +2,10 @@ package pt.ulisboa.tecnico.softeng.broker.domain
 
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure.State
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*
-import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.*
+import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestActivityBookingData
+import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRentingData
+import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBookingData
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.*
-
 import spock.lang.Unroll
 
 class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
@@ -28,7 +29,7 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         hotelInterface = Mock(HotelInterface)
         carInterface = Mock(CarInterface)
 
-        broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, BROKER_NIF_AS_BUYER, BROKER_IBAN,
+        broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF, BROKER_IBAN,
                 activityInterface, hotelInterface, carInterface, bankInterface, taxInterface)
         client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
 
@@ -59,12 +60,12 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         activityInterface.reserveActivity(_) >> bookingActivityData
 
         and: 'a room booking'
-        if(hotel) {
-          hotelInterface.reserveRoom(_) >> bookingRoomData
+        if (hotel) {
+            hotelInterface.reserveRoom(_) >> bookingRoomData
         }
         and: 'a car renting'
-        if(car) {
-          carInterface.rentCar(*_) >> rentingData
+        if (car) {
+            carInterface.rentCar(*_) >> rentingData
         }
 
         and: 'a bank payment'
@@ -73,11 +74,11 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
         taxInterface.submitInvoice(_) >> INVOICE_DATA
         and: 'the correct return of the data associated with each reservation and payment'
         activityInterface.getActivityReservationData(ACTIVITY_CONFIRMATION) >> bookingActivityData
-        if(car) {
-          carInterface.getRentingData(RENTING_CONFIRMATION) >> rentingData
+        if (car) {
+            carInterface.getRentingData(RENTING_CONFIRMATION) >> rentingData
         }
-        if(hotel) {
-          hotelInterface.getRoomBookingData(ROOM_CONFIRMATION) >> bookingRoomData
+        if (hotel) {
+            hotelInterface.getRoomBookingData(ROOM_CONFIRMATION) >> bookingRoomData
         }
         bankInterface.getOperationData(PAYMENT_CONFIRMATION)
 

@@ -15,9 +15,9 @@ class BrokerGetRoomBookingFromBulkBookingsSpockTest extends SpockRollbackTestAbs
     @Override
     def populate4Test() {
         hotelInterface = Mock(HotelInterface)
-        broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF_AS_SELLER, NIF_AS_BUYER, BROKER_IBAN,
+        broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF, BROKER_IBAN,
                 new ActivityInterface(), hotelInterface, new CarInterface(), new BankInterface(), new TaxInterface())
-        bulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, BEGIN, END, NIF_AS_BUYER, CLIENT_IBAN)
+        bulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, BEGIN, END, BROKER_NIF, CLIENT_IBAN)
         new Reference(bulk, REF_ONE)
         new Reference(bulk, REF_TWO)
 
@@ -47,7 +47,7 @@ class BrokerGetRoomBookingFromBulkBookingsSpockTest extends SpockRollbackTestAbs
         given: 'that the hotel interface returns a booking data for a single room'
         hotelInterface.getRoomBookingData(_) >> bookingData
         and: 'one of the bulk bookings is cancelled'
-        def otherBulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, BEGIN, END, NIF_AS_BUYER, CLIENT_IBAN)
+        def otherBulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, BEGIN, END, BROKER_NIF, CLIENT_IBAN)
         new Reference(otherBulk, REF_THREE)
         new Reference(otherBulk, REF_FOUR)
         otherBulk.setCancelled(true)
@@ -63,13 +63,12 @@ class BrokerGetRoomBookingFromBulkBookingsSpockTest extends SpockRollbackTestAbs
         !bulk.getCancelled()
     }
 
-
     def 'fail both bulk booking are cancelled'() {
         given: 'that the hotel interface returns a booking data for a single room'
         hotelInterface.getRoomBookingData(_) >> bookingData
         and: 'both bulk bookings are cancelled'
         bulk.setCancelled(true)
-        def otherBulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, BEGIN, END, NIF_AS_BUYER, CLIENT_IBAN)
+        def otherBulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, BEGIN, END, BROKER_NIF, CLIENT_IBAN)
         new Reference(otherBulk, REF_THREE)
         new Reference(otherBulk, REF_FOUR)
         otherBulk.setCancelled(true)
