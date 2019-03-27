@@ -45,12 +45,12 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
         where:
         begin | end   | margin | age | room                      | vehicle                          | label
         BEGIN | END   | MARGIN | AGE | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | 'normal'
-        BEGIN | BEGIN | MARGIN | AGE | null                      | Adventure.VehicleType.MOTORCYCLE | 'begin begin'
+        BEGIN | BEGIN | MARGIN | AGE | Adventure.RoomType.NONE   | Adventure.VehicleType.MOTORCYCLE | 'begin begin'
         BEGIN | END   | 1      | AGE | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | 'margin 1'
         BEGIN | END   | MARGIN | 18  | Adventure.RoomType.SINGLE | Adventure.VehicleType.CAR        | '18 years old'
         BEGIN | END   | MARGIN | 100 | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | '100 years old'
-        BEGIN | END   | MARGIN | AGE | null                      | Adventure.VehicleType.MOTORCYCLE | 'no room'
-        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.SINGLE | null                             | 'no vehicle'
+        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.NONE   | Adventure.VehicleType.MOTORCYCLE | 'no room'
+        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.SINGLE | Adventure.VehicleType.NONE       | 'no vehicle'
     }
 
     @Unroll('#label')

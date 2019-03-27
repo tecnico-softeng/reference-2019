@@ -36,8 +36,8 @@ public class ReserveActivityState extends ReserveActivityState_Base {
             return;
         }
 
-        if (getAdventure().getRoomType() == null) {
-            if (getAdventure().getVehicleType() != null) {
+        if (getAdventure().getRoomType() == Adventure.RoomType.NONE) {
+            if (getAdventure().getVehicleType() != Adventure.VehicleType.NONE) {
                 getAdventure().setState(State.RENT_VEHICLE);
             } else {
                 getAdventure().setState(State.PROCESS_PAYMENT);

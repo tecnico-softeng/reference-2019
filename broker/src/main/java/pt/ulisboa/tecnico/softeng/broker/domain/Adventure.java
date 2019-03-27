@@ -6,11 +6,11 @@ import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 
 public class Adventure extends Adventure_Base {
     public enum RoomType {
-        SINGLE, DOUBLE
+        NONE, SINGLE, DOUBLE
     }
 
     public enum VehicleType {
-        CAR, MOTORCYCLE
+        NONE, CAR, MOTORCYCLE
     }
 
     public enum State {
@@ -46,7 +46,7 @@ public class Adventure extends Adventure_Base {
     }
 
     private void checkArguments(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, RoomType roomType, VehicleType vehicleType) {
-        if (client == null || broker == null || begin == null || end == null) {
+        if (client == null || broker == null || begin == null || end == null || roomType == null || vehicleType == null) {
             throw new BrokerException();
         }
 
@@ -62,7 +62,7 @@ public class Adventure extends Adventure_Base {
             throw new BrokerException();
         }
 
-        if (roomType != null && begin.equals(end)) {
+        if (roomType != RoomType.NONE && begin.equals(end)) {
             throw new BrokerException();
         }
     }
