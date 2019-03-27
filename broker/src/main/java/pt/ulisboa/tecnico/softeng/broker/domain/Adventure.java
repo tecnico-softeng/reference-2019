@@ -2,30 +2,31 @@ package pt.ulisboa.tecnico.softeng.broker.domain;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 
 public class Adventure extends Adventure_Base {
+    public enum RoomType {
+        SINGLE, DOUBLE
+    }
+
+    public enum VehicleType {
+        CAR, MOTORCYCLE
+    }
+
     public enum State {
         PROCESS_PAYMENT, RESERVE_ACTIVITY, BOOK_ROOM, RENT_VEHICLE, UNDO, CONFIRMED, CANCELLED, TAX_PAYMENT
     }
 
-    public Adventure(Broker broker, LocalDate begin, LocalDate end, Client client, double margin) {
-        this(broker, begin, end, client, margin, false);
-    }
+    public Adventure(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, RoomType roomType, VehicleType vehicleType) {
+        checkArguments(broker, begin, end, client, margin, roomType, vehicleType);
 
-    public Adventure(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, boolean rentVehicle) {
-        checkArguments(broker, begin, end, client, margin);
-
-        setID(broker.getCode() + Integer.toString(broker.getCounter()));
+        setID(broker.getCode() + broker.getCounter());
         setBegin(begin);
         setEnd(end);
         setMargin(margin);
-        setRentVehicle(rentVehicle);
         setClient(client);
-
+        setRoomType(roomType);
+        setVehicleType(vehicleType);
         broker.addAdventure(this);
         setBroker(broker);
 
@@ -35,7 +36,7 @@ public class Adventure extends Adventure_Base {
         setState(State.RESERVE_ACTIVITY);
     }
 
-    public void delete() {
+    void delete() {
         setBroker(null);
         setClient(null);
 
@@ -44,7 +45,7 @@ public class Adventure extends Adventure_Base {
         deleteDomainObject();
     }
 
-    private void checkArguments(Broker broker, LocalDate begin, LocalDate end, Client client, double margin) {
+    private void checkArguments(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, RoomType roomType, VehicleType vehicleType) {
         if (client == null || broker == null || begin == null || end == null) {
             throw new BrokerException();
         }
@@ -60,6 +61,10 @@ public class Adventure extends Adventure_Base {
         if (margin <= 0 || margin > 1) {
             throw new BrokerException();
         }
+
+        if (roomType != null && begin.equals(end)) {
+            throw new BrokerException();
+        }
     }
 
     public int getAge() {
@@ -70,16 +75,12 @@ public class Adventure extends Adventure_Base {
         return getClient().getIban();
     }
 
-    public void incAmountToPay(double toPay) {
+    void incAmountToPay(double toPay) {
         setCurrentAmount(getCurrentAmount() + toPay);
     }
 
-    public double getAmount() {
+    double getAmount() {
         return getCurrentAmount() * (1 + getMargin());
-    }
-
-    public boolean shouldRentVehicle() {
-        return getRentVehicle();
     }
 
     public void setState(State state) {
@@ -123,43 +124,43 @@ public class Adventure extends Adventure_Base {
         getState().process();
     }
 
-    public boolean shouldCancelRoom() {
+    boolean shouldCancelRoom() {
         return getRoomConfirmation() != null && getRoomCancellation() == null;
     }
 
-    public boolean roomIsCancelled() {
+    boolean roomIsCancelled() {
         return !shouldCancelRoom();
     }
 
-    public boolean shouldCancelActivity() {
+    boolean shouldCancelActivity() {
         return getActivityConfirmation() != null && getActivityCancellation() == null;
     }
 
-    public boolean activityIsCancelled() {
+    boolean activityIsCancelled() {
         return !shouldCancelActivity();
     }
 
-    public boolean shouldCancelPayment() {
+    boolean shouldCancelPayment() {
         return getPaymentConfirmation() != null && getPaymentCancellation() == null;
     }
 
-    public boolean paymentIsCancelled() {
+    boolean paymentIsCancelled() {
         return !shouldCancelPayment();
     }
 
-    public boolean shouldCancelVehicleRenting() {
+    boolean shouldCancelVehicleRenting() {
         return getRentingConfirmation() != null && getRentingCancellation() == null;
     }
 
-    public boolean rentingIsCancelled() {
+    boolean rentingIsCancelled() {
         return !shouldCancelVehicleRenting();
     }
 
-    public boolean shouldCancelInvoice() {
+    boolean shouldCancelInvoice() {
         return getInvoiceReference() != null && !getInvoiceCancelled();
     }
 
-    public boolean invoiceIsCancelled() {
+    boolean invoiceIsCancelled() {
         return !shouldCancelInvoice();
     }
 

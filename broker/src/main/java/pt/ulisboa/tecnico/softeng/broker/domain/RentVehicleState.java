@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.softeng.broker.domain;
 
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure.State;
-import pt.ulisboa.tecnico.softeng.broker.services.remote.CarInterface.Type;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRentingData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.CarException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
@@ -17,8 +16,7 @@ public class RentVehicleState extends RentVehicleState_Base {
     @Override
     public void process() {
         try {
-            // For now we will only reserve cars
-            RestRentingData rentingData = getAdventure().getBroker().getCarInterface().rentCar(Type.CAR, getAdventure().getClient().getDrivingLicense(),
+            RestRentingData rentingData = getAdventure().getBroker().getCarInterface().rentCar(getAdventure().getVehicleType(), getAdventure().getClient().getDrivingLicense(),
                     getAdventure().getBroker().getNif(), getAdventure().getBroker().getIban(),
                     getAdventure().getBegin(), getAdventure().getEnd(), getAdventure().getID());
 
