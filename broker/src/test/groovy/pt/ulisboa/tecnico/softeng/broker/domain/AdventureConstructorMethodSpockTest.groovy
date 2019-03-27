@@ -21,7 +21,7 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
         client = getClientWithAge(age)
 
         when: 'an adventure is created'
-        def adventure = new Adventure(broker, begin, end, client, margin)
+        def adventure = new Adventure(broker, begin, end, client, margin, room, vehicle)
 
         then: 'all its attributes are correctly set'
         adventure.getBroker() == broker
@@ -31,6 +31,8 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
             getEnd() == end
             getClient() == client
             getMargin() == margin
+            getRoomType() == room
+            getVehicleType() == vehicle
             getAge() == age
             getIban().equals(iban)
 
@@ -41,12 +43,14 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
         broker.getAdventureSet().contains(adventure)
 
         where:
-        begin | end   | margin | age | label
-        BEGIN | END   | MARGIN | AGE | 'normal'
-        BEGIN | END   | MARGIN | 18  | '18 years old'
-        BEGIN | END   | MARGIN | 100 | '100 years old'
-        BEGIN | END   | 1      | AGE | 'margin 1'
-        BEGIN | BEGIN | MARGIN | AGE | 'begin begin'
+        begin | end   | margin | age | room                      | vehicle                          | label
+        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | 'normal'
+        BEGIN | BEGIN | MARGIN | AGE | Adventure.RoomType.NONE   | Adventure.VehicleType.MOTORCYCLE | 'begin begin'
+        BEGIN | END   | 1      | AGE | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | 'margin 1'
+        BEGIN | END   | MARGIN | 18  | Adventure.RoomType.SINGLE | Adventure.VehicleType.CAR        | '18 years old'
+        BEGIN | END   | MARGIN | 100 | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | '100 years old'
+        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.NONE   | Adventure.VehicleType.MOTORCYCLE | 'no room'
+        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.SINGLE | Adventure.VehicleType.NONE       | 'no vehicle'
     }
 
     @Unroll('#label')
@@ -55,21 +59,22 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
         client = getClientWithAge(age)
 
         when: 'an adventure is created with invalid arguments'
-        new Adventure(brok, begin, end, client, margin)
+        new Adventure(brok, begin, end, client, margin, room, vehicle)
 
         then: 'an exception is thrown'
         thrown(BrokerException)
 
         where:
-        brok   | begin | end                | age | margin | label
-        null   | BEGIN | END                | 20  | MARGIN | 'broker is null'
-        broker | null  | END                | 20  | MARGIN | 'begin date is null'
-        broker | BEGIN | null               | 20  | MARGIN | 'end date is null'
-        broker | BEGIN | BEGIN.minusDays(1) | 20  | MARGIN | 'end date before begin date'
-        broker | BEGIN | END                | 17  | MARGIN | 'client is 17 years old'
-        broker | BEGIN | END                | 20  | 0      | 'margin is zero'
-        broker | BEGIN | END                | 20  | -100   | 'margin is negative'
-        broker | BEGIN | END                | -1  | MARGIN | 'client is null'
+        brok   | begin | end                | age | margin | room                      | vehicle                   | label
+        null   | BEGIN | END                | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'broker is null'
+        broker | null  | END                | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'begin date is null'
+        broker | BEGIN | null               | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'end date is null'
+        broker | BEGIN | BEGIN.minusDays(1) | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'end date before begin date'
+        broker | BEGIN | BEGIN              | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'end date begin begin date and non null room'
+        broker | BEGIN | END                | 17  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'client is 17 years old'
+        broker | BEGIN | END                | -1  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'client is null'
+        broker | BEGIN | END                | 20  | 0      | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'margin is zero'
+        broker | BEGIN | END                | 20  | -100   | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'margin is negative'
     }
 
     def getClientWithAge(def age) {

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import pt.ulisboa.tecnico.softeng.broker.domain.Adventure;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRentingData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.CarException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
@@ -14,12 +15,8 @@ public class CarInterface {
 
     private static final String ENDPOINT = "http://localhost:8084";
 
-    public static enum Type {
-        CAR, MOTORCYCLE
-    }
-
-    public RestRentingData rentCar(Type vehicleType, String drivingLicense, String nif, String iban,
-                                   LocalDate begin, LocalDate end, String adventureId) {
+     public RestRentingData rentCar(Adventure.VehicleType vehicleType, String drivingLicense, String nif, String iban,
+                                    LocalDate begin, LocalDate end, String adventureId) {
         logger.info("rentCar vehicleType:{}, drivingLicense:{}, nif:{}, iban:{}, begin:{}, end:{}, adventureId:{}",
                 vehicleType, drivingLicense, nif, iban, begin, end, adventureId);
         RestTemplate restTemplate = new RestTemplate();

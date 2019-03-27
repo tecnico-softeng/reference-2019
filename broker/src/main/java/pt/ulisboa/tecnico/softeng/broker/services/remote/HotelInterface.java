@@ -14,10 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class HotelInterface {
-    public enum Type {
-        SINGLE, DOUBLE
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(HotelInterface.class);
 
     private static final String ENDPOINT = "http://localhost:8085";
