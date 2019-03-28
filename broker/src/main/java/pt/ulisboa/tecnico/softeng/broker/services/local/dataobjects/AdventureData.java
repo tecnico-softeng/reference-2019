@@ -153,8 +153,12 @@ public class AdventureData {
         this.activityCancellation = activityCancellation;
     }
 
-    public long getMargin() {
-        return Math.round(margin / SCALE);
+    public Double getMargin() {
+        return margin / SCALE;
+    }
+
+    public long getMarginLong() {
+        return Math.round(getAmount() * Adventure.SCALE);
     }
 
     public void setMargin(long margin) {
