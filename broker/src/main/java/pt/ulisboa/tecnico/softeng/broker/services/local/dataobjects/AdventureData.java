@@ -36,7 +36,7 @@ public class AdventureData {
         this.end = adventure.getEnd();
         this.age = adventure.getAge();
         this.iban = adventure.getIban();
-        this.margin = Long.valueOf(adventure.getMargin()).doubleValue() * SCALE;
+        this.margin = getMargin() * SCALE;
         this.bookRoom = adventure.getBookRoom();
         this.rentVehicle = adventure.getRentVehicle();
         this.state = adventure.getState().getValue();
