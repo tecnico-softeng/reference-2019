@@ -18,7 +18,7 @@ class ProcessPaymentStateProcessMethodSpockTest extends SpockRollbackTestAbstrac
         broker = new Broker('BR01', 'eXtremeADVENTURE', BROKER_NIF, BROKER_IBAN,
                 new ActivityInterface(), new HotelInterface(), new CarInterface(), bankInterface, new TaxInterface())
         client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
-        adventure = new Adventure(broker, BEGIN, END, client, MARGIN, Adventure.RoomType.DOUBLE, Adventure.VehicleType.CAR)
+        adventure = new Adventure(broker, BEGIN, END, client, MARGIN, Adventure.BookRoom.DOUBLE, Adventure.RentVehicle.CAR)
 
         adventure.setState(Adventure.State.PROCESS_PAYMENT)
     }

@@ -31,8 +31,8 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
             getEnd() == end
             getClient() == client
             getMargin() == margin
-            getRoomType() == room
-            getVehicleType() == vehicle
+            getBookRoom() == room
+            getRentVehicle() == vehicle
             getAge() == age
             getIban().equals(iban)
 
@@ -44,13 +44,13 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 
         where:
         begin | end   | margin | age | room                      | vehicle                          | label
-        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | 'normal'
-        BEGIN | BEGIN | MARGIN | AGE | Adventure.RoomType.NONE   | Adventure.VehicleType.MOTORCYCLE | 'begin begin'
-        BEGIN | END   | 1      | AGE | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | 'margin 1'
-        BEGIN | END   | MARGIN | 18  | Adventure.RoomType.SINGLE | Adventure.VehicleType.CAR        | '18 years old'
-        BEGIN | END   | MARGIN | 100 | Adventure.RoomType.DOUBLE | Adventure.VehicleType.MOTORCYCLE | '100 years old'
-        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.NONE   | Adventure.VehicleType.MOTORCYCLE | 'no room'
-        BEGIN | END   | MARGIN | AGE | Adventure.RoomType.SINGLE | Adventure.VehicleType.NONE       | 'no vehicle'
+        BEGIN | END   | MARGIN | AGE | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.MOTORCYCLE | 'normal'
+        BEGIN | BEGIN | MARGIN | AGE | Adventure.BookRoom.NONE   | Adventure.RentVehicle.MOTORCYCLE | 'begin begin'
+        BEGIN | END   | 1      | AGE | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.MOTORCYCLE | 'margin 1'
+        BEGIN | END   | MARGIN | 18  | Adventure.BookRoom.SINGLE | Adventure.RentVehicle.CAR        | '18 years old'
+        BEGIN | END   | MARGIN | 100 | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.MOTORCYCLE | '100 years old'
+        BEGIN | END   | MARGIN | AGE | Adventure.BookRoom.NONE   | Adventure.RentVehicle.MOTORCYCLE | 'no room'
+        BEGIN | END   | MARGIN | AGE | Adventure.BookRoom.SINGLE | Adventure.RentVehicle.NONE       | 'no vehicle'
     }
 
     @Unroll('#label')
@@ -66,15 +66,15 @@ class AdventureConstructorMethodSpockTest extends SpockRollbackTestAbstractClass
 
         where:
         brok   | begin | end                | age | margin | room                      | vehicle                   | label
-        null   | BEGIN | END                | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'broker is null'
-        broker | null  | END                | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'begin date is null'
-        broker | BEGIN | null               | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'end date is null'
-        broker | BEGIN | BEGIN.minusDays(1) | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'end date before begin date'
-        broker | BEGIN | BEGIN              | 20  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'end date begin begin date and non null room'
-        broker | BEGIN | END                | 17  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'client is 17 years old'
-        broker | BEGIN | END                | -1  | MARGIN | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'client is null'
-        broker | BEGIN | END                | 20  | 0      | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'margin is zero'
-        broker | BEGIN | END                | 20  | -100   | Adventure.RoomType.DOUBLE | Adventure.VehicleType.CAR | 'margin is negative'
+        null   | BEGIN | END                | 20  | MARGIN | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'broker is null'
+        broker | null  | END                | 20  | MARGIN | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'begin date is null'
+        broker | BEGIN | null               | 20  | MARGIN | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'end date is null'
+        broker | BEGIN | BEGIN.minusDays(1) | 20  | MARGIN | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'end date before begin date'
+        broker | BEGIN | BEGIN              | 20  | MARGIN | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'end date begin begin date and non null room'
+        broker | BEGIN | END                | 17  | MARGIN | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'client is 17 years old'
+        broker | BEGIN | END                | -1  | MARGIN | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'client is null'
+        broker | BEGIN | END                | 20  | 0      | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'margin is zero'
+        broker | BEGIN | END                | 20  | -100   | Adventure.BookRoom.DOUBLE | Adventure.RentVehicle.CAR | 'margin is negative'
     }
 
     def getClientWithAge(def age) {

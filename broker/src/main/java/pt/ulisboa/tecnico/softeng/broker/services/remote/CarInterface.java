@@ -15,8 +15,8 @@ public class CarInterface {
 
     private static final String ENDPOINT = "http://localhost:8084";
 
-     public RestRentingData rentCar(Adventure.VehicleType vehicleType, String drivingLicense, String nif, String iban,
-                                    LocalDate begin, LocalDate end, String adventureId) {
+    public RestRentingData rentCar(Adventure.RentVehicle vehicleType, String drivingLicense, String nif, String iban,
+                                   LocalDate begin, LocalDate end, String adventureId) {
         logger.info("rentCar vehicleType:{}, drivingLicense:{}, nif:{}, iban:{}, begin:{}, end:{}, adventureId:{}",
                 vehicleType, drivingLicense, nif, iban, begin, end, adventureId);
         RestTemplate restTemplate = new RestTemplate();

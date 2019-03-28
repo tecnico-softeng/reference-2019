@@ -5,11 +5,11 @@ import org.joda.time.LocalDate;
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 
 public class Adventure extends Adventure_Base {
-    public enum RoomType {
+    public enum BookRoom {
         NONE, SINGLE, DOUBLE
     }
 
-    public enum VehicleType {
+    public enum RentVehicle {
         NONE, CAR, MOTORCYCLE
     }
 
@@ -17,16 +17,16 @@ public class Adventure extends Adventure_Base {
         PROCESS_PAYMENT, RESERVE_ACTIVITY, BOOK_ROOM, RENT_VEHICLE, UNDO, CONFIRMED, CANCELLED, TAX_PAYMENT
     }
 
-    public Adventure(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, RoomType roomType, VehicleType vehicleType) {
-        checkArguments(broker, begin, end, client, margin, roomType, vehicleType);
+    public Adventure(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, BookRoom bookRoom, RentVehicle rentVehicle) {
+        checkArguments(broker, begin, end, client, margin, bookRoom, rentVehicle);
 
         setID(broker.getCode() + broker.getCounter());
         setBegin(begin);
         setEnd(end);
         setMargin(margin);
         setClient(client);
-        setRoomType(roomType);
-        setVehicleType(vehicleType);
+        setBookRoom(bookRoom);
+        setRentVehicle(rentVehicle);
         broker.addAdventure(this);
         setBroker(broker);
 
@@ -45,8 +45,8 @@ public class Adventure extends Adventure_Base {
         deleteDomainObject();
     }
 
-    private void checkArguments(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, RoomType roomType, VehicleType vehicleType) {
-        if (client == null || broker == null || begin == null || end == null || roomType == null || vehicleType == null) {
+    private void checkArguments(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, BookRoom bookRoom, RentVehicle rentVehicle) {
+        if (client == null || broker == null || begin == null || end == null || bookRoom == null || rentVehicle == null) {
             throw new BrokerException();
         }
 
@@ -62,7 +62,7 @@ public class Adventure extends Adventure_Base {
             throw new BrokerException();
         }
 
-        if (roomType != RoomType.NONE && begin.equals(end)) {
+        if (bookRoom != BookRoom.NONE && begin.equals(end)) {
             throw new BrokerException();
         }
     }

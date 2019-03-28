@@ -26,7 +26,7 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
         setBroker(broker);
     }
 
-    public void delete() {
+    void delete() {
         setBroker(null);
 
         for (Reference reference : getReferenceSet()) {
@@ -93,7 +93,7 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
                 }
             }
 
-            if (data != null && data.getRoomType().equals(type) && data.getArrival().equals(arrival)
+            if (data != null && data.getBookRoom().equals(type) && data.getArrival().equals(arrival)
                     && data.getDeparture().equals(departure)) {
                 removeReference(reference);
                 return data;

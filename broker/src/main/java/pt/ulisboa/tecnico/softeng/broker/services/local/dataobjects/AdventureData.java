@@ -13,8 +13,8 @@ public class AdventureData {
     private Integer age;
     private String iban;
     private Double margin;
-    private Adventure.RoomType roomType;
-    private Adventure.VehicleType vehicleType;
+    private Adventure.BookRoom bookRoom;
+    private Adventure.RentVehicle rentVehicle;
     private Double amount;
     private Adventure.State state;
 
@@ -35,8 +35,8 @@ public class AdventureData {
         this.age = adventure.getAge();
         this.iban = adventure.getIban();
         this.margin = adventure.getMargin();
-        this.roomType = adventure.getRoomType();
-        this.vehicleType = adventure.getVehicleType();
+        this.bookRoom = adventure.getBookRoom();
+        this.rentVehicle = adventure.getRentVehicle();
         this.state = adventure.getState().getValue();
 
         this.paymentConfirmation = adventure.getPaymentConfirmation();
@@ -160,21 +160,21 @@ public class AdventureData {
     }
 
 
-    public Adventure.RoomType getRoomType() {
-        return this.roomType;
+    public Adventure.BookRoom getBookRoom() {
+        return this.bookRoom;
     }
 
-    public void setRoomType(Adventure.RoomType roomType) {
-        this.roomType = roomType;
+    public void setBookRoom(Adventure.BookRoom bookRoom) {
+        this.bookRoom = bookRoom;
     }
 
 
-    public Adventure.VehicleType getVehicleType() {
-        return this.vehicleType;
+    public Adventure.RentVehicle getRentVehicle() {
+        return this.rentVehicle;
     }
 
-    public void setVehicleType(Adventure.VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setRentVehicle(Adventure.RentVehicle rentVehicle) {
+        this.rentVehicle = rentVehicle;
     }
 
 }

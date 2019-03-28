@@ -16,7 +16,7 @@ public class RentVehicleState extends RentVehicleState_Base {
     @Override
     public void process() {
         try {
-            RestRentingData rentingData = getAdventure().getBroker().getCarInterface().rentCar(getAdventure().getVehicleType(), getAdventure().getClient().getDrivingLicense(),
+            RestRentingData rentingData = getAdventure().getBroker().getCarInterface().rentCar(getAdventure().getRentVehicle(), getAdventure().getClient().getDrivingLicense(),
                     getAdventure().getBroker().getNif(), getAdventure().getBroker().getIban(),
                     getAdventure().getBegin(), getAdventure().getEnd(), getAdventure().getID());
 

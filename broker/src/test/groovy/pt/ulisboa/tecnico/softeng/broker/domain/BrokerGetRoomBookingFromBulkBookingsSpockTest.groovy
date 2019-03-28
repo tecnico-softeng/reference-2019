@@ -22,7 +22,7 @@ class BrokerGetRoomBookingFromBulkBookingsSpockTest extends SpockRollbackTestAbs
         new Reference(bulk, REF_TWO)
 
         bookingData = new RestRoomBookingData()
-        bookingData.setRoomType(SINGLE)
+        bookingData.setBookRoom(SINGLE)
         bookingData.setArrival(BEGIN)
         bookingData.setDeparture(END)
     }
@@ -35,7 +35,7 @@ class BrokerGetRoomBookingFromBulkBookingsSpockTest extends SpockRollbackTestAbs
         bookingData = broker.getRoomBookingFromBulkBookings(SINGLE, BEGIN, END)
 
         then: 'a the booking of a single room is returned'
-        bookingData.getRoomType() == SINGLE
+        bookingData.getBookRoom() == SINGLE
         and: 'the number of references is decremented'
         bulk.getReferences().size() == 1
         and: 'the bulk is not cancelled'
@@ -56,7 +56,7 @@ class BrokerGetRoomBookingFromBulkBookingsSpockTest extends SpockRollbackTestAbs
         bookingData = broker.getRoomBookingFromBulkBookings(SINGLE, BEGIN, END)
 
         then: 'a the booking of a single room is returned'
-        bookingData.getRoomType() == SINGLE
+        bookingData.getBookRoom() == SINGLE
         and: 'the number of references is decremented'
         bulk.getReferences().size() == 1
         and: 'the bulk is not cancelled'

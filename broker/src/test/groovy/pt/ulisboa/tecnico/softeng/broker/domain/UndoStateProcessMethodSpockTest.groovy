@@ -23,7 +23,7 @@ class UndoStateProcessMethodSpockTest extends SpockRollbackTestAbstractClass {
         broker = new Broker("BR01", "eXtremeADVENTURE", BROKER_NIF, BROKER_IBAN,
                 activityInterface, hotelInterface, carInterface, bankInterface, taxInterface)
         client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
-        adventure = new Adventure(broker, BEGIN, END, client, MARGIN, Adventure.RoomType.DOUBLE, Adventure.VehicleType.CAR)
+        adventure = new Adventure(broker, BEGIN, END, client, MARGIN, Adventure.BookRoom.DOUBLE, Adventure.RentVehicle.CAR)
 
         adventure.setState(Adventure.State.UNDO)
     }

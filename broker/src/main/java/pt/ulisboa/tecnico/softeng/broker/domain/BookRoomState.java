@@ -16,12 +16,12 @@ public class BookRoomState extends BookRoomState_Base {
 
     @Override
     public void process() {
-        RestRoomBookingData bookingData = getAdventure().getBroker().getRoomBookingFromBulkBookings(getAdventure().getRoomType().name(), getAdventure().getBegin(), getAdventure().getEnd());
+        RestRoomBookingData bookingData = getAdventure().getBroker().getRoomBookingFromBulkBookings(getAdventure().getBookRoom().name(), getAdventure().getBegin(), getAdventure().getEnd());
 
         if (bookingData == null) {
             HotelInterface hotelInterface = getAdventure().getBroker().getHotelInterface();
             try {
-                bookingData = hotelInterface.reserveRoom(new RestRoomBookingData(getAdventure().getRoomType(),
+                bookingData = hotelInterface.reserveRoom(new RestRoomBookingData(getAdventure().getBookRoom(),
                         getAdventure().getBegin(), getAdventure().getEnd(), getAdventure().getBroker().getNif(),
                         getAdventure().getBroker().getIban(), getAdventure().getID()));
             } catch (HotelException he) {
@@ -40,7 +40,7 @@ public class BookRoomState extends BookRoomState_Base {
         getAdventure().incAmountToPay(bookingData.getPrice());
 
 
-        if (getAdventure().getVehicleType() != Adventure.VehicleType.CAR.NONE) {
+        if (getAdventure().getRentVehicle() != Adventure.RentVehicle.CAR.NONE) {
             getAdventure().setState(State.RENT_VEHICLE);
         } else {
             getAdventure().setState(State.PROCESS_PAYMENT);
