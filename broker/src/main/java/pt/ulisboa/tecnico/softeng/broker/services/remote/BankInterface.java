@@ -8,6 +8,7 @@ import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestBankOpe
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.BankException;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.exception.RemoteAccessException;
 
+
 public class BankInterface {
     private static final Logger logger = LoggerFactory.getLogger(BankInterface.class);
 
