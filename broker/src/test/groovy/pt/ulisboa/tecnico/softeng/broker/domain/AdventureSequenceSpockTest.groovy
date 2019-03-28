@@ -35,19 +35,19 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
 
         bookingActivityData = new RestActivityBookingData()
         bookingActivityData.setReference(ACTIVITY_CONFIRMATION)
-        bookingActivityData.setPrice(70.0)
+        bookingActivityData.setPrice(70 * Adventure.SCALE)
         bookingActivityData.setPaymentReference(PAYMENT_CONFIRMATION)
         bookingActivityData.setInvoiceReference(INVOICE_REFERENCE)
 
         bookingRoomData = new RestRoomBookingData()
         bookingRoomData.setReference(ROOM_CONFIRMATION)
-        bookingRoomData.setPrice(80.0)
+        bookingRoomData.setPrice(80 * Adventure.SCALE)
         bookingRoomData.setPaymentReference(PAYMENT_CONFIRMATION)
         bookingRoomData.setInvoiceReference(INVOICE_REFERENCE)
 
         rentingData = new RestRentingData()
         rentingData.setReference(RENTING_CONFIRMATION)
-        rentingData.setPrice(60.0)
+        rentingData.setPrice(60 * Adventure.SCALE)
         rentingData.setPaymentReference(PAYMENT_CONFIRMATION)
         rentingData.setInvoiceReference(INVOICE_REFERENCE)
     }

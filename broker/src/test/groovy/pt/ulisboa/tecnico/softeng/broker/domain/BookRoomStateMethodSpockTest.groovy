@@ -29,7 +29,7 @@ class BookRoomStateMethodSpockTest extends SpockRollbackTestAbstractClass {
         bookingData.setArrival(BEGIN)
         bookingData.setDeparture(END)
         bookingData.setReference(ROOM_CONFIRMATION)
-        bookingData.setPrice(80.0)
+        bookingData.setPrice(80 * Adventure.SCALE)
 
         adventure.setState(Adventure.State.BOOK_ROOM)
     }

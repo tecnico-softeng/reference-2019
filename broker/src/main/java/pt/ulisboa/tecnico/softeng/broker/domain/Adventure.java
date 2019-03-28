@@ -5,6 +5,8 @@ import org.joda.time.LocalDate;
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
 
 public class Adventure extends Adventure_Base {
+    public static final int SCALE = 1000;
+
     public enum BookRoom {
         NONE, SINGLE, DOUBLE
     }
@@ -30,7 +32,7 @@ public class Adventure extends Adventure_Base {
         broker.addAdventure(this);
         setBroker(broker);
 
-        setCurrentAmount(0.0);
+        setCurrentAmount(0);
         setTime(DateTime.now());
 
         setState(State.RESERVE_ACTIVITY);
@@ -75,12 +77,12 @@ public class Adventure extends Adventure_Base {
         return getClient().getIban();
     }
 
-    void incAmountToPay(double toPay) {
+    void incAmountToPay(long toPay) {
         setCurrentAmount(getCurrentAmount() + toPay);
     }
 
-    double getAmount() {
-        return getCurrentAmount() * (1 + getMargin());
+    long getAmount() {
+        return Math.round(getCurrentAmount() / SCALE * (1 + getMargin() / SCALE) * SCALE);
     }
 
     public void setState(State state) {

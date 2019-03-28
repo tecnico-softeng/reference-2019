@@ -26,7 +26,7 @@ class ReserveActivityStateProcessMethodSpockTest extends SpockRollbackTestAbstra
 
         bookingData = new RestActivityBookingData()
         bookingData.setReference(ACTIVITY_CONFIRMATION)
-        bookingData.setPrice(76.78)
+        bookingData.setPrice(Math.round(76.78 * Adventure.SCALE))
     }
 
     @Unroll('#label: #rent_a_car #adventure_state')

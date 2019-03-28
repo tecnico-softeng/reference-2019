@@ -27,7 +27,7 @@ class Adventure {
 	long margin;
 	BookRoom bookRoom;
 	RentVehicle rentVehicle;
-    double currentAmount;
+    long currentAmount;
     DateTime time;
 	String paymentConfirmation;
 	String paymentCancellation;

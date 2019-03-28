@@ -19,7 +19,7 @@ public class RestActivityBookingData {
 	private String cancellation;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate cancellationDate;
-	private Double price;
+	private long price;
 	private String paymentReference;
 	private String invoiceReference;
 
@@ -124,11 +124,11 @@ public class RestActivityBookingData {
 		this.cancellationDate = cancellationDate;
 	}
 
-	public Double getPrice() {
+	public long getPrice() {
 		return this.price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 
