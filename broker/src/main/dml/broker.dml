@@ -24,7 +24,7 @@ class Adventure {
 	String ID;
 	LocalDate begin;
 	LocalDate end;
-	double margin;
+	long margin;
 	BookRoom bookRoom;
 	RentVehicle rentVehicle;
     double currentAmount;

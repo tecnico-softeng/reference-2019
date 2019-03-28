@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure;
 
 public class AdventureData {
+    private static final int SCALE = 1000;
+
     private String id;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate begin;
@@ -34,7 +36,7 @@ public class AdventureData {
         this.end = adventure.getEnd();
         this.age = adventure.getAge();
         this.iban = adventure.getIban();
-        this.margin = adventure.getMargin();
+        this.margin = Long.valueOf(adventure.getMargin()).doubleValue() * SCALE;
         this.bookRoom = adventure.getBookRoom();
         this.rentVehicle = adventure.getRentVehicle();
         this.state = adventure.getState().getValue();
@@ -151,14 +153,13 @@ public class AdventureData {
         this.activityCancellation = activityCancellation;
     }
 
-    public Double getMargin() {
-        return this.margin;
+    public long getMargin() {
+        return Math.round(margin / SCALE);
     }
 
-    public void setMargin(Double margin) {
-        this.margin = margin;
+    public void setMargin(long margin) {
+        this.margin = Long.valueOf(margin).doubleValue() * SCALE;
     }
-
 
     public Adventure.BookRoom getBookRoom() {
         return this.bookRoom;

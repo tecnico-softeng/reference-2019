@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.softeng.broker.domain
 
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException
+import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.AdventureData
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import spock.lang.Shared
 import spock.lang.Unroll

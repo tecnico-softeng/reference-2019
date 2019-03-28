@@ -17,7 +17,7 @@ public class Adventure extends Adventure_Base {
         PROCESS_PAYMENT, RESERVE_ACTIVITY, BOOK_ROOM, RENT_VEHICLE, UNDO, CONFIRMED, CANCELLED, TAX_PAYMENT
     }
 
-    public Adventure(Broker broker, LocalDate begin, LocalDate end, Client client, double margin, BookRoom bookRoom, RentVehicle rentVehicle) {
+    public Adventure(Broker broker, LocalDate begin, LocalDate end, Client client, long margin, BookRoom bookRoom, RentVehicle rentVehicle) {
         checkArguments(broker, begin, end, client, margin, bookRoom, rentVehicle);
 
         setID(broker.getCode() + broker.getCounter());
@@ -58,7 +58,7 @@ public class Adventure extends Adventure_Base {
             throw new BrokerException();
         }
 
-        if (margin <= 0 || margin > 1) {
+        if (margin <= 0 || margin > 100) {
             throw new BrokerException();
         }
 
@@ -120,7 +120,6 @@ public class Adventure extends Adventure_Base {
     }
 
     public void process() {
-        // logger.debug("process ID:{}, state:{} ", this.ID, getState().name());
         getState().process();
     }
 
