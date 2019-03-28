@@ -3,12 +3,13 @@ package pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import pt.ulisboa.tecnico.softeng.broker.domain.Adventure;
 
 public class RestBankOperationData {
 	private String reference;
 	private String type;
 	private String iban;
-	private long value;
+	private Double value;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	private DateTime time;
 	private String transactionSource;
@@ -19,7 +20,7 @@ public class RestBankOperationData {
 
 	public RestBankOperationData(String iban, long value, String transactionSource, String transactionReference) {
 		this.iban = iban;
-		this.value = value;
+		this.value = new Double(value) / Adventure.SCALE;
 		this.transactionSource = transactionSource;
 		this.transactionReference = transactionReference;
 	}
