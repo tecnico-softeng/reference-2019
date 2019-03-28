@@ -157,7 +157,7 @@ public class AdventureData {
     }
 
     public long getMarginLong() {
-        return Math.round(getAmount() * Adventure.SCALE);
+        return Math.round(getMargin() * Adventure.SCALE);
     }
 
     public void setMargin(long margin) {
