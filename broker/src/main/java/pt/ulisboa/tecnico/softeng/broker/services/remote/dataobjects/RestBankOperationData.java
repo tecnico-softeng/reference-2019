@@ -49,11 +49,11 @@ public class RestBankOperationData {
 		this.iban = iban;
 	}
 
-	public long getValue() {
+	public Double getValue() {
 		return this.value;
 	}
 
-	public void setValue(long value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
