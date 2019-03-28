@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects;
 
 import org.joda.time.DateTime;
+import pt.ulisboa.tecnico.softeng.bank.domain.Bank;
 import pt.ulisboa.tecnico.softeng.bank.domain.Operation;
 
 public class BankOperationData {
@@ -21,7 +22,7 @@ public class BankOperationData {
         this.type = operation.getType().name();
         this.sourceIban = operation.getSourceIban();
         this.targetIban = operation.getTargetIban();
-        this.value = operation.getValue();
+        this.value = new Double(operation.getValue()) * Bank.SCALE;
         this.time = operation.getTime();
         this.transactionSource = operation.getTransactionSource();
         this.transactionReference = operation.getTransactionReference();
@@ -69,6 +70,14 @@ public class BankOperationData {
 
     public Double getValue() {
         return this.value;
+    }
+
+    public long getValueLong() {
+        return Math.round(this.value);
+    }
+
+    public void setValue(long value) {
+        this.value = Long.valueOf(value).doubleValue() * Bank.SCALE;
     }
 
     public void setValue(Double value) {

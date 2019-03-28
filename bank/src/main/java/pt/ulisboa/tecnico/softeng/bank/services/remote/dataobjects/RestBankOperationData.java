@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.softeng.bank.services.remote.dataobjects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.joda.time.DateTime;
+import pt.ulisboa.tecnico.softeng.bank.domain.Bank;
 import pt.ulisboa.tecnico.softeng.bank.domain.TransferOperation;
 
 public class RestBankOperationData {
@@ -23,16 +24,16 @@ public class RestBankOperationData {
         this.type = operation.getType().name();
         this.sourceIban = operation.getWithdrawOperation().getAccount().getIban();
         this.sourceIban = operation.getDepositOperation().getAccount().getIban();
-        this.value = operation.getWithdrawOperation().getValue();
+        this.value = new Double(operation.getWithdrawOperation().getValue()) / Bank.SCALE;
         this.time = operation.getTime();
         this.transactionSource = operation.getTransactionSource();
         this.transactionReference = operation.getTransactionReference();
     }
 
-    public RestBankOperationData(String sourceIban, String targetIban, double value, String transactionSource, String transactionReference) {
+    public RestBankOperationData(String sourceIban, String targetIban, long value, String transactionSource, String transactionReference) {
         this.sourceIban = sourceIban;
         this.targetIban = targetIban;
-        this.value = value;
+        this.value = new Double(value) / Bank.SCALE;
         this.transactionSource = transactionSource;
         this.transactionReference = transactionReference;
     }
@@ -61,12 +62,12 @@ public class RestBankOperationData {
         this.targetIban = targetIban;
     }
 
-    public Double getValue() {
-        return this.value;
+    public long getValue() {
+        return Math.round(this.value * Bank.SCALE);
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public void setValue(long value) {
+        this.value = Long.valueOf(value).doubleValue() * Bank.SCALE;
     }
 
     public DateTime getTime() {

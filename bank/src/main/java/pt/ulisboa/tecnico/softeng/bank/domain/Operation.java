@@ -37,7 +37,7 @@ public abstract class Operation extends Operation_Base {
 
     public abstract String getTargetIban();
 
-    public abstract double getValue();
+    public abstract long getValue();
 
     public abstract String getTransactionSource();
 
