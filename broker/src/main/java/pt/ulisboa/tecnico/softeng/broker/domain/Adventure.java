@@ -82,7 +82,7 @@ public class Adventure extends Adventure_Base {
     }
 
     long getAmount() {
-        return Math.round(getCurrentAmount() / SCALE * (1 + getMargin() / SCALE) * SCALE);
+        return Math.round(getCurrentAmount() / SCALE * (1 + new Double(getMargin()) / SCALE) * SCALE);
     }
 
     public void setState(State state) {

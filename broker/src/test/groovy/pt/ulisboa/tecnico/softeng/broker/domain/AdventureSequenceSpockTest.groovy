@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.softeng.broker.domain
 
+import com.sun.javafx.scene.layout.region.Margins
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure.State
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestActivityBookingData
@@ -87,13 +88,14 @@ class AdventureSequenceSpockTest extends SpockRollbackTestAbstractClass {
 
         then: 'the final state is confirmed'
         adventure.getState().getValue() == State.CONFIRMED
+        adventure.getAmount() / Adventure.SCALE == amount
 
         where:
-        cycles | car                        | hotel                     | end
-        6      | Adventure.RentVehicle.CAR  | Adventure.BookRoom.SINGLE | DEPARTURE
-        5      | Adventure.RentVehicle.NONE | Adventure.BookRoom.SINGLE | DEPARTURE
-        5      | Adventure.RentVehicle.CAR  | Adventure.BookRoom.NONE   | ARRIVAL
-        4      | Adventure.RentVehicle.NONE | Adventure.BookRoom.NONE   | ARRIVAL
+        cycles | car                        | hotel                     | end       | amount
+        6      | Adventure.RentVehicle.CAR  | Adventure.BookRoom.SINGLE | DEPARTURE | (70 + 80 + 60) * 1.03
+        5      | Adventure.RentVehicle.NONE | Adventure.BookRoom.SINGLE | DEPARTURE | (70 + 80) * 1.03
+        5      | Adventure.RentVehicle.CAR  | Adventure.BookRoom.NONE   | ARRIVAL   | (70 + 60) * 1.03
+        4      | Adventure.RentVehicle.NONE | Adventure.BookRoom.NONE   | ARRIVAL   | 70 * 1.03
     }
 
     def 'unsuccess sequence fail activity'() {
