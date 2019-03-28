@@ -8,7 +8,7 @@ public class RestBankOperationData {
     private String type;
     private String sourceIban;
     private String targetIban;
-    private Double value;
+    private long value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private DateTime time;
     private String transactionSource;
@@ -17,7 +17,7 @@ public class RestBankOperationData {
     public RestBankOperationData() {
     }
 
-    public RestBankOperationData(String sourceIban, String targetIban, double value, String transactionSource, String transactionReference) {
+    public RestBankOperationData(String sourceIban, String targetIban, long value, String transactionSource, String transactionReference) {
         this.sourceIban = sourceIban;
         this.targetIban = targetIban;
         this.value = value;
@@ -49,11 +49,11 @@ public class RestBankOperationData {
         this.sourceIban = sourceIban;
     }
 
-    public Double getValue() {
+    public long getValue() {
         return this.value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(long value) {
         this.value = value;
     }
 

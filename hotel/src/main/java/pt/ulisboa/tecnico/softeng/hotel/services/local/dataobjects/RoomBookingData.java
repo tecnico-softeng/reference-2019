@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Booking;
+import pt.ulisboa.tecnico.softeng.hotel.domain.Hotel;
 
 public class RoomBookingData {
     private String reference;
@@ -27,7 +28,7 @@ public class RoomBookingData {
     public RoomBookingData() {
     }
 
-    public RoomBookingData(Booking booking) {
+    RoomBookingData(Booking booking) {
         this.reference = booking.getReference();
         this.cancellation = booking.getCancellation();
         this.hotelName = booking.getRoom().getHotel().getName();
@@ -36,7 +37,7 @@ public class RoomBookingData {
         this.roomType = booking.getRoom().getType().name();
         this.arrival = booking.getArrival();
         this.departure = booking.getDeparture();
-        this.price = new Double(booking.getPrice()) / 100;
+        this.price = new Double(booking.getPrice()) / Hotel.SCALE;
         this.buyerNif = booking.getBuyerNif();
         this.buyerIban = booking.getBuyerIban();
         this.cancellationDate = booking.getCancellationDate();

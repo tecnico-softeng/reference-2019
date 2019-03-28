@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Hotel extends Hotel_Base {
+    public static final int SCALE = 10000;
     static final int CODE_SIZE = 7;
 
     public Hotel(String code, String name, String nif, String iban, long priceSingle, long priceDouble, Processor processor) {
@@ -118,7 +119,7 @@ public class Hotel extends Hotel_Base {
         super.addRoom(room);
     }
 
-    public boolean hasRoom(String number) {
+    private boolean hasRoom(String number) {
         for (Room room : getRoomSet()) {
             if (room.getNumber().equals(number)) {
                 return true;

@@ -52,7 +52,7 @@ public class Processor extends Processor_Base {
                     }
                 }
                 RestInvoiceData invoiceData = new RestInvoiceData(booking.getProviderNif(), booking.getBuyerNif(),
-                        Booking.getType(), new Double(booking.getPrice()) / 100, booking.getArrival(), booking.getTime());
+                        Booking.getType(), booking.getPrice(), booking.getArrival(), booking.getTime());
                 try {
                     booking.setInvoiceReference(getTaxInterface().submitInvoice(invoiceData));
                 } catch (TaxException | RemoteAccessException ex) {
@@ -84,14 +84,14 @@ public class Processor extends Processor_Base {
         }
     }
 
-    public BankInterface getBankInterface() {
+    private BankInterface getBankInterface() {
         if (this.bankInterface == null) {
             this.bankInterface = new BankInterface();
         }
         return this.bankInterface;
     }
 
-    public TaxInterface getTaxInterface() {
+    private TaxInterface getTaxInterface() {
         if (this.taxInterface == null) {
             this.taxInterface = new TaxInterface();
         }
