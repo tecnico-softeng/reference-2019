@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import pt.ulisboa.tecnico.softeng.car.domain.RentACar;
 import pt.ulisboa.tecnico.softeng.car.domain.Renting;
 
 public class RestRentingData {
@@ -38,7 +39,7 @@ public class RestRentingData {
 		this.paymentReference = renting.getPaymentReference();
 		this.invoiceReference = renting.getInvoiceReference();
 		this.cancellationReference = renting.getCancellationReference();
-		this.price = renting.getPrice();
+		this.price = new Double(renting.getPrice()) / RentACar.SCALE;
 		this.adventureId = renting.getAdventureId();
 	}
 

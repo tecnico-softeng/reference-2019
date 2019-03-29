@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.softeng.car.services.local.dataobjects;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import pt.ulisboa.tecnico.softeng.car.domain.RentACar;
 import pt.ulisboa.tecnico.softeng.car.domain.Renting;
 import pt.ulisboa.tecnico.softeng.car.domain.Vehicle;
 
@@ -39,7 +40,7 @@ public class RentingData {
 		this.paymentReference = renting.getPaymentReference();
 		this.invoiceReference = renting.getInvoiceReference();
 		this.cancellationReference = renting.getCancellationReference();
-		this.price = renting.getPrice();
+		this.price = new Double(renting.getPrice()) / RentACar.SCALE;
 		this.adventureId = renting.getAdventureId();
 	}
 
@@ -96,6 +97,8 @@ public class RentingData {
 	public Double getPrice() {
 		return this.price;
 	}
+
+	public long getPriceLong() { return Math.round(getPrice() * RentACar.SCALE); }
 
 	public String getBuyerNIF() {
 		return this.buyerNIF;

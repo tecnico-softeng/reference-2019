@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.softeng.car.services.local.dataobjects;
 
+import pt.ulisboa.tecnico.softeng.car.domain.RentACar;
 import pt.ulisboa.tecnico.softeng.car.domain.Vehicle;
 
 public class VehicleData {
@@ -11,11 +12,11 @@ public class VehicleData {
 
     public VehicleData() { }
 
-    public VehicleData(Vehicle.Type type, String plate, int kilometers, double price, RentACarData rentacar) {
+    public VehicleData(Vehicle.Type type, String plate, int kilometers, long price, RentACarData rentacar) {
         this.type = type;
         this.plate = plate;
         this.kilometers = kilometers;
-        this.price = price;
+        this.price = new Double(price) / RentACar.SCALE;
         this.rentacar = rentacar;
     }
 
@@ -46,6 +47,8 @@ public class VehicleData {
     public Double getPrice() {
         return price;
     }
+
+    public long getPriceLong() { return Math.round(getPrice() * RentACar.SCALE); }
 
     public void setPrice(Double price) {
         this.price = price;

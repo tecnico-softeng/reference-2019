@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import pt.ulisboa.tecnico.softeng.car.domain.RentACar;
 
 public class RestInvoiceData {
 	private String sellerNif;
@@ -19,12 +20,12 @@ public class RestInvoiceData {
 	public RestInvoiceData() {
 	}
 
-	public RestInvoiceData(String sellerNif, String buyerNif, String itemType, Double value, LocalDate date,
+	public RestInvoiceData(String sellerNif, String buyerNif, String itemType, long value, LocalDate date,
 			DateTime time) {
 		this.sellerNif = sellerNif;
 		this.buyerNif = buyerNif;
 		this.itemType = itemType;
-		this.value = value;
+		this.value = new Double(value) / RentACar.SCALE;
 		this.date = date;
 		this.time = time;
 	}
