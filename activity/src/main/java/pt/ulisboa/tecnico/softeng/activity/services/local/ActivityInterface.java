@@ -82,7 +82,7 @@ public class ActivityInterface {
 		}
 
 		new ActivityOffer(activity, offer.getBegin(), offer.getEnd(),
-				offer.getAmount() != null ? offer.getAmount() : -1);
+				offer.getAmount() != null ? offer.getAmountLong() : -1);
 	}
 
 	@Atomic(mode = TxMode.WRITE)
