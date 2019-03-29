@@ -32,7 +32,7 @@ class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
         def value = seller.toPay(year)
 
         then:
-        toPay == value
+        toPay == value / IRS.SCALE
 
         where:
         year | toPay
@@ -66,7 +66,7 @@ class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
         def value = seller.toPay(1970)
 
         then:
-        15.0 == value
+        15.0 == value / IRS.SCALE
     }
 
     def 'ignore cancelled'() {
@@ -80,7 +80,7 @@ class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
         def value = seller.toPay(2018)
 
         then:
-        15.0 == value
+        15.0 == value / IRS.SCALE
     }
 
 }

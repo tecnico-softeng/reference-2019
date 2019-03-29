@@ -5,6 +5,7 @@ import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 
 public class IRS extends IRS_Base {
+    public static final int SCALE = 1000;
 
     public static IRS getIRSInstance() {
         if (FenixFramework.getDomainRoot().getIrs() == null) {

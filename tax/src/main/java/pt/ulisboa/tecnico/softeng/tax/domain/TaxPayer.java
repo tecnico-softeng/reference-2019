@@ -84,7 +84,7 @@ public class TaxPayer extends TaxPayer_Base {
 
     public Map<Integer, Double> getToPayPerYear() {
         return getSellerInvoiceSet().stream().map(i -> i.getDate().getYear()).distinct()
-                .collect(Collectors.toMap(y -> y, y -> toPay(y)));
+                .collect(Collectors.toMap(y -> y, this::toPay));
     }
 
     public double taxReturn(int year) {
@@ -95,7 +95,7 @@ public class TaxPayer extends TaxPayer_Base {
         double result = 0;
         for (Invoice invoice : getBuyerInvoiceSet()) {
             if (!invoice.isCancelled() && invoice.getDate().getYear() == year) {
-                result = result + invoice.getIva() * PERCENTAGE / 100;
+                result = result + invoice.getIva() * PERCENTAGE / 100.0;
             }
         }
         return result;

@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import pt.ulisboa.tecnico.softeng.tax.domain.IRS;
 import pt.ulisboa.tecnico.softeng.tax.domain.Invoice;
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException;
 
@@ -21,8 +22,8 @@ public class InvoiceData {
 	public InvoiceData() {
 	}
 
-	public InvoiceData(String reference, String sellerNif, String buyerNif, String itemType, Double value,
-			LocalDate date, DateTime time) {
+	public InvoiceData(String reference, String sellerNif, String buyerNif, String itemType,
+					   long value, LocalDate date, DateTime time) {
 		if (reference == null) {
 			throw new TaxException();
 		}
@@ -30,7 +31,7 @@ public class InvoiceData {
 		this.sellerNif = sellerNif;
 		this.buyerNif = buyerNif;
 		this.itemType = itemType;
-		this.value = value;
+		this.value = new Double(value) / IRS.SCALE;
 		this.date = date;
 		this.time = time;
 	}
@@ -40,9 +41,9 @@ public class InvoiceData {
 		this.sellerNif = invoice.getSeller().getNif();
 		this.buyerNif = invoice.getBuyer().getNif();
 		this.itemType = invoice.getItemType().getName();
-		this.value = invoice.getValue();
+		this.value = new Double(invoice.getValue()) / IRS.SCALE;
 		this.date = invoice.getDate();
-		this.iva = invoice.getIva();
+		this.iva = new Double(invoice.getIva()) / IRS.SCALE;
 		this.time = invoice.getTime();
 	}
 
@@ -82,6 +83,8 @@ public class InvoiceData {
 		return this.value;
 	}
 
+	public long getValueLong() {  return Math.round(getValue() * IRS.SCALE); }
+
 	public void setValue(Double value) {
 		this.value = value;
 	}
@@ -97,6 +100,8 @@ public class InvoiceData {
 	public Double getIva() {
 		return this.iva;
 	}
+
+	public long getIvaLong() { return Math.round(getIva() * IRS.SCALE); }
 
 	public void setIva(Double iva) {
 		this.iva = iva;
