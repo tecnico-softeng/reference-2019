@@ -19,7 +19,7 @@ public class RestRentingData {
 	private String paymentReference;
 	private String invoiceReference;
 	private String cancellationReference;
-	private Double price;
+	private long price;
 	private String buyerNIF;
 	private String buyerIBAN;
 	private String typeValue;
@@ -39,7 +39,7 @@ public class RestRentingData {
 		this.paymentReference = renting.getPaymentReference();
 		this.invoiceReference = renting.getInvoiceReference();
 		this.cancellationReference = renting.getCancellationReference();
-		this.price = new Double(renting.getPrice()) / RentACar.SCALE;
+		this.price = renting.getPrice();
 		this.adventureId = renting.getAdventureId();
 	}
 
@@ -115,11 +115,11 @@ public class RestRentingData {
 		this.cancellationReference = cancellationReference;
 	}
 
-	public Double getPrice() {
+	public long getPrice() {
 		return this.price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 
