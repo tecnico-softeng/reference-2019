@@ -83,4 +83,12 @@ public class HotelData {
         this.rooms = rooms;
     }
 
+    public long getPriceSingleLong() {
+        return Math.round(getPriceSingle() * Hotel.SCALE);
+    }
+
+    public long getPriceDoubleLong() {
+        return Math.round(getPriceDouble() * Hotel.SCALE);
+    }
+
 }
