@@ -35,7 +35,8 @@ public class AdventureData {
         this.end = adventure.getEnd();
         this.age = adventure.getAge();
         this.iban = adventure.getIban();
-        this.margin = getMargin() * Adventure.SCALE;
+        this.margin = new Double(adventure.getMargin()) / Adventure.SCALE;
+        this.amount = new Double(adventure.getCurrentAmount()) / Adventure.SCALE;
         this.bookRoom = adventure.getBookRoom();
         this.rentVehicle = adventure.getRentVehicle();
         this.state = adventure.getState().getValue();
@@ -94,6 +95,10 @@ public class AdventureData {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public long getAmountLong() {
+        return Math.round(getAmount() * Adventure.SCALE);
     }
 
     public Adventure.State getState() {
