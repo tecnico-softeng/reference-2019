@@ -4,7 +4,8 @@ import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 
 public class TransferOperation extends TransferOperation_Base {
 
-    public void init(WithdrawOperation withdrawOperation, DepositOperation depositOperation, String transactionSource, String transactionReference) {
+    public void init(WithdrawOperation withdrawOperation, DepositOperation depositOperation, String transactionSource,
+                     String transactionReference) {
         checkArguments(withdrawOperation, depositOperation, transactionSource, transactionReference);
 
         setWithdrawOperation(withdrawOperation);
@@ -16,7 +17,8 @@ public class TransferOperation extends TransferOperation_Base {
         init(withdrawOperation.getBank());
     }
 
-    private void checkArguments(WithdrawOperation withdrawOperation, DepositOperation depositOperation, String transactionSource, String transactionReference) {
+    private void checkArguments(WithdrawOperation withdrawOperation, DepositOperation depositOperation,
+                                String transactionSource, String transactionReference) {
         if (withdrawOperation == null || depositOperation == null
                 || transactionSource == null || transactionSource.trim().equals("")
                 || transactionReference == null || transactionReference.trim().equals("")) {
@@ -86,7 +88,7 @@ public class TransferOperation extends TransferOperation_Base {
     }
 
     @Override
-    public double getValue() {
+    public long getValue() {
         return getWithdrawOperation().getValue();
     }
 

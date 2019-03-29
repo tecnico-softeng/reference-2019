@@ -33,7 +33,7 @@ relation BankHasClients {
 
 class Account {
 	String iban;
-	double balance;
+	long balance;
 }
 
 relation BankHasAccounts {
@@ -61,7 +61,7 @@ class Operation {
 }
 
 class SingleOperation extends Operation {
-	double value;
+	long value;
 }
 
 class DepositOperation extends SingleOperation;

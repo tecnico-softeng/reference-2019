@@ -10,6 +10,7 @@ import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.ClientData;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class BankInterface {
 
     public static List<BankData> getBanks() {
         return FenixFramework.getDomainRoot().getBankSet().stream()
-                .sorted((b1, b2) -> b1.getName().compareTo(b2.getName())).map(b -> new BankData(b))
+                .sorted(Comparator.comparing(Bank_Base::getName)).map(BankData::new)
                 .collect(Collectors.toList());
     }
 
@@ -89,7 +90,7 @@ public class BankInterface {
     }
 
     @Atomic(mode = TxMode.WRITE)
-    public static void deposit(String iban, double amount) {
+    public static void deposit(String iban, long amount) {
         Account account = getAccountByIban(iban);
         if (account == null) {
             throw new BankException();
@@ -99,7 +100,7 @@ public class BankInterface {
     }
 
     @Atomic(mode = TxMode.WRITE)
-    public static void withdraw(String iban, double amount) {
+    public static void withdraw(String iban, long amount) {
         Account account = getAccountByIban(iban);
         if (account == null) {
             throw new BankException();
@@ -126,8 +127,8 @@ public class BankInterface {
                 .findAny().orElse(null);
 
         if (sourceAccount != null && targetAccount != null) {
-            WithdrawOperation withdrawOperation = sourceAccount.withdraw(bankOperationData.getValue());
-            DepositOperation depositOperation = targetAccount.deposit(bankOperationData.getValue());
+            WithdrawOperation withdrawOperation = sourceAccount.withdraw(bankOperationData.getValueLong());
+            DepositOperation depositOperation = targetAccount.deposit(bankOperationData.getValueLong());
 
             TransferOperation transferOperation = new TransferOperation();
             transferOperation.init(withdrawOperation, depositOperation, bankOperationData.getTransactionSource(), bankOperationData.getTransactionReference());

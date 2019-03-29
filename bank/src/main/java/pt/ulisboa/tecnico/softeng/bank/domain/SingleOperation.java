@@ -4,7 +4,7 @@ import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 
 public abstract class SingleOperation extends SingleOperation_Base {
 
-    public void init(Account account, double value) {
+    public void init(Account account, long value) {
         checkArguments(account, value);
 
         setAccount(account);

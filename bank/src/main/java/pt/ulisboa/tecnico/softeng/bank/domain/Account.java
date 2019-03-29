@@ -35,7 +35,7 @@ public class Account extends Account_Base {
         }
     }
 
-    public DepositOperation deposit(double amount) {
+    public DepositOperation deposit(long amount) {
         if (amount <= 0) {
             throw new BankException();
         }
@@ -48,7 +48,7 @@ public class Account extends Account_Base {
         return depositOperation;
     }
 
-    public WithdrawOperation withdraw(double amount) {
+    public WithdrawOperation withdraw(long amount) {
         if (amount <= 0 || amount > getBalance()) {
             throw new BankException();
         }

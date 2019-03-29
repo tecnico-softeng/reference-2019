@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.softeng.bank.services.remote.dataobjects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.joda.time.DateTime;
+import pt.ulisboa.tecnico.softeng.bank.domain.Bank;
 import pt.ulisboa.tecnico.softeng.bank.domain.TransferOperation;
 
 public class RestBankOperationData {
@@ -9,7 +10,7 @@ public class RestBankOperationData {
     private String type;
     private String sourceIban;
     private String targetIban;
-    private Double value;
+    private long value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private DateTime time;
     private String transactionSource;
@@ -29,7 +30,7 @@ public class RestBankOperationData {
         this.transactionReference = operation.getTransactionReference();
     }
 
-    public RestBankOperationData(String sourceIban, String targetIban, double value, String transactionSource, String transactionReference) {
+    public RestBankOperationData(String sourceIban, String targetIban, long value, String transactionSource, String transactionReference) {
         this.sourceIban = sourceIban;
         this.targetIban = targetIban;
         this.value = value;
@@ -61,11 +62,11 @@ public class RestBankOperationData {
         this.targetIban = targetIban;
     }
 
-    public Double getValue() {
-        return this.value;
+    public long getValue() {
+        return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(long value) {
         this.value = value;
     }
 
