@@ -90,23 +90,23 @@ public class BankInterface {
     }
 
     @Atomic(mode = TxMode.WRITE)
-    public static void deposit(String iban, double amount) {
+    public static void deposit(String iban, long amount) {
         Account account = getAccountByIban(iban);
         if (account == null) {
             throw new BankException();
         }
 
-        account.deposit(Math.round(amount * Bank.SCALE));
+        account.deposit(amount);
     }
 
     @Atomic(mode = TxMode.WRITE)
-    public static void withdraw(String iban, double amount) {
+    public static void withdraw(String iban, long amount) {
         Account account = getAccountByIban(iban);
         if (account == null) {
             throw new BankException();
         }
 
-        account.withdraw(Math.round(amount * Bank.SCALE));
+        account.withdraw(amount);
     }
 
     @Atomic(mode = TxMode.WRITE)

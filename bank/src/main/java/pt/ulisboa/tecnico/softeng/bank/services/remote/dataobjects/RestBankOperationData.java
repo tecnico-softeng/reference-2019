@@ -10,7 +10,7 @@ public class RestBankOperationData {
     private String type;
     private String sourceIban;
     private String targetIban;
-    private Double value;
+    private long value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private DateTime time;
     private String transactionSource;
@@ -24,7 +24,7 @@ public class RestBankOperationData {
         this.type = operation.getType().name();
         this.sourceIban = operation.getWithdrawOperation().getAccount().getIban();
         this.sourceIban = operation.getDepositOperation().getAccount().getIban();
-        this.value = new Double(operation.getWithdrawOperation().getValue()) / Bank.SCALE;
+        this.value = operation.getWithdrawOperation().getValue();
         this.time = operation.getTime();
         this.transactionSource = operation.getTransactionSource();
         this.transactionReference = operation.getTransactionReference();
@@ -33,7 +33,7 @@ public class RestBankOperationData {
     public RestBankOperationData(String sourceIban, String targetIban, long value, String transactionSource, String transactionReference) {
         this.sourceIban = sourceIban;
         this.targetIban = targetIban;
-        this.value = new Double(value) / Bank.SCALE;
+        this.value = value;
         this.transactionSource = transactionSource;
         this.transactionReference = transactionReference;
     }
@@ -63,11 +63,11 @@ public class RestBankOperationData {
     }
 
     public long getValue() {
-        return Math.round(this.value * Bank.SCALE);
+        return value;
     }
 
     public void setValue(long value) {
-        this.value = Long.valueOf(value).doubleValue() * Bank.SCALE;
+        this.value = value;
     }
 
     public DateTime getTime() {

@@ -77,7 +77,7 @@ public class AccountController {
 		logger.info("accountDeposit bankCode:{}, clientId:{}, iban:{}, amount:{}", code, id, iban, account.getAmount());
 
 		try {
-			BankInterface.deposit(iban, account.getAmount());
+			BankInterface.deposit(iban, account.getAmountLong());
 			model.addAttribute("client", BankInterface.getClientDataById(code, id));
 			model.addAttribute("account", BankInterface.getAccountData(iban));
 			return "redirect:/banks/" + code + "/clients/" + id + "/accounts/" + iban + "/operations";
@@ -96,7 +96,7 @@ public class AccountController {
 				account.getAmount());
 
 		try {
-			BankInterface.withdraw(iban, account.getAmount());
+			BankInterface.withdraw(iban, account.getAmountLong());
 			model.addAttribute("client", BankInterface.getClientDataById(code, id));
 			model.addAttribute("account", BankInterface.getAccountData(iban));
 			return "account";
