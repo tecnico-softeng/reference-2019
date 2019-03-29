@@ -24,7 +24,7 @@ class RentVehicleStateMethodSpockTest extends SpockRollbackTestAbstractClass {
 
         rentingData = new RestRentingData()
         rentingData.setReference(RENTING_CONFIRMATION)
-        rentingData.setPrice(76.78)
+        rentingData.setPrice(Math.round(76.78 * Adventure.SCALE))
 
         adventure.setState(Adventure.State.RENT_VEHICLE)
     }

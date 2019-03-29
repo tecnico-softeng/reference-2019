@@ -24,11 +24,11 @@ class Adventure {
 	String ID;
 	LocalDate begin;
 	LocalDate end;
-	double margin;
+	long margin;
 	BookRoom bookRoom;
 	RentVehicle rentVehicle;
-    double currentAmount;
-    DateTime time;
+	long currentAmount;
+	DateTime time;
 	String paymentConfirmation;
 	String paymentCancellation;
 	String roomConfirmation;

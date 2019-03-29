@@ -72,7 +72,7 @@ public class BrokerInterface {
         Broker broker = getBrokerByCode(brokerCode);
         Client client = broker.getClientByNIF(clientNif);
         new Adventure(broker, adventureData.getBegin(), adventureData.getEnd(), client,
-                adventureData.getMargin() != null ? adventureData.getMargin() : -1, adventureData.getBookRoom(), adventureData.getRentVehicle());
+                adventureData.getMargin() == null ? -1 : adventureData.getMarginLong(), adventureData.getBookRoom(), adventureData.getRentVehicle());
     }
 
     @Atomic(mode = TxMode.WRITE)
@@ -86,7 +86,7 @@ public class BrokerInterface {
     public static void processAdventure(String brokerCode, String id) {
         Adventure adventure = FenixFramework.getDomainRoot().getBrokerSet().stream()
                 .filter(b -> b.getCode().equals(brokerCode)).flatMap(b -> b.getAdventureSet().stream())
-                .filter(a -> a.getID().equals(id)).findFirst().orElseThrow(() -> new BrokerException());
+                .filter(a -> a.getID().equals(id)).findFirst().orElseThrow(BrokerException::new);
 
         adventure.process();
     }
@@ -95,7 +95,7 @@ public class BrokerInterface {
     public static void processBulk(String brokerCode, String bulkId) {
         BulkRoomBooking bulkRoomBooking = FenixFramework.getDomainRoot().getBrokerSet().stream()
                 .filter(b -> b.getCode().equals(brokerCode)).flatMap(b -> b.getRoomBulkBookingSet().stream())
-                .filter(r -> r.getId().equals(bulkId)).findFirst().orElseThrow(() -> new BrokerException());
+                .filter(r -> r.getId().equals(bulkId)).findFirst().orElseThrow(BrokerException::new);
 
         bulkRoomBooking.processBooking();
     }
