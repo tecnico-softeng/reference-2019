@@ -28,7 +28,7 @@ public class AccountData {
     }
 
     public long getBalanceLong() {
-        return Math.round(getBalance()) * Bank.SCALE;
+        return Math.round(getBalance() * Bank.SCALE) ;
     }
 
     public void setBalance(Double balance) {
@@ -40,7 +40,7 @@ public class AccountData {
     }
 
     public long getAmountLong() {
-        return Math.round(getAmount()) * Bank.SCALE;
+        return Math.round(getAmount() * Bank.SCALE) ;
     }
 
     public void setAmount(Double amount) {
