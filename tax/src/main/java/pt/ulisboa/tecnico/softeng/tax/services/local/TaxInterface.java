@@ -38,8 +38,8 @@ public class TaxInterface {
 
     @Atomic(mode = TxMode.READ)
     public static List<TaxPayerData> getTaxPayerDataList() {
-        return IRS.getIRSInstance().getTaxPayerSet().stream().map(i -> new TaxPayerData(i))
-                .sorted((i1, i2) -> i1.getNif().compareTo(i2.getNif())).collect(Collectors.toList());
+        return IRS.getIRSInstance().getTaxPayerSet().stream().map(TaxPayerData::new)
+                .sorted(Comparator.comparing(TaxPayerData::getNif)).collect(Collectors.toList());
     }
 
     @Atomic(mode = TxMode.WRITE)
