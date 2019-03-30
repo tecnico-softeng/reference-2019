@@ -90,7 +90,7 @@ class TaxInterfaceSubmitInvoiceMethodSpockTest extends SpockRollbackTestAbstract
         REFERENCE | SELLER_NIF | BUYER_NIF | null | VALUE  | date                        | time
         REFERENCE | SELLER_NIF | BUYER_NIF | ''   | VALUE  | date                        | time
         REFERENCE | SELLER_NIF | BUYER_NIF | FOOD | 0      | date                        | time
-        REFERENCE | SELLER_NIF | BUYER_NIF | FOOD | -23    | date                        | time
+        REFERENCE | SELLER_NIF | BUYER_NIF | FOOD | Math.round(-23.7 * IRS.SCALE) | date | time
         REFERENCE | SELLER_NIF | BUYER_NIF | FOOD | VALUE  | date                        | null
         REFERENCE | SELLER_NIF | BUYER_NIF | FOOD | VALUE  | new LocalDate(1969, 12, 31) | new DateTime(1969, 12, 31, 10, 10)
     }
