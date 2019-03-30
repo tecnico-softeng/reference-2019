@@ -33,8 +33,8 @@ class TaxPayerGetTaxesPerYearMethodSpockTest extends SpockRollbackTestAbstractCl
 
         then:
         toPay.keySet().size() == 2
-        10.0 == toPay.get(2017)
-        25.0 == toPay.get(2018)
+        10.0 == toPay.get(2017) / IRS.SCALE
+        25.0 == toPay.get(2018) / IRS.SCALE
         Map<Integer, Double> taxReturn = buyer.getTaxReturnPerYear()
 
         taxReturn.keySet().size() == 2

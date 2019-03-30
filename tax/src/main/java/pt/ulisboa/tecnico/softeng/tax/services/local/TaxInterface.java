@@ -38,8 +38,8 @@ public class TaxInterface {
 
     @Atomic(mode = TxMode.READ)
     public static List<TaxPayerData> getTaxPayerDataList() {
-        return IRS.getIRSInstance().getTaxPayerSet().stream().map(i -> new TaxPayerData(i))
-                .sorted((i1, i2) -> i1.getNif().compareTo(i2.getNif())).collect(Collectors.toList());
+        return IRS.getIRSInstance().getTaxPayerSet().stream().map(TaxPayerData::new)
+                .sorted(Comparator.comparing(TaxPayerData::getNif)).collect(Collectors.toList());
     }
 
     @Atomic(mode = TxMode.WRITE)
@@ -61,8 +61,8 @@ public class TaxInterface {
         }
 
         return Stream.concat(
-                taxPayer.getBuyerInvoiceSet().stream().map(i -> new InvoiceData(i)).sorted(Comparator.comparing(InvoiceData::getSellerNif)),
-                taxPayer.getSellerInvoiceSet().stream().map(i -> new InvoiceData(i)).sorted(Comparator.comparing(InvoiceData::getBuyerNif)))
+                taxPayer.getBuyerInvoiceSet().stream().map(InvoiceData::new).sorted(Comparator.comparing(InvoiceData::getSellerNif)),
+                taxPayer.getSellerInvoiceSet().stream().map(InvoiceData::new).sorted(Comparator.comparing(InvoiceData::getBuyerNif)))
                 .collect(Collectors.toList());
     }
 
@@ -87,7 +87,7 @@ public class TaxInterface {
             buyer = IRS.getIRSInstance().getTaxPayerByNif(invoiceData.getBuyerNif());
         }
 
-        new Invoice(invoiceData.getValue(), invoiceData.getDate(), itemType, seller, buyer);
+        new Invoice(invoiceData.getValue() != null ? invoiceData.getValueLong() : -1, invoiceData.getDate(), itemType, seller, buyer);
     }
 
     @Atomic(mode = TxMode.WRITE)
@@ -133,7 +133,7 @@ public class TaxInterface {
                 .filter(i -> i.getBuyer().getNif().equals(invoiceData.getBuyerNif())
                         && i.getSeller().getNif().equals(invoiceData.getSellerNif())
                         && i.getItemType().getName().equals(invoiceData.getItemType())
-                        && i.getValue() == invoiceData.getValue().doubleValue()
+                        && i.getValue() == invoiceData.getValue()
                         && i.getTime().getMillis() == invoiceData.getTime().getMillis())
                 .findFirst();
 
