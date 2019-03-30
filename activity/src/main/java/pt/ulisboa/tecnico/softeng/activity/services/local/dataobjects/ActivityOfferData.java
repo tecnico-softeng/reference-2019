@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import pt.ulisboa.tecnico.softeng.activity.domain.Activity;
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityOffer;
 import pt.ulisboa.tecnico.softeng.activity.services.remote.dataobjects.RestActivityBookingData;
 
@@ -33,7 +34,7 @@ public class ActivityOfferData {
 		this.begin = offer.getBegin();
 		this.end = offer.getEnd();
 		this.capacity = offer.getCapacity();
-		this.amount = offer.getAmount();
+		this.amount = new Double(offer.getAmount()) / Activity.SCALE;
 		this.reservations = offer.getBookingSet().stream().map(b -> new RestActivityBookingData(b))
 				.collect(Collectors.toList());
 	}
@@ -97,6 +98,8 @@ public class ActivityOfferData {
 	public Double getAmount() {
 		return this.amount;
 	}
+
+	public long getAmountLong() { return Math.round(getAmount() * Activity.SCALE); }
 
 	public void setAmount(Double amount) {
 		this.amount = amount;

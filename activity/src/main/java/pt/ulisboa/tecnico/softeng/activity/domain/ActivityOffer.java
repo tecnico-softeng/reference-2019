@@ -6,7 +6,7 @@ import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException;
 
 public class ActivityOffer extends ActivityOffer_Base {
 
-	public ActivityOffer(Activity activity, LocalDate begin, LocalDate end, double amount) {
+	public ActivityOffer(Activity activity, LocalDate begin, LocalDate end, long amount) {
 		checkArguments(activity, begin, end, amount);
 
 		setBegin(begin);
@@ -51,7 +51,7 @@ public class ActivityOffer extends ActivityOffer_Base {
 		return count;
 	}
 
-	public double getPrice() {
+	public long getPrice() {
 		return getAmount();
 	}
 
