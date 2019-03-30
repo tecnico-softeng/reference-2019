@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import pt.ulisboa.tecnico.softeng.car.domain.RentACar;
 import pt.ulisboa.tecnico.softeng.car.domain.Renting;
 
 public class RestRentingData {
@@ -18,7 +19,7 @@ public class RestRentingData {
 	private String paymentReference;
 	private String invoiceReference;
 	private String cancellationReference;
-	private Double price;
+	private long price;
 	private String buyerNIF;
 	private String buyerIBAN;
 	private String typeValue;
@@ -114,11 +115,11 @@ public class RestRentingData {
 		this.cancellationReference = cancellationReference;
 	}
 
-	public Double getPrice() {
+	public long getPrice() {
 		return this.price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 

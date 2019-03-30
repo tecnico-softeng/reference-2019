@@ -60,7 +60,7 @@ public class RentACarInterface {
     private Renting getRenting(final String reference) {
         return FenixFramework.getDomainRoot().getRentACarSet().stream()
                 .flatMap(rac -> rac.getVehicleSet().stream()).flatMap(v -> v.getRentingSet().stream())
-                .filter(r -> r.getReference().equals(reference)).findFirst().orElseThrow(() -> new CarException());
+                .filter(r -> r.getReference().equals(reference)).findFirst().orElseThrow(CarException::new);
     }
 
     @Atomic(mode = Atomic.TxMode.WRITE)
@@ -117,9 +117,9 @@ public class RentACarInterface {
 
         final RentACar rentACar = getRentACar(code);
         if (vehicleData.getType() == Vehicle.Type.CAR) {
-            new Car(vehicleData.getPlate(), vehicleData.getKilometers(), vehicleData.getPrice(), rentACar);
+            new Car(vehicleData.getPlate(), vehicleData.getKilometers(), vehicleData.getPrice() != null ? vehicleData.getPriceLong() : -1, rentACar);
         } else {
-            new Motorcycle(vehicleData.getPlate(), vehicleData.getKilometers(), vehicleData.getPrice(), rentACar);
+            new Motorcycle(vehicleData.getPlate(), vehicleData.getKilometers(), vehicleData.getPrice() != null ? vehicleData.getPriceLong() : -1, rentACar);
         }
     }
 
