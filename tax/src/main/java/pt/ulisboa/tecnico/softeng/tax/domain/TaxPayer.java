@@ -95,7 +95,7 @@ public class TaxPayer extends TaxPayer_Base {
         double result = 0;
         for (Invoice invoice : getBuyerInvoiceSet()) {
             if (!invoice.isCancelled() && invoice.getDate().getYear() == year) {
-                result = result + invoice.getIva();
+                result = result + new Double(invoice.getIva()) / IRS.SCALE;
             }
         }
         return result * PERCENTAGE / 100.0;
