@@ -2,7 +2,7 @@ package pt.ulisboa.tecnico.softeng.bank.domain
 
 import pt.ist.fenixframework.FenixFramework
 import pt.ulisboa.tecnico.softeng.bank.services.local.BankInterface
-import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData
+import pt.ulisboa.tecnico.softeng.bank.services.remote.dataobjects.RestBankOperationData
 
 class BankPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
     def TRANSACTION_SOURCE = 'transactionSource'
@@ -19,7 +19,7 @@ class BankPersistenceSpockTest extends SpockPersistenceTestAbstractClass {
         def targetAccount = new Account(bank, client)
         sourceAccount.deposit(100)
         sourceAccount.withdraw(50)
-        BankInterface.processPayment(new BankOperationData(sourceAccount.getIban(), targetAccount.getIban(), 50,
+        BankInterface.processPayment(new RestBankOperationData(sourceAccount.getIban(), targetAccount.getIban(), 50,
                 TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
     }
 

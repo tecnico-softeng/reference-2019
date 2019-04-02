@@ -2,7 +2,7 @@ package pt.ulisboa.tecnico.softeng.bank.services.local
 
 import pt.ulisboa.tecnico.softeng.bank.domain.*
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException
-import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData
+import pt.ulisboa.tecnico.softeng.bank.services.remote.dataobjects.RestBankOperationData
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -31,7 +31,7 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 
     def 'success'() {
         when: 'a payment is processed for this sourceAccount'
-        def newReference = BankInterface.processPayment(new BankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
+        def newReference = BankInterface.processPayment(new RestBankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
 
         then: 'the operation occurs and a reference is generated'
         newReference != null
@@ -55,13 +55,13 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
         def otherIbanTwo = otherAccountTwo.getIban()
 
         when:
-        BankInterface.processPayment(new BankOperationData(otherIbanOne, otherIbanTwo, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
+        BankInterface.processPayment(new RestBankOperationData(otherIbanOne, otherIbanTwo, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
 
         then:
         otherAccountOne.getBalance() == 900.0
 
         when:
-        BankInterface.processPayment(new BankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE + 'PLUS'))
+        BankInterface.processPayment(new RestBankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE + 'PLUS'))
 
         then:
         sourceAccount.getBalance() == 400
@@ -76,7 +76,7 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
         def otherIbanOne = otherAccountOne.getIban()
 
         when: 'a transference between accounts belonging to different banks'
-        BankInterface.processPayment(new BankOperationData(otherIbanOne, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
+        BankInterface.processPayment(new RestBankOperationData(otherIbanOne, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
 
         then: 'the balances are correct'
         otherAccountOne.getBalance() == 900.0
@@ -88,10 +88,10 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 
     def 'redo an already payed'() {
         given: 'a payment to the sourceAccount'
-        def firstReference = BankInterface.processPayment(new BankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
+        def firstReference = BankInterface.processPayment(new RestBankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
 
         when: 'when there is a second payment for the same reference'
-        def secondReference = BankInterface.processPayment(new BankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
+        def secondReference = BankInterface.processPayment(new RestBankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
 
         then: 'the operation is idempotent'
         secondReference == firstReference
@@ -101,7 +101,7 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 
     def 'one amount'() {
         when: 'a payment of 1'
-        BankInterface.processPayment(new BankOperationData(this.sourceIban, targetIban, 1, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
+        BankInterface.processPayment(new RestBankOperationData(this.sourceIban, targetIban, 1, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
 
         then:
         sourceAccount.getBalance() == 499.0
@@ -112,7 +112,7 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
     def 'problem process payment '() {
         when: 'process payment'
         BankInterface.processPayment(
-                new BankOperationData(sourceIbn, targetIbn, val, transaction_source, transaction_reference))
+                new RestBankOperationData(sourceIbn, targetIbn, val, transaction_source, transaction_reference))
 
         then: 'throw exception'
         thrown(BankException)
@@ -144,7 +144,7 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
 
         when: 'process payment'
         BankInterface.processPayment(
-                new BankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
+                new RestBankOperationData(sourceIban, targetIban, 100, TRANSACTION_SOURCE, TRANSACTION_REFERENCE))
 
         then: 'an exception is thrown'
         thrown(BankException)
