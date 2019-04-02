@@ -7,8 +7,8 @@ import pt.ulisboa.tecnico.softeng.bank.domain.*;
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.AccountData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
-import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.ClientData;
+import pt.ulisboa.tecnico.softeng.bank.services.remote.dataobjects.RestBankOperationData;
 
 import java.util.Comparator;
 import java.util.List;
@@ -110,7 +110,7 @@ public class BankInterface {
     }
 
     @Atomic(mode = TxMode.WRITE)
-    public static String processPayment(BankOperationData bankOperationData) {
+    public static String processPayment(RestBankOperationData bankOperationData) {
         Operation operation = getOperationBySourceAndReference(bankOperationData.getTransactionSource(),
                 bankOperationData.getTransactionReference());
         if (operation != null) {
@@ -127,8 +127,8 @@ public class BankInterface {
                 .findAny().orElse(null);
 
         if (sourceAccount != null && targetAccount != null) {
-            WithdrawOperation withdrawOperation = sourceAccount.withdraw(bankOperationData.getValueLong());
-            DepositOperation depositOperation = targetAccount.deposit(bankOperationData.getValueLong());
+            WithdrawOperation withdrawOperation = sourceAccount.withdraw(bankOperationData.getValue());
+            DepositOperation depositOperation = targetAccount.deposit(bankOperationData.getValue());
 
             TransferOperation transferOperation = new TransferOperation();
             transferOperation.init(withdrawOperation, depositOperation, bankOperationData.getTransactionSource(), bankOperationData.getTransactionReference());
@@ -153,10 +153,10 @@ public class BankInterface {
     }
 
     @Atomic(mode = TxMode.READ)
-    public static BankOperationData getOperationData(String reference) {
+    public static RestBankOperationData getOperationData(String reference) {
         Operation operation = getOperationByReference(reference);
         if (operation != null) {
-            return new BankOperationData(operation);
+            return new RestBankOperationData(operation);
         }
         throw new BankException();
     }
