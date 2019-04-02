@@ -45,6 +45,7 @@ public class Processor extends Processor_Base {
                     try {
                         renting.setPaymentReference(
                                 getBankInterface().processPayment(new RestBankOperationData(renting.getClientIban(),
+                                        renting.getVehicle().getRentACar().getIban(),
                                         renting.getPrice(), TRANSACTION_SOURCE, renting.getReference())));
                     } catch (BankException | RemoteAccessException ex) {
                         failedToProcess.add(renting);
