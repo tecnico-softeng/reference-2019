@@ -37,9 +37,9 @@ class ClientConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
         where: 'the values are invalid'
         brok   | iban        | nif        | license         | age | label
         null   | CLIENT_IBAN | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the broker is null'
-        broker | null        | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the iban is null'
-        broker | '     '     | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the iban is blank'
-        broker | ''          | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the iban is empty'
+        broker | null        | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the sourceIban is null'
+        broker | '     '     | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the sourceIban is blank'
+        broker | ''          | CLIENT_NIF | DRIVING_LICENSE | AGE | 'the sourceIban is empty'
         broker | CLIENT_IBAN | null       | DRIVING_LICENSE | AGE | 'the nif is null'
         broker | CLIENT_IBAN | '    '     | DRIVING_LICENSE | AGE | 'the nif is blank'
         broker | CLIENT_IBAN | ''         | DRIVING_LICENSE | AGE | 'the nif is empty'
@@ -75,10 +75,10 @@ class ClientConstructorMethodSpockTest extends SpockRollbackTestAbstractClass {
         given: 'a client'
         def client1 = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
 
-        when: 'another client is created with the same iban'
+        when: 'another client is created with the same sourceIban'
         def client2 = new Client(broker, CLIENT_IBAN, CLIENT_NIF + "1", DRIVING_LICENSE + '1', AGE)
 
-        then: 'both clients have the same iban'
+        then: 'both clients have the same sourceIban'
         client1.getIban() == client2.getIban()
     }
 }
