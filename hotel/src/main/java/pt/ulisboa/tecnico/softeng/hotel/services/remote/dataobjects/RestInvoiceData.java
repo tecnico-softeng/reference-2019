@@ -11,7 +11,7 @@ public class RestInvoiceData {
     private long value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
-    private Double iva;
+    private long iva;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private DateTime time;
 
@@ -68,11 +68,11 @@ public class RestInvoiceData {
         this.date = date;
     }
 
-    public Double getIva() {
+    public long getIva() {
         return this.iva;
     }
 
-    public void setIva(Double iva) {
+    public void setIva(long iva) {
         this.iva = iva;
     }
 
