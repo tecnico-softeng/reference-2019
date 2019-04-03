@@ -24,65 +24,65 @@ class BrokerPersistenceSpockTest extends SpockPersistenceTestAbstractClass imple
         def brokers = new ArrayList<>(FenixFramework.getDomainRoot().getBrokerSet())
         def broker = brokers.get(0)
 
-        broker.getCode().equals(BROKER_CODE)
-        broker.getName().equals(BROKER_NAME)
-        broker.getAdventureSet().size() == 1
-        broker.getRoomBulkBookingSet().size() == 1
-        broker.getNif().equals(BROKER_NIF)
-        broker.getIban().equals(BROKER_IBAN)
+        assert broker.getCode().equals(BROKER_CODE)
+        assert broker.getName().equals(BROKER_NAME)
+        assert broker.getAdventureSet().size() == 1
+        assert broker.getRoomBulkBookingSet().size() == 1
+        assert broker.getNif().equals(BROKER_NIF)
+        assert broker.getIban().equals(BROKER_IBAN)
 
         def adventures = new ArrayList<>(broker.getAdventureSet())
         def adventure = adventures.get(0)
 
-        adventure.getID() != null
-        adventure.getBroker() == broker
-        adventure.getBegin() == BEGIN
-        adventure.getEnd() == END
-        adventure.getAge() == AGE
-        adventure.getIban().equals(CLIENT_IBAN)
-        adventure.getTime() != null
-        adventure.getMargin() == MARGIN
-        adventure.getCurrentAmount() == 0.0
-        adventure.getClient().getAdventureSet().size() == 1
-        adventure.getBookRoom() == Adventure.BookRoom.DOUBLE
-        adventure.getRentVehicle() == Adventure.RentVehicle.CAR
-        adventure.getPaymentConfirmation() == null
-        adventure.getPaymentCancellation() == null
-        adventure.getRentingConfirmation() == null
-        adventure.getRentingCancellation() == null
-        adventure.getActivityConfirmation() == null
-        adventure.getActivityCancellation() == null
-        adventure.getRentingConfirmation() == null
-        adventure.getRentingCancellation() == null
-        adventure.getInvoiceReference() == null
-        !adventure.getInvoiceCancelled()
+        assert adventure.getID() != null
+        assert adventure.getBroker() == broker
+        assert adventure.getBegin() == BEGIN
+        assert adventure.getEnd() == END
+        assert adventure.getAge() == AGE
+        assert adventure.getIban().equals(CLIENT_IBAN)
+        assert adventure.getTime() != null
+        assert adventure.getMargin() == MARGIN
+        assert adventure.getCurrentAmount() == 0.0
+        assert adventure.getClient().getAdventureSet().size() == 1
+        assert adventure.getBookRoom() == Adventure.BookRoom.DOUBLE
+        assert adventure.getRentVehicle() == Adventure.RentVehicle.CAR
+        assert adventure.getPaymentConfirmation() == null
+        assert adventure.getPaymentCancellation() == null
+        assert adventure.getRentingConfirmation() == null
+        assert adventure.getRentingCancellation() == null
+        assert adventure.getActivityConfirmation() == null
+        assert adventure.getActivityCancellation() == null
+        assert adventure.getRentingConfirmation() == null
+        assert adventure.getRentingCancellation() == null
+        assert adventure.getInvoiceReference() == null
+        assert !adventure.getInvoiceCancelled()
 
-        adventure.getState().getValue() == Adventure.State.RESERVE_ACTIVITY
-        adventure.getState().getNumOfRemoteErrors() == 0
+        assert adventure.getState().getValue() == Adventure.State.RESERVE_ACTIVITY
+        assert adventure.getState().getNumOfRemoteErrors() == 0
 
         def bulks = new ArrayList<>(broker.getRoomBulkBookingSet())
         def bulk = bulks.get(0)
 
-        bulk != null
-        bulk.getArrival() == BEGIN
-        bulk.getDeparture() == END
-        bulk.getNumber() == NUMBER_OF_BULK
-        !bulk.getCancelled()
-        bulk.getNumberOfHotelExceptions() == 0
-        bulk.getNumberOfRemoteErrors() == 0
-        bulk.getReferenceSet().size() == 1
-        bulk.getBuyerIban() == CLIENT_IBAN
-        bulk.getBuyerNif() == NIF_AS_BUYER
+        assert bulk != null
+        assert bulk.getArrival() == BEGIN
+        assert bulk.getDeparture() == END
+        assert bulk.getNumber() == NUMBER_OF_BULK
+        assert !bulk.getCancelled()
+        assert bulk.getNumberOfHotelExceptions() == 0
+        assert bulk.getNumberOfRemoteErrors() == 0
+        assert bulk.getReferenceSet().size() == 1
+        assert bulk.getBuyerIban() == CLIENT_IBAN
+        assert bulk.getBuyerNif() == NIF_AS_BUYER
 
         def references = new ArrayList<>(bulk.getReferenceSet())
         def reference = references.get(0)
-        reference.getValue().equals(REF_ONE)
+        assert reference.getValue().equals(REF_ONE)
 
         def client = adventure.getClient()
-        client.getIban().equals(CLIENT_IBAN)
-        client.getNif().equals(CLIENT_NIF)
-        client.getAge() == AGE
-        client.getDrivingLicense().equals(DRIVING_LICENSE)
+        assert client.getIban().equals(CLIENT_IBAN)
+        assert client.getNif().equals(CLIENT_NIF)
+        assert client.getAge() == AGE
+        assert client.getDrivingLicense().equals(DRIVING_LICENSE)
     }
 
     @Override
