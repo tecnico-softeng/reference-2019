@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.softeng.broker.domain
 
-import com.sun.javafx.scene.layout.region.Margins
 import pt.ulisboa.tecnico.softeng.broker.domain.Adventure.State
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*
 import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestActivityBookingData
