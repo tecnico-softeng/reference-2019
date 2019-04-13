@@ -5,9 +5,9 @@ To run tests execute: mvn clean install
 
 To see the coverage reports, go to <module name>/target/site/jacoco/index.html.
 
-### Rastreabilidade do trabalho
+### Work traceability
 
-Ordene a tabela por ordem crescente da data de término.
+Sort the table by finish date, ascending.
 
 |   Issue id | Owner (ist number)      | Owner (github username) | PRs id (with link)  |            Date    |  
 | ---------- | ----------------------- | ----------------------- | ------------------- | ------------------ |
