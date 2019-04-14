@@ -44,7 +44,7 @@ class ActivityOfferConstructorMethodSpockTest extends SpockRollbackTestAbstractC
     @Unroll('exception: #the_beg, #the_end')
     def 'exception'() {
         when:
-        new ActivityOffer(act, the_beg, the_end, 30)
+        new ActivityOffer(act, the_beg, the_end, amnt)
 
         then:
         thrown(ActivityException)
