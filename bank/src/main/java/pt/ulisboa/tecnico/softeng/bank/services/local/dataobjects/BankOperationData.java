@@ -17,12 +17,12 @@ public class BankOperationData {
     public BankOperationData() {
     }
 
-    public BankOperationData(Operation operation) {
+    BankOperationData(Operation operation) {
         this.reference = operation.getReference();
         this.type = operation.getType().name();
         this.sourceIban = operation.getSourceIban();
         this.targetIban = operation.getTargetIban();
-        this.value = new Double(operation.getValue()) * Bank.SCALE;
+        this.value = new Double(operation.getValue()) / Bank.SCALE;
         this.time = operation.getTime();
         this.transactionSource = operation.getTransactionSource();
         this.transactionReference = operation.getTransactionReference();
