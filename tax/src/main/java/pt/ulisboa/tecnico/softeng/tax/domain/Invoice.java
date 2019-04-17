@@ -18,7 +18,7 @@ public class Invoice extends Invoice_Base {
         setBuyer(buyer);
         setTime(time);
 
-        setIva(Math.round(value * itemType.getTax() * IRS.SCALE / 100.0));
+        setIva(Math.round(value * itemType.getTax() / 100.0));
 
         setIrs(getSeller().getIrs());
     }
@@ -27,7 +27,7 @@ public class Invoice extends Invoice_Base {
         this(value, date, itemType, seller, buyer, DateTime.now());
     }
 
-    public void delete() {
+    void delete() {
         setIrs(null);
         setSeller(null);
         setBuyer(null);
