@@ -79,7 +79,12 @@ public class HotelInterface {
             return new RestRoomBookingData(booking);
         }
 
-        Room.Type type = roomBookingData.getRoomType().equals("SINGLE") ? Room.Type.SINGLE : Room.Type.DOUBLE;
+        Room.Type type;
+        try {
+            type = Room.Type.valueOf(roomBookingData.getBookRoom());
+        } catch (IllegalArgumentException e) {
+            throw new HotelException();
+        }
 
         for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
             return new RestRoomBookingData(hotel.reserveRoom(type, roomBookingData.getArrival(),
