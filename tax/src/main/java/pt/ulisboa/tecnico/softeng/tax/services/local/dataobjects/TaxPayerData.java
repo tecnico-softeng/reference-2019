@@ -1,16 +1,18 @@
 package pt.ulisboa.tecnico.softeng.tax.services.local.dataobjects;
 
+import pt.ulisboa.tecnico.softeng.tax.domain.IRS;
 import pt.ulisboa.tecnico.softeng.tax.domain.TaxPayer;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class TaxPayerData {
     private String nif;
     private String name;
     private String address;
-    private Map<Integer, Double> taxes = new TreeMap<Integer, Double>();
-    private Map<Integer, Double> returns = new TreeMap<Integer, Double>();
+    private Map<Integer, Double> taxes = new TreeMap<>();
+    private Map<Integer, Double> returns = new TreeMap<>();
 
     public TaxPayerData() {
     }
@@ -19,8 +21,8 @@ public class TaxPayerData {
         this.nif = taxPayer.getNif();
         this.name = taxPayer.getName();
         this.address = taxPayer.getAddress();
-        this.taxes = taxPayer.getToPayPerYear();
-        this.returns = taxPayer.getTaxReturnPerYear();
+        this.taxes = taxPayer.getToPayPerYear().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> new Double(e.getValue()) / IRS.SCALE));
+        this.returns = taxPayer.getTaxReturnPerYear().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> new Double(e.getValue()) / IRS.SCALE));
     }
 
     public String getName() {

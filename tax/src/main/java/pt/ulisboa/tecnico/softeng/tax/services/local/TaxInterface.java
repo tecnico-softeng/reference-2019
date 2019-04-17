@@ -68,23 +68,23 @@ public class TaxInterface {
 
     @Atomic(mode = TxMode.WRITE)
     public static void createInvoice(String nif, InvoiceData invoiceData) {
-        if (invoiceData.getValue() == null || invoiceData.getItemType() == null || invoiceData.getDate() == null
-                || invoiceData.getBuyerNif() == null && invoiceData.getSellerNif() == null
-                && invoiceData.getTime() == null) {
+        if (nif == null || invoiceData.getType() == null || invoiceData.getOtherNif() == null || invoiceData.getValue() == null ||
+                invoiceData.getItemType() == null || invoiceData.getDate() == null) {
             throw new TaxException();
         }
 
         TaxPayer taxPayer = IRS.getIRSInstance().getTaxPayerByNif(nif);
+        TaxPayer otherTaxPayer = IRS.getIRSInstance().getTaxPayerByNif(invoiceData.getOtherNif());
         ItemType itemType = IRS.getIRSInstance().getItemTypeByName(invoiceData.getItemType());
 
         TaxPayer seller;
         TaxPayer buyer;
-        if (invoiceData.getSellerNif() != null) {
-            seller = IRS.getIRSInstance().getTaxPayerByNif(invoiceData.getSellerNif());
+        if (invoiceData.getType().equals(InvoiceData.Type.BUY)) {
+            seller = otherTaxPayer;
             buyer = taxPayer;
         } else {
             seller = taxPayer;
-            buyer = IRS.getIRSInstance().getTaxPayerByNif(invoiceData.getBuyerNif());
+            buyer = otherTaxPayer;
         }
 
         new Invoice(invoiceData.getValue() != null ? invoiceData.getValueLong() : -1, invoiceData.getDate(), itemType, seller, buyer);

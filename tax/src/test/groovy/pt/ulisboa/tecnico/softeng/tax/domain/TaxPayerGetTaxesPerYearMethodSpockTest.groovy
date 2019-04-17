@@ -23,10 +23,10 @@ class TaxPayerGetTaxesPerYearMethodSpockTest extends SpockRollbackTestAbstractCl
 
     def 'success'() {
         given:
-        new Invoice(100, new LocalDate(2017, 12, 12), itemType, seller, buyer)
-        new Invoice(100, date, itemType, seller, buyer)
-        new Invoice(100, date, itemType, seller, buyer)
-        new Invoice(50, date, itemType, seller, buyer)
+        new Invoice(100 * IRS.SCALE, new LocalDate(2017, 12, 12), itemType, seller, buyer)
+        new Invoice(100 * IRS.SCALE, date, itemType, seller, buyer)
+        new Invoice(100 * IRS.SCALE, date, itemType, seller, buyer)
+        new Invoice(50 * IRS.SCALE, date, itemType, seller, buyer)
 
         when:
         def toPay = seller.getToPayPerYear()
@@ -38,8 +38,8 @@ class TaxPayerGetTaxesPerYearMethodSpockTest extends SpockRollbackTestAbstractCl
         Map<Integer, Double> taxReturn = buyer.getTaxReturnPerYear()
 
         taxReturn.keySet().size() == 2
-        0.5 == taxReturn.get(2017)
-        1.25 == taxReturn.get(2018)
+        0.5 == taxReturn.get(2017) / IRS.SCALE
+        1.25 == taxReturn.get(2018) / IRS.SCALE
     }
 
     def 'success empty'() {
