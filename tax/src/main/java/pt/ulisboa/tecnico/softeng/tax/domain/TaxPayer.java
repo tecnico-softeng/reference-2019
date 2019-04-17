@@ -28,7 +28,7 @@ public class TaxPayer extends TaxPayer_Base {
         irs.addTaxPayer(this);
     }
 
-    public void delete() {
+    void delete() {
         setIrs(null);
 
         getAllInvoices().forEach(invoice -> invoice.delete());
@@ -36,7 +36,7 @@ public class TaxPayer extends TaxPayer_Base {
         deleteDomainObject();
     }
 
-    protected void checkArguments(IRS irs, String nif, String name, String address) {
+    private void checkArguments(IRS irs, String nif, String name, String address) {
         if (nif == null || nif.length() != 9) {
             throw new TaxException();
         }
@@ -68,12 +68,12 @@ public class TaxPayer extends TaxPayer_Base {
         return Stream.concat(getBuyerInvoiceSet().stream(), getSellerInvoiceSet().stream()).distinct();
     }
 
-    public double toPay(int year) {
+    public long toPay(int year) {
         if (year < 1970) {
             throw new TaxException();
         }
 
-        double result = 0;
+        long result = 0;
         for (Invoice invoice : getSellerInvoiceSet()) {
             if (!invoice.isCancelled() && invoice.getDate().getYear() == year) {
                 result = result + invoice.getIva();
@@ -82,26 +82,26 @@ public class TaxPayer extends TaxPayer_Base {
         return result;
     }
 
-    public Map<Integer, Double> getToPayPerYear() {
+    public Map<Integer, Long> getToPayPerYear() {
         return getSellerInvoiceSet().stream().map(i -> i.getDate().getYear()).distinct()
                 .collect(Collectors.toMap(y -> y, this::toPay));
     }
 
-    public double taxReturn(int year) {
+    public long taxReturn(int year) {
         if (year < 1970) {
             throw new TaxException();
         }
 
-        double result = 0;
+        long result = 0;
         for (Invoice invoice : getBuyerInvoiceSet()) {
             if (!invoice.isCancelled() && invoice.getDate().getYear() == year) {
-                result = result + new Double(invoice.getIva()) / IRS.SCALE;
+                result = result + invoice.getIva();
             }
         }
-        return result * PERCENTAGE / 100.0;
+        return Math.round(result * PERCENTAGE / 100.0);
     }
 
-    public Map<Integer, Double> getTaxReturnPerYear() {
+    public Map<Integer, Long> getTaxReturnPerYear() {
         return getBuyerInvoiceSet().stream().map(i -> i.getDate().getYear()).distinct()
                 .collect(Collectors.toMap(y -> y, y -> taxReturn(y)));
     }

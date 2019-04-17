@@ -24,9 +24,9 @@ class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     def 'success'() {
         given:
-        new Invoice(100, date, itemType, seller, buyer)
-        new Invoice(100, date, itemType, seller, buyer)
-        new Invoice(50, date, itemType, seller, buyer)
+        new Invoice(100 * IRS.SCALE, date, itemType, seller, buyer)
+        new Invoice(100 * IRS.SCALE, date, itemType, seller, buyer)
+        new Invoice(50 * IRS.SCALE, date, itemType, seller, buyer)
 
         when:
         def value = seller.toPay(year)
@@ -49,8 +49,8 @@ class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     def 'before 1970'() {
         when:
-        new Invoice(100, new LocalDate(1969, 02, 13), itemType, seller, buyer)
-        new Invoice(50, new LocalDate(1969, 02, 13), itemType, seller, buyer)
+        new Invoice(100 * IRS.SCALE, new LocalDate(1969, 02, 13), itemType, seller, buyer)
+        new Invoice(50 * IRS.SCALE, new LocalDate(1969, 02, 13), itemType, seller, buyer)
 
         seller.toPay(1969)
 
@@ -60,8 +60,8 @@ class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     def 'equal 1970'() {
         when:
-        new Invoice(100, new LocalDate(1970, 02, 13), itemType, seller, buyer)
-        new Invoice(50, new LocalDate(1970, 02, 13), itemType, seller, buyer)
+        new Invoice(100 * IRS.SCALE, new LocalDate(1970, 02, 13), itemType, seller, buyer)
+        new Invoice(50 * IRS.SCALE, new LocalDate(1970, 02, 13), itemType, seller, buyer)
 
         def value = seller.toPay(1970)
 
@@ -71,10 +71,10 @@ class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     def 'ignore cancelled'() {
         when:
-        new Invoice(100, date, itemType, seller, buyer)
-        def invoice = new Invoice(100, date, itemType, seller, buyer)
+        new Invoice(100 * IRS.SCALE, date, itemType, seller, buyer)
+        def invoice = new Invoice(100 * IRS.SCALE, date, itemType, seller, buyer)
 
-        new Invoice(50, date, itemType, seller, buyer)
+        new Invoice(50 * IRS.SCALE, date, itemType, seller, buyer)
         invoice.cancel()
 
         def value = seller.toPay(2018)
