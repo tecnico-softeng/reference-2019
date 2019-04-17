@@ -116,8 +116,7 @@ public class Adventure extends Adventure_Base {
                 setState(new CancelledState());
                 break;
             default:
-                new BrokerException();
-                break;
+                throw new BrokerException();
         }
     }
 
