@@ -111,6 +111,10 @@ public class BankInterface {
 
     @Atomic(mode = TxMode.WRITE)
     public static String processPayment(RestBankOperationData bankOperationData) {
+        if (bankOperationData.getTransactionSource() != null && bankOperationData.getTransactionSource().equals(TransferOperation.REVERT)) {
+            throw new BankException();
+        }
+
         Operation operation = getOperationBySourceAndReference(bankOperationData.getTransactionSource(),
                 bankOperationData.getTransactionReference());
         if (operation != null) {

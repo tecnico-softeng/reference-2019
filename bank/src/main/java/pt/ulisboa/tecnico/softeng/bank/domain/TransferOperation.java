@@ -4,6 +4,8 @@ import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 
 public class TransferOperation extends TransferOperation_Base {
 
+    public static final String REVERT = "REVERT";
+
     public void init(WithdrawOperation withdrawOperation, DepositOperation depositOperation, String transactionSource,
                      String transactionReference) {
         checkArguments(withdrawOperation, depositOperation, transactionSource, transactionReference);
@@ -61,7 +63,7 @@ public class TransferOperation extends TransferOperation_Base {
         DepositOperation depositOperation = (DepositOperation) getWithdrawOperation().getBank().getOperation(reference);
 
         TransferOperation transferOperation = new TransferOperation();
-        transferOperation.init(withdrawOperation, depositOperation, "REVERT", getReference());
+        transferOperation.init(withdrawOperation, depositOperation, REVERT, getReference());
 
         return transferOperation.getReference();
 

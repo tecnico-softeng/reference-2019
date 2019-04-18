@@ -118,24 +118,25 @@ class BankInterfaceProcessPaymentMethodSpockTest extends SpockRollbackTestAbstra
         thrown(BankException)
 
         where: 'for incorrect arguments'
-        sourceIbn  | targetIbn  | val | transaction_source | transaction_reference | label
-        null       | targetIban | 100 | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | 'null sourceIban'
-        '  '       | targetIban | 100 | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | 'blank sourceIban'
-        ''         | targetIban | 100 | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | 'empty sourceIban'
-        'other'    | targetIban | 100 | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | 'sourceAccount does not exist for other sourceIban'
-        sourceIban | null       | 100 | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | 'null targetIban'
-        sourceIban | '  '       | 100 | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | 'blank targetIban'
-        sourceIban | ''         | 100 | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | 'empty targetIban'
-        sourceIban | 'other'    | 100 | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | 'targetAccount does not exist for other iban'
-        sourceIban | targetIban | 0   | TRANSACTION_SOURCE | TRANSACTION_REFERENCE | '0 amount'
-        sourceIban | targetIban | 0   | null               | TRANSACTION_REFERENCE | 'null transaction source'
-        sourceIban | targetIban | 0   | '  '               | TRANSACTION_REFERENCE | 'blank transaction source'
-        sourceIban | targetIban | 0   | ''                 | TRANSACTION_REFERENCE | 'empty transaction source'
-        sourceIban | targetIban | 0   | 'whatever'         | TRANSACTION_REFERENCE | 'whatever transaction source'
-        sourceIban | targetIban | 0   | TRANSACTION_SOURCE | null                  | 'null transaction reference'
-        sourceIban | targetIban | 0   | TRANSACTION_SOURCE | '  '                  | 'blank transaction reference'
-        sourceIban | targetIban | 0   | TRANSACTION_SOURCE | ''                    | 'empty transaction reference'
-        sourceIban | targetIban | 0   | TRANSACTION_SOURCE | 'whatever'            | 'whatever transaction reference'
+        sourceIbn  | targetIbn  | val | transaction_source       | transaction_reference | label
+        null       | targetIban | 100 | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | 'null sourceIban'
+        '  '       | targetIban | 100 | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | 'blank sourceIban'
+        ''         | targetIban | 100 | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | 'empty sourceIban'
+        'other'    | targetIban | 100 | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | 'sourceAccount does not exist for other sourceIban'
+        sourceIban | null       | 100 | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | 'null targetIban'
+        sourceIban | '  '       | 100 | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | 'blank targetIban'
+        sourceIban | ''         | 100 | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | 'empty targetIban'
+        sourceIban | 'other'    | 100 | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | 'targetAccount does not exist for other iban'
+        sourceIban | targetIban | 0   | TRANSACTION_SOURCE       | TRANSACTION_REFERENCE | '0 amount'
+        sourceIban | targetIban | 0   | null                     | TRANSACTION_REFERENCE | 'null transaction source'
+        sourceIban | targetIban | 0   | '  '                     | TRANSACTION_REFERENCE | 'blank transaction source'
+        sourceIban | targetIban | 0   | ''                       | TRANSACTION_REFERENCE | 'empty transaction source'
+        sourceIban | targetIban | 0   | 'whatever'               | TRANSACTION_REFERENCE | 'whatever transaction source'
+        sourceIban | targetIban | 0   | TransferOperation.REVERT | TRANSACTION_REFERENCE | 'REVERT transaction source'
+        sourceIban | targetIban | 0   | TRANSACTION_SOURCE       | null                  | 'null transaction reference'
+        sourceIban | targetIban | 0   | TRANSACTION_SOURCE       | '  '                  | 'blank transaction reference'
+        sourceIban | targetIban | 0   | TRANSACTION_SOURCE       | ''                    | 'empty transaction reference'
+        sourceIban | targetIban | 0   | TRANSACTION_SOURCE       | 'whatever'            | 'whatever transaction reference'
     }
 
     def 'no banks'() {
