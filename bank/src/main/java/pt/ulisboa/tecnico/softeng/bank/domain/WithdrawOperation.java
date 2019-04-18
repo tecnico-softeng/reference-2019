@@ -28,11 +28,6 @@ public class WithdrawOperation extends WithdrawOperation_Base {
     }
 
     @Override
-    public boolean canRevert() {
-        return getTransferOperationAsWithdraw() == null && getCancellation() == null;
-    }
-
-    @Override
     public boolean isSubOperation() {
         return getTransferOperationAsWithdraw() != null;
     }

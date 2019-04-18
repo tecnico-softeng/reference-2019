@@ -29,11 +29,6 @@ public class DepositOperation extends DepositOperation_Base {
     }
 
     @Override
-    public boolean canRevert() {
-        return getTransferOperationAsDeposit() == null && getCancellation() == null;
-    }
-
-    @Override
     public boolean isSubOperation() {
         return getTransferOperationAsDeposit() != null;
     }

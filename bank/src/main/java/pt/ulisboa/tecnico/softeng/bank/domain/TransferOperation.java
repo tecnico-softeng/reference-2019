@@ -55,10 +55,8 @@ public class TransferOperation extends TransferOperation_Base {
         }
 
         WithdrawOperation withdrawOperation = getDepositOperation().getSourceAccount().withdraw(getDepositOperation().getValue());
-        getDepositOperation().setCancellation(getDepositOperation().getReference() + "_CANCEL");
 
         DepositOperation depositOperation = getWithdrawOperation().getSourceAccount().deposit(getWithdrawOperation().getValue());
-        getWithdrawOperation().setCancellation(getWithdrawOperation().getReference() + "_CANCEL");
 
         TransferOperation transferOperation = new TransferOperation();
         transferOperation.init(withdrawOperation, depositOperation, "REVERT", getReference());
