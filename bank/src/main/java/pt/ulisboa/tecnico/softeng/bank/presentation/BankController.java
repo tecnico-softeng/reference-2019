@@ -5,49 +5,66 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 import pt.ulisboa.tecnico.softeng.bank.services.local.BankInterface;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
+import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.ClientData;
 
 @Controller
 @RequestMapping(value = "/banks")
 public class BankController {
-	private static Logger logger = LoggerFactory.getLogger(BankController.class);
+    private static final Logger logger = LoggerFactory.getLogger(BankController.class);
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String bankForm(Model model) {
-		logger.info("bankForm");
-		model.addAttribute("bank", new BankData());
-		model.addAttribute("banks", BankInterface.getBanks());
-		return "banks";
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public String bankForm(Model model) {
+        logger.info("bankForm");
+        model.addAttribute("bank", new BankData());
+        model.addAttribute("banks", BankInterface.getBanks());
+        return "banks";
+    }
 
-	@RequestMapping(method = RequestMethod.POST)
-	public String bankSubmit(Model model, @ModelAttribute BankData bank) {
-		logger.info("bankSubmit name:{}, code:{}", bank.getName(), bank.getCode());
+    @RequestMapping(method = RequestMethod.POST)
+    public String bankSubmit(Model model, @ModelAttribute BankData bank) {
+        logger.info("bankSubmit name:{}, code:{}", bank.getName(), bank.getCode());
 
-		try {
-			BankInterface.createBank(bank);
-		} catch (BankException be) {
-			model.addAttribute("error", "Error: it was not possible to create the bank");
-			model.addAttribute("bank", bank);
-			model.addAttribute("banks", BankInterface.getBanks());
-			return "banks";
-		}
+        try {
+            BankInterface.createBank(bank);
+        } catch (BankException be) {
+            model.addAttribute("error", "Error: it was not possible to create the bank");
+            model.addAttribute("bank", bank);
+            model.addAttribute("banks", BankInterface.getBanks());
+            return "banks";
+        }
 
-		return "redirect:/banks";
-	}
+        return "redirect:/banks";
+    }
 
-	@RequestMapping(method = RequestMethod.DELETE)
-	public String deleteBanks(Model model) {
-		logger.info("deleteBanks");
+    @RequestMapping(method = RequestMethod.DELETE)
+    public String deleteBanks(Model model) {
+        logger.info("deleteBanks");
 
-		BankInterface.deleteBanks();
+        BankInterface.deleteBanks();
 
-		return "redirect:/banks";
-	}
+        return "redirect:/banks";
+    }
+
+    @RequestMapping(value = "/{code}/operations/{reference}", method = RequestMethod.POST)
+    public String cancelOperation(Model model, @PathVariable String code, @ModelAttribute ClientData client, @PathVariable String reference) {
+        logger.info("clientSubmit bankCode:{}, clientName:{}, operation reference: {}", code, client.getName(), reference);
+
+        try {
+            BankInterface.cancelOperation(reference);
+        } catch (BankException be) {
+            model.addAttribute("error", "Error: it was not possible to cancel de operation");
+            model.addAttribute("client", client);
+            model.addAttribute("bank", BankInterface.getBankDataByCode(code));
+            return "clients";
+        }
+
+        return "redirect:/banks/" + code + "/clients";
+    }
 
 }

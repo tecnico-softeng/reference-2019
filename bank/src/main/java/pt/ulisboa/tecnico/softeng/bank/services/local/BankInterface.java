@@ -7,6 +7,7 @@ import pt.ulisboa.tecnico.softeng.bank.domain.*;
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.AccountData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
+import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.ClientData;
 import pt.ulisboa.tecnico.softeng.bank.services.remote.dataobjects.RestBankOperationData;
 
@@ -110,6 +111,26 @@ public class BankInterface {
     }
 
     @Atomic(mode = TxMode.WRITE)
+    public static void cancelOperation(String reference) {
+        Operation operation = getOperationByReference(reference);
+        if (operation == null || operation.getCancellation() != null) {
+            throw new BankException();
+        }
+
+        operation.revert();
+    }
+
+    @Atomic(mode = TxMode.WRITE)
+    public static void transfer(BankOperationData bankOperationData) {
+        if (getOperationBySourceAndReference(bankOperationData.getTransactionSource(),
+                bankOperationData.getTransactionReference()) != null) {
+            throw new BankException();
+        }
+        doTransfer(bankOperationData.getSourceIban(), bankOperationData.getTargetIban(), bankOperationData.getValueLong(),
+                bankOperationData.getTransactionSource(), bankOperationData.getTransactionReference());
+    }
+
+    @Atomic(mode = TxMode.WRITE)
     public static String processPayment(RestBankOperationData bankOperationData) {
         Operation operation = getOperationBySourceAndReference(bankOperationData.getTransactionSource(),
                 bankOperationData.getTransactionReference());
@@ -117,26 +138,28 @@ public class BankInterface {
             return operation.getReference();
         }
 
-        Account sourceAccount = FenixFramework.getDomainRoot().getBankSet().stream()
-                .flatMap(bank -> bank.getAccountSet().stream())
-                .filter(account -> account.getIban().equals(bankOperationData.getSourceIban()))
-                .findAny().orElse(null);
-        Account targetAccount = FenixFramework.getDomainRoot().getBankSet().stream()
-                .flatMap(bank -> bank.getAccountSet().stream())
-                .filter(account -> account.getIban().equals(bankOperationData.getTargetIban()))
-                .findAny().orElse(null);
+        TransferOperation transferOperation = doTransfer(bankOperationData.getSourceIban(), bankOperationData.getTargetIban(), bankOperationData.getValue(),
+                bankOperationData.getTransactionSource(), bankOperationData.getTransactionReference());
 
-        if (sourceAccount != null && targetAccount != null) {
-            WithdrawOperation withdrawOperation = sourceAccount.withdraw(bankOperationData.getValue());
-            DepositOperation depositOperation = targetAccount.deposit(bankOperationData.getValue());
-
-            TransferOperation transferOperation = new TransferOperation();
-            transferOperation.init(withdrawOperation, depositOperation, bankOperationData.getTransactionSource(), bankOperationData.getTransactionReference());
-
-            return transferOperation.getReference();
-        }
-        throw new BankException();
+        return transferOperation.getReference();
     }
+
+    private static TransferOperation doTransfer(String sourceIban, String targetIban, long value, String transactionSource, String transactionReference) {
+        Account sourceAccount = getAccountByIban(sourceIban);
+        Account targetAccount = getAccountByIban(targetIban);
+        if (sourceAccount == null || targetAccount == null) {
+            throw new BankException();
+        }
+
+        WithdrawOperation withdrawOperation = sourceAccount.withdraw(value);
+        DepositOperation depositOperation = targetAccount.deposit(value);
+
+        TransferOperation transferOperation = new TransferOperation();
+        transferOperation.init(withdrawOperation, depositOperation, transactionSource, transactionReference);
+
+        return transferOperation;
+    }
+
 
     @Atomic(mode = TxMode.WRITE)
     public static String cancelPayment(String paymentConfirmation) {

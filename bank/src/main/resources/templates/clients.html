@@ -53,16 +53,30 @@
             <th>Source Iban</th>
             <th>Target Iban</th>
             <th>Value</th>
+            <th>Transaction Source</th>
+            <th>Transaction Reference</th>
+            <th>Cancellation Reference</th>
+            <th>Undo</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="operation: ${bank.operations}">
-            <td th:text="${operation.time}">2017/04/01</td>
+            <td th:text="${#dates.format(operation.time,'dd-MM-YYYY HH:mm:ss')}">2017/04/01</td>
             <td th:text="${operation.reference}">BK12344567</td>
             <td th:text="${operation.type}">DEPOSIT</td>
             <td th:text="${operation.sourceIban}">123456</td>
             <td th:text="${operation.targetIban}">654897</td>
             <td th:text="${operation.value}">200</td>
+            <td th:text="${operation.transactionSource}">ACTIVITY</td>
+            <td th:text="${operation.transactionReference}">HT1234</td>
+            <td th:text="${operation.cancellation}">HT1234</td>
+            <td>
+                <form th:if="${operation.canRevert}" class="form-inline"
+                      th:action="@{/banks/{code}/operations/{reference}(code=${bank.code},reference=${operation.reference})}"
+                      method="post">
+                    <input class="btn btn-primary" type="submit" value="Undo"/>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

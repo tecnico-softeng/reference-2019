@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.softeng.bank.domain;
 
+import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
+
 public class DepositOperation extends DepositOperation_Base {
 
     @Override
@@ -20,7 +22,20 @@ public class DepositOperation extends DepositOperation_Base {
 
     @Override
     protected String doRevert() {
+        if (!canRevert()) {
+            throw new BankException();
+        }
         return getAccount().withdraw(getValue()).getReference();
+    }
+
+    @Override
+    public boolean canRevert() {
+        return getTransferOperationAsDeposit() == null && getCancellation() == null;
+    }
+
+    @Override
+    public boolean isSubOperation() {
+        return getTransferOperationAsDeposit() != null;
     }
 
 }
