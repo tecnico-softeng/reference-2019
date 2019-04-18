@@ -13,6 +13,7 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
     @Shared def AMOUNT = 30
     @Shared def IBAN = 'IBAN'
     @Shared def NIF = '123456789'
+    @Shared def AGE = 28;
 
     @Override
     def populate4Test() {
@@ -29,7 +30,7 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     def 'success'() {
         when:
-        def booking = new Booking(provider, offer, NIF, IBAN)
+        def booking = new Booking(provider, offer, AGE, NIF, IBAN)
 
         then:
         with(booking) {
@@ -45,29 +46,30 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
     @Unroll('exceptions: #prov, #off, #nif, #iban')
     def 'exceptions'() {
         when:
-        new Booking(prov, off, nif, iban)
+        new Booking(prov, off, age, nif, iban)
 
         then:
         thrown(ActivityException)
 
         where:
-        prov     | off   | nif  | iban
-        null     | offer | NIF  | IBAN
-        provider | null  | NIF  | IBAN
-        provider | offer | null | IBAN
-        provider | offer | '  ' | IBAN
-        provider | offer | NIF  | null
-        provider | offer | NIF  | '   '
+        prov     | off   | age | nif  | iban
+        null     | offer | AGE | NIF  | IBAN
+        provider | null  | AGE | NIF  | IBAN
+        provider | offer | -1  | NIF  | IBAN
+        provider | offer | AGE | null | IBAN
+        provider | offer | AGE | '  ' | IBAN
+        provider | offer | AGE | NIF  | null
+        provider | offer | AGE | NIF  | '   '
     }
 
     def 'booking equal capacity'() {
         given: 'it is complete'
-        new Booking(provider, offer, NIF, IBAN)
-        new Booking(provider, offer, NIF, IBAN)
-        new Booking(provider, offer, NIF, IBAN)
+        new Booking(provider, offer, AGE, NIF, IBAN)
+        new Booking(provider, offer, AGE, NIF, IBAN)
+        new Booking(provider, offer, AGE, NIF, IBAN)
 
         when: 'a booking'
-        new Booking(provider, offer, NIF, IBAN)
+        new Booking(provider, offer, AGE, NIF, IBAN)
 
         then: 'throws an exception'
         def error = thrown(ActivityException)
@@ -76,14 +78,14 @@ class BookingContructorMethodSpockTest extends SpockRollbackTestAbstractClass {
 
     def 'booking equal capacity but has cancelled'() {
         given: 'is complete'
-        new Booking(provider, offer, NIF, IBAN)
-        new Booking(provider, offer, NIF, IBAN)
-        def booking = new Booking(provider, offer, NIF, IBAN)
+        new Booking(provider, offer, AGE, NIF, IBAN)
+        new Booking(provider, offer, AGE, NIF, IBAN)
+        def booking = new Booking(provider, offer, AGE, NIF, IBAN)
         and: 'there is a cancel'
         booking.cancel()
 
         when: 'booking'
-        new Booking(provider, offer, NIF, IBAN)
+        new Booking(provider, offer, AGE, NIF, IBAN)
 
         then: 'succeeds and is complete'
         offer.getNumberActiveOfBookings() == 3

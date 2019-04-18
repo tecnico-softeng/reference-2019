@@ -13,9 +13,10 @@
     <h2>
         Bookings of Offer <span th:text="${offer.name}">Tracking</span> from
         <span th:text="${offer.begin}">12/12/2017</span> to <span
-            th:text="${offer.end}">15/12/2107</span> and with <span
-            th:text="${offer.capacity}">20</span> free places
-    </h2>
+            th:text="${offer.end}">15/12/2107</span></h2>
+    <h3>
+        <span th:text="${offer.capacity - offer.reservations.size()}">20</span> free places
+    </h3>
     <a class="btn btn-default pull-right"
        th:href="@{/providers/{codeProvider}/activities/{codeActivity}/offers(codeProvider=${offer.codeProvider}, codeActivity=${offer.codeActivity})}">Offers</a>
     <br/>
@@ -25,25 +26,40 @@
           th:action="@{/providers/{codeProvider}/activities/{codeActivity}/offers/{externalId}/bookings(codeProvider=${offer.codeProvider},codeActivity=${offer.codeActivity},externalId=${offer.externalId})}"
           th:object="${booking}" method="post">
         <label>NIF: </label> <input class="form-control input-sm" type="text"
-                                    size="9" th:field="*{nif}"/> <label>IBAN: </label> <input
+                                    size="9" th:field="*{nif}"/>
+        <label>IBAN: </label> <input
             class="form-control input-sm" type="text" size="20"
-            th:field="*{iban}"/> <input class="btn btn-primary btn-sm"
-                                        type="submit" value="Submit"/>
+            th:field="*{iban}"/>
+        <label>Age: </label> <input class="form-control input-sm" type="number" min="0" max="120" th:field="*{age}"/>
+        <input class="btn btn-primary btn-sm"
+               type="submit" value="Submit"/>
     </form>
     <br/>
     <h3>Bookings</h3>
     <table class="table table-striped">
         <thead>
         <tr>
+            <th>Reference</th>
             <th>NIF</th>
             <th>IBAN</th>
+            <th>Age</th>
+            <th>Price</th>
+            <th>Payment</th>
+            <th>Invoice</th>
+            <th>Cancellation</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="booking: ${offer.reservations}">
 
+            <td th:text="${booking.reference}">132452623</td>
             <td th:text="${booking.nif}">132452623</td>
             <td th:text="${booking.iban}">PT 89265897 8745982</td>
+            <td th:text="${booking.age}">28</td>
+            <td th:text="${booking.price}">45.5</td>
+            <td th:text="${booking.paymentReference}">132452623</td>
+            <td th:text="${booking.invoiceReference}">132452623</td>
+            <td th:text="${booking.cancellation}">132452623</td>
         </tr>
         </tbody>
     </table>

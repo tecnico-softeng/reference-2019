@@ -26,10 +26,6 @@ public class Booking extends Booking_Base {
         offer.addBooking(this);
     }
 
-    public Booking(ActivityProvider provider, ActivityOffer offer, String buyerNif, String buyerIban) {
-        this(provider, offer, 0, buyerNif, buyerIban);
-    }
-
     private void checkArguments(ActivityProvider provider, ActivityOffer offer, int age, String buyerNIF,
                                 String buyerIban) {
         if (provider == null || offer == null || age < 0 || buyerNIF == null || buyerNIF.trim().length() == 0
