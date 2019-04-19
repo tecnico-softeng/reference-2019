@@ -57,4 +57,10 @@ public abstract class SingleOperation extends SingleOperation_Base {
         return null;
     }
 
+    @Override
+    public boolean canRevert() {
+        return !isSubOperation() && getCancellation() == null;
+    }
+
+
 }

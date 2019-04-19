@@ -4,6 +4,8 @@ import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 
 public class TransferOperation extends TransferOperation_Base {
 
+    public static final String REVERT = "REVERT";
+
     public void init(WithdrawOperation withdrawOperation, DepositOperation depositOperation, String transactionSource,
                      String transactionReference) {
         checkArguments(withdrawOperation, depositOperation, transactionSource, transactionReference);
@@ -50,18 +52,16 @@ public class TransferOperation extends TransferOperation_Base {
 
     @Override
     protected String doRevert() {
-        if (getTransactionSource().equals("REVERT")) {
+        if (!canRevert()) {
             throw new BankException();
         }
 
-        String reference = getDepositOperation().revert();
-        WithdrawOperation withdrawOperation = (WithdrawOperation) getDepositOperation().getBank().getOperation(reference);
+        WithdrawOperation withdrawOperation = getDepositOperation().getSourceAccount().withdraw(getDepositOperation().getValue());
 
-        reference = getWithdrawOperation().doRevert();
-        DepositOperation depositOperation = (DepositOperation) getWithdrawOperation().getBank().getOperation(reference);
+        DepositOperation depositOperation = getWithdrawOperation().getSourceAccount().deposit(getWithdrawOperation().getValue());
 
         TransferOperation transferOperation = new TransferOperation();
-        transferOperation.init(withdrawOperation, depositOperation, "REVERT", getReference());
+        transferOperation.init(withdrawOperation, depositOperation, REVERT, getReference());
 
         return transferOperation.getReference();
 
@@ -91,5 +91,16 @@ public class TransferOperation extends TransferOperation_Base {
     public long getValue() {
         return getWithdrawOperation().getValue();
     }
+
+    @Override
+    public boolean canRevert() {
+        return !getTransactionSource().equals("REVERT") && getCancellation() == null;
+    }
+
+    @Override
+    public boolean isSubOperation() {
+        return false;
+    }
+
 
 }
