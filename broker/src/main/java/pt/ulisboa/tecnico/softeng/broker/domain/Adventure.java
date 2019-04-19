@@ -60,7 +60,7 @@ public class Adventure extends Adventure_Base {
             throw new BrokerException();
         }
 
-        if (margin <= 0 || margin > 100) {
+        if (margin <= 0 || margin > 100 * SCALE) {
             throw new BrokerException();
         }
 
