@@ -103,5 +103,23 @@ class OperationRevertMethodSpockTest extends SpockRollbackTestAbstractClass {
         then: 'a bank exception is thrown'
         thrown(BankException)
     }
+
+    def 'revert a suboperation of a composite'() {
+        given: 'a withdraw operation'
+        def withdrawOperation = new WithdrawOperation()
+        withdrawOperation.init(account, 100)
+        and: 'a deposit operation'
+        def depositOperation = new DepositOperation()
+        depositOperation.init(targetAccount, 100)
+        and: 'a transfer operation'
+        def transferOperation = new TransferOperation()
+        transferOperation.init(withdrawOperation, depositOperation, TRANSACTION_SOURCE, TRANSACTION_REFERENCE)
+
+        when: "reverting a suboperation"
+        withdrawOperation.revert()
+
+        then: 'a bank exception is thrown'
+        thrown(BankException)
+    }
 }
 

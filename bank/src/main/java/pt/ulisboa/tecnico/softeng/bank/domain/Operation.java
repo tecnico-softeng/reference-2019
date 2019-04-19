@@ -21,8 +21,10 @@ public abstract class Operation extends Operation_Base {
     }
 
     public String revert() {
+        String reference = doRevert();
         setCancellation(getReference() + "_CANCEL");
-        return doRevert();
+
+        return reference;
     }
 
     public abstract Operation.Type getType();
@@ -42,5 +44,9 @@ public abstract class Operation extends Operation_Base {
     public abstract String getTransactionSource();
 
     public abstract String getTransactionReference();
+
+    public abstract boolean canRevert();
+
+    public abstract boolean isSubOperation();
 
 }

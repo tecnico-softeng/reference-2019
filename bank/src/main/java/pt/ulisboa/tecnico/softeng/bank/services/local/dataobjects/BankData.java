@@ -24,7 +24,7 @@ public class BankData {
         this.clients = bank.getClientSet().stream().sorted(Comparator.comparing(Client::getName))
                 .map(c -> new ClientData(c)).collect(Collectors.toList());
 
-        this.setOperations(bank.getOperationSet().stream().sorted(Comparator.comparing(Operation::getType))
+        this.setOperations(bank.getOperationSet().stream().filter(operation -> !operation.isSubOperation()).sorted(Comparator.comparing(Operation::getTime))
                 .map(c -> new BankOperationData(c)).collect(Collectors.toList()));
     }
 
@@ -56,7 +56,7 @@ public class BankData {
         return this.operations;
     }
 
-    public void setOperations(List<BankOperationData> operations) {
+    private void setOperations(List<BankOperationData> operations) {
         this.operations = operations;
     }
 
