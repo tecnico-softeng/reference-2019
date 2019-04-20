@@ -20,6 +20,7 @@ public class ActivityOfferData {
     private Integer capacity;
     private Double amount;
     private List<ActivityBookingData> reservations;
+    private int availablePlaces;
 
     public ActivityOfferData() {
     }
@@ -35,6 +36,7 @@ public class ActivityOfferData {
         this.amount = new Double(offer.getAmount()) / Activity.SCALE;
         this.reservations = offer.getBookingSet().stream().map(b -> new ActivityBookingData(b))
                 .collect(Collectors.toList());
+        this.availablePlaces = this.capacity - (int) offer.getBookingSet().stream().filter(booking -> !booking.isCancelled()).count();
     }
 
     public String getExternalId() {
@@ -113,4 +115,11 @@ public class ActivityOfferData {
         this.name = name;
     }
 
+    public int getAvailablePlaces() {
+        return this.availablePlaces;
+    }
+
+    public void setAvailablePlaces(int availablePlaces) {
+        this.availablePlaces = availablePlaces;
+    }
 }
