@@ -13,16 +13,13 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
     public static final int MAX_HOTEL_EXCEPTIONS = 3;
     public static final int MAX_REMOTE_ERRORS = 10;
 
-    public BulkRoomBooking(Broker broker, int number, LocalDate arrival, LocalDate departure, String buyerNif,
-                           String buyerIban) {
+    public BulkRoomBooking(Broker broker, int number, LocalDate arrival, LocalDate departure) {
         checkArguments(number, arrival, departure);
 
         setId(Integer.toString(broker.getCounter()));
         setNumber(number);
         setArrival(arrival);
         setDeparture(departure);
-        setBuyerNif(buyerNif);
-        setBuyerIban(buyerIban);
         setBroker(broker);
     }
 
@@ -53,8 +50,8 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
         }
 
         try {
-            for (String reference : getBroker().getHotelInterface().bulkBooking(getNumber(), getArrival(), getDeparture(), getBuyerNif(),
-                    getBuyerIban(), getId())) {
+            for (String reference : getBroker().getHotelInterface().bulkBooking(getNumber(), getArrival(), getDeparture(), getBroker().getNif(),
+                    getBroker().getIban(), getId())) {
                 addReference(new Reference(this, reference));
             }
             setNumberOfHotelExceptions(0);

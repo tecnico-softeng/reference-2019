@@ -81,12 +81,12 @@ public class Broker extends Broker_Base {
         return null;
     }
 
-    public boolean drivingLicenseIsRegistered(String drivingLicense) {
+    boolean drivingLicenseIsRegistered(String drivingLicense) {
         return getClientSet().stream().anyMatch(client -> client.getDrivingLicense().equals(drivingLicense));
     }
 
     public void bulkBooking(int number, LocalDate arrival, LocalDate departure) {
-        BulkRoomBooking bulkBooking = new BulkRoomBooking(this, number, arrival, departure, getNif(), getIban());
+        BulkRoomBooking bulkBooking = new BulkRoomBooking(this, number, arrival, departure);
         bulkBooking.processBooking();
     }
 
@@ -118,7 +118,7 @@ public class Broker extends Broker_Base {
         return this.hotelInterface;
     }
 
-    public CarInterface getCarInterface() {
+    CarInterface getCarInterface() {
         if (this.carInterface == null) {
             this.carInterface = new CarInterface();
         }
@@ -132,7 +132,7 @@ public class Broker extends Broker_Base {
         return this.bankInterface;
     }
 
-    public TaxInterface getTaxInterface() {
+    TaxInterface getTaxInterface() {
         if (this.taxInterface == null) {
             this.taxInterface = new TaxInterface();
         }

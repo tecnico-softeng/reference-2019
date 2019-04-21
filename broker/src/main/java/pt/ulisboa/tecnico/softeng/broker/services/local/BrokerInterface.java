@@ -78,7 +78,7 @@ public class BrokerInterface {
     @Atomic(mode = TxMode.WRITE)
     public static void createBulkRoomBooking(String brokerCode, BulkData bulkData) {
         new BulkRoomBooking(getBrokerByCode(brokerCode), bulkData.getNumber() != null ? bulkData.getNumber() : 0,
-                bulkData.getArrival(), bulkData.getDeparture(), bulkData.getBuyerNif(), bulkData.getBuyerIban());
+                bulkData.getArrival(), bulkData.getDeparture());
 
     }
 
