@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reference</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h2>
+        Welcome to Room Booking of Reference <span th:text="${roomBookingData.reference}">13432453</span>
+    </h2>
+    <a class="btn btn-default pull-right" th:href="@{/brokers/{code}/bulks(code=${brokerCode})}">Bulk Bookings</a>
+    <br/>
+    <br/>
+    <br/>
+
+    <label>Hotel Code: </label><span th:text="${roomBookingData.getHotelCode()}">HT23</span><br/>
+    <label>Hotel Name: </label><span th:text="${roomBookingData.getHotelName()}">Paris</span><br/>
+    <label>Room Number: </label><span th:text="${roomBookingData.getRoomNumber()}">01</span><br/>
+    <label>Type: </label><span th:text="${roomBookingData.getBookRoom()}">SINGLE</span><br/>
+    <label>Arrival: </label><span th:text="${roomBookingData.getArrival()}">12-12-2019</span><br/>
+    <label>Departure: </label><span th:text="${roomBookingData.getDeparture()}">14-12-2019</span><br/>
+    <label>Price: </label><span th:text="${roomBookingData.getPrice()}">23.34</span><br/>
+    <label>Cancellation: </label><span th:text="${roomBookingData.getCancellation()}">13432453CANCEL</span><br/>
+    <form th:if="${roomBookingData.getCancellation() == null}" class="form-inline"
+          th:action="@{/brokers/{code}/bulks/{id}/references/{reference}/cancel(code=${brokerCode},id=${bulkId},reference=${roomBookingData.reference})}"
+          method="post">
+        <input class="btn btn-primary input-sm" type="submit" value="Cancel"/>
+    </form>
+</div>
+</body>
+</html>

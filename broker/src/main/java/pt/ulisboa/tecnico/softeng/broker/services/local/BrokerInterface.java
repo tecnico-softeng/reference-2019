@@ -8,12 +8,10 @@ import pt.ulisboa.tecnico.softeng.broker.domain.Broker;
 import pt.ulisboa.tecnico.softeng.broker.domain.BulkRoomBooking;
 import pt.ulisboa.tecnico.softeng.broker.domain.Client;
 import pt.ulisboa.tecnico.softeng.broker.exception.BrokerException;
-import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.AdventureData;
-import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.BrokerData;
+import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.*;
 import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.BrokerData.CopyDepth;
-import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.BulkData;
-import pt.ulisboa.tecnico.softeng.broker.services.local.dataobjects.ClientData;
 import pt.ulisboa.tecnico.softeng.broker.services.remote.*;
+import pt.ulisboa.tecnico.softeng.broker.services.remote.dataobjects.RestRoomBookingData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +76,7 @@ public class BrokerInterface {
     @Atomic(mode = TxMode.WRITE)
     public static void createBulkRoomBooking(String brokerCode, BulkData bulkData) {
         new BulkRoomBooking(getBrokerByCode(brokerCode), bulkData.getNumber() != null ? bulkData.getNumber() : 0,
-                bulkData.getArrival(), bulkData.getDeparture(), bulkData.getBuyerNif(), bulkData.getBuyerIban());
+                bulkData.getArrival(), bulkData.getDeparture());
 
     }
 
@@ -116,4 +114,13 @@ public class BrokerInterface {
         return null;
     }
 
+    @Atomic(mode = TxMode.READ)
+    public static RoomBookingData getBulkBookedRoomBookingDataByReference(String brokerCode, String reference) {
+        Broker broker = FenixFramework.getDomainRoot().getBrokerSet().stream()
+                .filter(b -> b.getCode().equals(brokerCode)).findAny().orElseThrow(BrokerException::new);
+
+        RestRoomBookingData restRoomBookingData = broker.getHotelInterface().getRoomBookingData(reference);
+
+        return new RoomBookingData(restRoomBookingData);
+    }
 }

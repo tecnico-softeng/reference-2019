@@ -12,7 +12,7 @@ class BrokerPersistenceSpockTest extends SpockPersistenceTestAbstractClass imple
         def client = new Client(broker, CLIENT_IBAN, CLIENT_NIF, DRIVING_LICENSE, AGE)
         new Adventure(broker, this.BEGIN, this.END, client, MARGIN, Adventure.BookRoom.DOUBLE, Adventure.RentVehicle.CAR)
 
-        def bulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, this.BEGIN, this.END, NIF_AS_BUYER, CLIENT_IBAN)
+        def bulk = new BulkRoomBooking(broker, NUMBER_OF_BULK, this.BEGIN, this.END)
 
         new Reference(bulk, REF_ONE)
     }
@@ -71,8 +71,6 @@ class BrokerPersistenceSpockTest extends SpockPersistenceTestAbstractClass imple
         assert bulk.getNumberOfHotelExceptions() == 0
         assert bulk.getNumberOfRemoteErrors() == 0
         assert bulk.getReferenceSet().size() == 1
-        assert bulk.getBuyerIban() == CLIENT_IBAN
-        assert bulk.getBuyerNif() == NIF_AS_BUYER
 
         def references = new ArrayList<>(bulk.getReferenceSet())
         def reference = references.get(0)
