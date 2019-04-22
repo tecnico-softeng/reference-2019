@@ -15,6 +15,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
     def AMOUNT = 30
     def IBAN = 'IBAN'
     def NIF = '123456789'
+    def AGE = 28
 
     def provider
     def offer
@@ -23,7 +24,7 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
 
     def bankInterface
     def taxInterface
-    
+
     @Override
     def populate4Test() {
         bankInterface = Mock(BankInterface)
@@ -36,8 +37,8 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         def begin = new LocalDate(2016, 12, 19)
         def end = new LocalDate(2016, 12, 21)
         offer = new ActivityOffer(activity, begin, end, AMOUNT)
-        booking = new Booking(provider, offer, NIF, IBAN)
-        booking2 = new Booking(provider, offer, NIF, IBAN)
+        booking = new Booking(provider, offer, AGE, NIF, IBAN)
+        booking2 = new Booking(provider, offer, AGE, NIF, IBAN)
     }
 
     def 'success'() {
@@ -80,9 +81,9 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking2.invoiceReference == INVOICE_REFERENCE
 
         where:
-        exception                    | label
-        new TaxException()           | 'tax'
-        new RemoteAccessException()  | 'remote'
+        exception                   | label
+        new TaxException()          | 'tax'
+        new RemoteAccessException() | 'remote'
     }
 
     @Unroll('one #label failure on process payment')
@@ -112,9 +113,9 @@ class ProcessorSubmitBookingMethodSpockTest extends SpockRollbackTestAbstractCla
         booking2.invoiceReference == INVOICE_REFERENCE
 
         where:
-        exception                    | label
-        new BankException()          | 'bank'
-        new RemoteAccessException()  | 'remote'
+        exception                   | label
+        new BankException()         | 'bank'
+        new RemoteAccessException() | 'remote'
     }
 
     def 'successful cancel'() {

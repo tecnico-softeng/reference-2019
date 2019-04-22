@@ -1,12 +1,7 @@
 package pt.ulisboa.tecnico.softeng.activity.services.local
 
 import org.joda.time.LocalDate
-import pt.ulisboa.tecnico.softeng.activity.domain.Activity
-import pt.ulisboa.tecnico.softeng.activity.domain.ActivityOffer
-import pt.ulisboa.tecnico.softeng.activity.domain.ActivityProvider
-import pt.ulisboa.tecnico.softeng.activity.domain.Booking
-import pt.ulisboa.tecnico.softeng.activity.domain.Processor
-import pt.ulisboa.tecnico.softeng.activity.domain.SpockRollbackTestAbstractClass
+import pt.ulisboa.tecnico.softeng.activity.domain.*
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException
 import pt.ulisboa.tecnico.softeng.activity.services.remote.BankInterface
 import pt.ulisboa.tecnico.softeng.activity.services.remote.TaxInterface
@@ -14,6 +9,7 @@ import pt.ulisboa.tecnico.softeng.activity.services.remote.TaxInterface
 class ActivityInterfaceCancelReservationMethodSpockTest extends SpockRollbackTestAbstractClass {
     def IBAN = "IBAN"
     def NIF = "123456789"
+    def AGE = 28
     def provider
     def offer
 
@@ -38,7 +34,7 @@ class ActivityInterfaceCancelReservationMethodSpockTest extends SpockRollbackTes
 
     def 'success'() {
         given: 'a booking'
-        def booking = new Booking(provider, offer, NIF, IBAN)
+        def booking = new Booking(provider, offer, AGE, NIF, IBAN)
         and: 'and a booking that was submitted'
         provider.getProcessor().submitBooking(booking)
 
@@ -55,7 +51,7 @@ class ActivityInterfaceCancelReservationMethodSpockTest extends SpockRollbackTes
 
     def 'booking does not exist'() {
         given:
-        provider.getProcessor().submitBooking(new Booking(provider, offer, NIF, IBAN))
+        provider.getProcessor().submitBooking(new Booking(provider, offer, AGE, NIF, IBAN))
 
         when:
         activityInterface.cancelReservation("XPTO")
