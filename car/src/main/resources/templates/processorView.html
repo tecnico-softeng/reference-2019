@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Processor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h2>
+        Processor of Rent-A-Car <span th:text="${rentacar.name}">Rent-A-Car</span>
+    </h2>
+    <a class="btn btn-default pull-right" th:href="@{/rentacars}">Rent-A-Cars</a>
+    <br/>
+
+    <h3>Peding Rentings</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Reference</th>
+            <th>Plate</th>
+            <th>Driving License</th>
+            <th>Rent-A-Car</th>
+            <th>begin</th>
+            <th>end</th>
+            <th>Payment Reference</th>
+            <th>Invoice Reference</th>
+            <th>Cancellation Reference</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="renting : ${processor.getPendingRentings()}">
+            <td th:text="${renting.reference}">RTt43589</td>
+            <td th:text="${renting.plate}">78-tr-78</td>
+            <td th:text="${renting.drivingLicense}">vc876</td>
+            <td th:text="${renting.rentACarCode}">rc876</td>
+            <td th:text="${renting.begin}">02-12-2018</td>
+            <td th:text="${renting.end}">04-12-2018</td>
+            <td th:text="${renting.paymentReference}">5436578</td>
+            <td th:text="${renting.invoiceReference}">874365879</td>
+            <td th:text="${renting.cancellationReference}">87364983</td>
+            <td th:text="${renting.price}">23.6</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
