@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.softeng.car.services.local.dataobjects;
 
-import org.joda.time.LocalDate;
-import pt.ulisboa.tecnico.softeng.car.domain.Renting;
+import pt.ulisboa.tecnico.softeng.car.domain.RentACar;
 
 public class RentACarData {
     private String code;
@@ -9,20 +8,22 @@ public class RentACarData {
     private String nif;
     private String iban;
     private Integer numVehicles;
+    private int numPending;
 
     public RentACarData() {
     }
 
-    public RentACarData(String code, String name, String nif, String iban, Integer numVehicles) {
-        this.code = code;
-        this.name = name;
-        this.nif = nif;
-        this.iban = iban;
-        this.numVehicles = numVehicles;
+    public RentACarData(RentACar rentACar) {
+        this.code = rentACar.getCode();
+        this.name = rentACar.getName();
+        this.nif = rentACar.getNif();
+        this.iban = rentACar.getIban();
+        this.numVehicles = rentACar.getVehicleSet().size();
+        this.numPending = rentACar.getProcessor().getRentingSet().size();
     }
 
     public Integer getNumVehicles() {
-        return numVehicles;
+        return this.numVehicles;
     }
 
     public void setNumVehicles(int numVehicles) {
@@ -30,7 +31,7 @@ public class RentACarData {
     }
 
     public String getCode() {
-        return code;
+        return this.code;
     }
 
     public void setCode(String code) {
@@ -38,7 +39,7 @@ public class RentACarData {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -46,7 +47,7 @@ public class RentACarData {
     }
 
     public String getNif() {
-        return nif;
+        return this.nif;
     }
 
     public void setNif(String nif) {
@@ -54,10 +55,18 @@ public class RentACarData {
     }
 
     public String getIban() {
-        return iban;
+        return this.iban;
     }
 
     public void setIban(String iban) {
         this.iban = iban;
+    }
+
+    public int getNumPending() {
+        return this.numPending;
+    }
+
+    public void setNumPending(int numPending) {
+        this.numPending = numPending;
     }
 }
