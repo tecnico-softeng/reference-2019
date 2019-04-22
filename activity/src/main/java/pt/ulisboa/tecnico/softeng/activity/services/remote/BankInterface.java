@@ -25,12 +25,12 @@ public class BankInterface {
                     bankOperationData, String.class);
         } catch (HttpClientErrorException e) {
             logger.info(
-                    "processPayment HttpClientErrorException  iban:{}, amount:{}, transactionSource:{}, transactionReference:{}",
+                    "processPayment HttpClientErrorException  sourceban:{}, targetIban:{}, amount:{}, transactionSource:{}, transactionReference:{}",
                     bankOperationData.getSourceIban(), bankOperationData.getTargetIban(), bankOperationData.getValue(), bankOperationData.getTransactionSource(),
                     bankOperationData.getTransactionReference());
             throw new BankException();
         } catch (Exception e) {
-            logger.info("processPayment Exception iban:{}, amount:{}, transactionSource:{}, transactionReference:{}",
+            logger.info("processPayment Exception sourceban:{}, targetIban:{}, amount:{}, transactionSource:{}, transactionReference:{}",
                     bankOperationData.getSourceIban(), bankOperationData.getTargetIban(), bankOperationData.getValue(), bankOperationData.getTransactionSource(),
                     bankOperationData.getTransactionReference());
             throw new RemoteAccessException();
