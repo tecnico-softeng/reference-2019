@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class BankInterface {
 
     @Atomic(mode = TxMode.READ)
-
     public static List<BankData> getBanks() {
         return FenixFramework.getDomainRoot().getBankSet().stream()
                 .sorted(Comparator.comparing(Bank_Base::getName)).map(BankData::new)
