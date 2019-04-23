@@ -92,7 +92,7 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
 
             if (data != null && data.getBookRoom().equals(type) && data.getArrival().equals(arrival)
                     && data.getDeparture().equals(departure)) {
-                removeReference(reference);
+                reference.delete();
                 return data;
             }
         }
