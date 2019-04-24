@@ -5,8 +5,8 @@ import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 public class WithdrawOperation extends WithdrawOperation_Base {
     @Override
     public void delete() {
-        if (getTransferOperationAsWithdraw() != null) {
-            TransferOperation transferOperation = getTransferOperationAsWithdraw();
+        TransferOperation transferOperation = getTransferOperationAsWithdraw();
+        if (transferOperation != null) {
             setTransferOperationAsWithdraw(null);
             transferOperation.delete();
         }

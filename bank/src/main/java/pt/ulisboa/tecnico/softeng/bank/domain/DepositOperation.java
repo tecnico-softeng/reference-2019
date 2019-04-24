@@ -3,11 +3,10 @@ package pt.ulisboa.tecnico.softeng.bank.domain;
 import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 
 public class DepositOperation extends DepositOperation_Base {
-
     @Override
     public void delete() {
-        if (getTransferOperationAsDeposit() != null) {
-            TransferOperation transferOperation = getTransferOperationAsDeposit();
+        TransferOperation transferOperation = getTransferOperationAsDeposit();
+        if (transferOperation != null) {
             setTransferOperationAsDeposit(null);
             transferOperation.delete();
         }
