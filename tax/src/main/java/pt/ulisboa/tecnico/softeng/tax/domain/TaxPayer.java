@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TaxPayer extends TaxPayer_Base {
-    private final static int PERCENTAGE = 5;
+    final static int PERCENTAGE = 5;
 
     protected TaxPayer() {
         // this is a FenixFramework artifact; if not present, compilation fails.

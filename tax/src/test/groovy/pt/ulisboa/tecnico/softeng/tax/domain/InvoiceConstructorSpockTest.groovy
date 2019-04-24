@@ -55,14 +55,14 @@ class InvoiceConstructorSpockTest extends SpockRollbackTestAbstractClass {
 
         where:
         value           | dt                          | it    | sel  | buy  | label
-        VALUE           | date                        | true  | null | 'B'  | 'null seller'
-        VALUE           | date                        | true  | 'S'  | null | 'null buyer'
+        VALUE           | date                        | true  | null | 'B'  | 'null taxPayerOne'
+        VALUE           | date                        | true  | 'S'  | null | 'null taxPayerTwo'
         VALUE           | date                        | false | 'S'  | 'B'  | 'null item'
         0               | date                        | true  | 'S'  | 'B'  | '0 value'
         -23 * IRS.SCALE | date                        | true  | 'S'  | 'B'  | 'negative value'
         VALUE           | null                        | true  | 'S'  | 'B'  | 'null date'
         VALUE           | new LocalDate(1969, 12, 31) | true  | 'S'  | 'B'  | 'incorrect date'
-        VALUE           | date                        | true  | 'S'  | 'S'  | 'buyer equal to seller'
+        VALUE           | date                        | true  | 'S'  | 'S'  | 'taxPayerTwo equal to taxPayerOne'
     }
 
     def getTaxPayer(type) {

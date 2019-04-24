@@ -3,6 +3,10 @@ package pt.ulisboa.tecnico.softeng.tax.domain;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
+import pt.ulisboa.tecnico.softeng.tax.exception.TaxException;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class IRS extends IRS_Base {
     public static final int SCALE = 1000;
@@ -47,6 +51,34 @@ public class IRS extends IRS_Base {
             }
         }
         return null;
+    }
+
+    private long taxes(int year) {
+        if (year < 1970) {
+            throw new TaxException();
+        }
+
+        long result = 0;
+        for (Invoice invoice : getInvoiceSet()) {
+            if (!invoice.isCancelled() && invoice.getDate().getYear() == year) {
+                result = result + invoice.getIva();
+            }
+        }
+        return result;
+    }
+
+    public Map<Integer, Long> getTaxesPerYear() {
+        return getInvoiceSet().stream().map(i -> i.getDate().getYear()).distinct()
+                .collect(Collectors.toMap(y -> y, this::taxes));
+    }
+
+    private long taxesReturn(int year) {
+        return Math.round(taxes(year) * TaxPayer.PERCENTAGE / 100.0);
+    }
+
+    public Map<Integer, Long> getTaxesReturnPerYear() {
+        return getInvoiceSet().stream().map(i -> i.getDate().getYear()).distinct()
+                .collect(Collectors.toMap(y -> y, y -> taxesReturn(y)));
     }
 
     private void clearAll() {

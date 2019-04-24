@@ -10,6 +10,7 @@ import pt.ulisboa.tecnico.softeng.tax.domain.Invoice;
 import pt.ulisboa.tecnico.softeng.tax.domain.ItemType;
 import pt.ulisboa.tecnico.softeng.tax.domain.TaxPayer;
 import pt.ulisboa.tecnico.softeng.tax.exception.TaxException;
+import pt.ulisboa.tecnico.softeng.tax.services.local.dataobjects.BalanceData;
 import pt.ulisboa.tecnico.softeng.tax.services.local.dataobjects.InvoiceData;
 import pt.ulisboa.tecnico.softeng.tax.services.local.dataobjects.ItemTypeData;
 import pt.ulisboa.tecnico.softeng.tax.services.local.dataobjects.TaxPayerData;
@@ -116,6 +117,11 @@ public class TaxInterface {
         }
 
         invoice.cancel();
+    }
+
+    @Atomic(mode = TxMode.READ)
+    public static BalanceData getTaxBalanceData() {
+        return new BalanceData();
     }
 
     @Atomic(mode = TxMode.WRITE)
