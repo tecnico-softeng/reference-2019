@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Balance</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h2>Gobal Balance Per Year</h2>
+    <a class="btn btn-default pull-right" th:href="@{/}">Tax</a> <br/>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Year</th>
+            <th>Taxes</th>
+            <th>Return</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="year: ${balance.getYears()}">
+            <td th:text="${year}">2018</td>
+            <td th:text="${balance.getTaxes().get(year)}"></td>
+            <td th:text="${balance.getReturns().get(year)}"></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

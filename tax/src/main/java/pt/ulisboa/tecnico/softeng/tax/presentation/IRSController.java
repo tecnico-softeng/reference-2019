@@ -11,10 +11,10 @@ import pt.ulisboa.tecnico.softeng.tax.services.local.TaxInterface;
 public class IRSController {
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public String deleteRentACars(Model model) {
+    public String deleteIRS(Model model) {
         TaxInterface.deleteIRS();
 
         return "redirect:/";
     }
-    
+
 }

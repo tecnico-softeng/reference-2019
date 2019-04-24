@@ -26,9 +26,9 @@ class IRSGetTaxPayerByNIFMethodSpockTest extends SpockRollbackTestAbstractClass 
         taxPayer.getNif() == nif
 
         where:
-        label        | nif
-        'buyer nif'  | BUYER_NIF
-        'seller nif' | SELLER_NIF
+        label             | nif
+        'taxPayerTwo nif' | BUYER_NIF
+        'taxPayerOne nif' | SELLER_NIF
     }
 
     @Unroll('#label')
