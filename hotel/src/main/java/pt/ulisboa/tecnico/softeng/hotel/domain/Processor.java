@@ -60,11 +60,12 @@ public class Processor extends Processor_Base {
                 }
             } else {
                 try {
-                    if (booking.getCancelledPaymentReference() == null) {
+                    if (booking.getCancelledPaymentReference() == null &&
+                            booking.getPaymentReference() != null) {
                         booking.setCancelledPaymentReference(
                                 getBankInterface().cancelPayment(booking.getPaymentReference()));
                     }
-                    if (!booking.getCancelledInvoice()) {
+                    if (!booking.getCancelledInvoice() && booking.getInvoiceReference() != null) {
                         getTaxInterface().cancelInvoice(booking.getInvoiceReference());
                         booking.setCancelledInvoice(true);
                     }

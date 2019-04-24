@@ -59,12 +59,15 @@ public class Processor extends Processor_Base {
                 }
             } else {
                 try {
-                    if (booking.getCancelledPaymentReference() == null) {
+                    if (booking.getCancelledPaymentReference() == null &&
+                            booking.getPaymentReference() != null) {
                         booking.setCancelledPaymentReference(
                                 getBankInterface().cancelPayment(booking.getPaymentReference()));
                     }
-                    getTaxInterface().cancelInvoice(booking.getInvoiceReference());
-                    booking.setCancelledInvoice(true);
+                    if (!booking.getCancelledInvoice() && booking.getInvoiceReference() != null) {
+                        getTaxInterface().cancelInvoice(booking.getInvoiceReference());
+                        booking.setCancelledInvoice(true);
+                    }
                 } catch (BankException | TaxException | RemoteAccessException ex) {
                     failedToProcess.add(booking);
                 }
