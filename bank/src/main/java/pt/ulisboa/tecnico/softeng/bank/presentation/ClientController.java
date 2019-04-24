@@ -38,7 +38,7 @@ public class ClientController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String clientSubmit(Model model, @PathVariable String code, @ModelAttribute ClientData client) {
-        logger.info("cancelOperation bankCode:{}, clientName:{}", code, client.getName());
+        logger.info("clientSubmit bankCode:{}, clientName:{}", code, client.getName());
 
         try {
             BankInterface.createClient(code, client);

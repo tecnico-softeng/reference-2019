@@ -20,7 +20,7 @@ public class RentingsController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String rentingForm(Model model, @PathVariable String code, @PathVariable String plate) {
-        logger.debug("rentingForm");
+        logger.info("rentingForm");
 
         RentACarInterface rentACarInterface = new RentACarInterface();
 
@@ -44,7 +44,9 @@ public class RentingsController {
     @RequestMapping(method = RequestMethod.POST)
     public String rentingSubmit(Model model, @PathVariable String code, @PathVariable String plate,
                                 @ModelAttribute RentingData renting) {
-        logger.debug("rentingSubmit");
+        logger.info("rentingSubmit code: {}, plate: {}, drivingLicense: {}, buyerNIF: {}, buyerIBAN: {}, begin: {}, end:{}, adventureId: {}",
+                code, plate, renting.getDrivingLicense(), renting.getBuyerNIF(),
+                renting.getBuyerIBAN(), renting.getBegin(), renting.getEnd(), renting.getAdventureId());
 
         RentACarInterface rentACarInterface = new RentACarInterface();
 

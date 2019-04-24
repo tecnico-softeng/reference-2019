@@ -30,14 +30,14 @@ public class TransferOperation extends TransferOperation_Base {
 
     @Override
     public void delete() {
-        if (getWithdrawOperation() != null) {
-            WithdrawOperation withdrawOperation = getWithdrawOperation();
+        WithdrawOperation withdrawOperation = getWithdrawOperation();
+        if (withdrawOperation != null) {
             setWithdrawOperation(null);
             withdrawOperation.delete();
         }
 
-        if (getDepositOperation() != null) {
-            DepositOperation depositOperation = getDepositOperation();
+        DepositOperation depositOperation = getDepositOperation();
+        if (depositOperation != null) {
             setDepositOperation(null);
             depositOperation.delete();
         }
