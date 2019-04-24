@@ -28,7 +28,7 @@ public class InvoiceController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String invoiceSubmit(Model model, @PathVariable String nif, @ModelAttribute InvoiceData invoiceData) {
-        logger.info("invoiceSubmit nif:{}, type:{}, otherNof:{}, itemType:{}, value:{}, date:{}, time:{}", nif,
+        logger.info("invoiceSubmit nif:{}, type:{}, otherNif:{}, itemType:{}, value:{}, date:{}, time:{}", nif,
                 invoiceData.getType(), invoiceData.getOtherNif(), invoiceData.getItemType(),
                 invoiceData.getValue(), invoiceData.getDate());
 
