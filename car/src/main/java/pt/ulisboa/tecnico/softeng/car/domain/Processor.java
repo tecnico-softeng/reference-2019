@@ -63,7 +63,8 @@ public class Processor extends Processor_Base {
                 }
             } else {
                 try {
-                    if (renting.getCancelledPaymentReference() == null) {
+                    if (renting.getCancelledPaymentReference() == null &&
+                            renting.getPaymentReference() != null) {
                         renting.setCancelledPaymentReference(
                                 getBankInterface().cancelPayment(renting.getPaymentReference()));
                     }

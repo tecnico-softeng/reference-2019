@@ -112,6 +112,10 @@ public class TaxInterface {
     public static void cancelInvoice(String reference) {
         Invoice invoice = getInvoiceByReference(reference);
 
+        if (invoice == null) {
+            throw new TaxException();
+        }
+
         if (invoice != null && invoice.getCancelled()) {
             return;
         }

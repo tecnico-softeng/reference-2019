@@ -60,18 +60,16 @@ public class Processor extends Processor_Base {
                 }
             } else {
                 try {
-                    if (booking.getCancelledPaymentReference() == null) {
+                    if (booking.getCancelledPaymentReference() == null &&
+                            booking.getPaymentReference() != null) {
                         booking.setCancelledPaymentReference(
                                 getBankInterface().cancelPayment(booking.getPaymentReference()));
                     }
-                    if (!booking.getCancelledInvoice()) {
-                        getTaxInterface().cancelInvoice(booking.getInvoiceReference());
-                        booking.setCancelledInvoice(true);
-                    }
+                    getTaxInterface().cancelInvoice(booking.getInvoiceReference());
+                    booking.setCancelledInvoice(true);
                 } catch (BankException | TaxException | RemoteAccessException ex) {
                     failedToProcess.add(booking);
                 }
-
             }
         }
 

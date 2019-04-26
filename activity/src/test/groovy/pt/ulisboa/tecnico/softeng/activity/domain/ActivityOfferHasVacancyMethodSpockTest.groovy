@@ -80,6 +80,8 @@ class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractCl
 
         then:
         !offer.hasVacancy()
+        1 * taxInterface.submitInvoice(_)
+        1 * bankInterface.processPayment(_)
         1 * taxInterface.cancelInvoice(_)
         1 * bankInterface.cancelPayment(_)
     }
