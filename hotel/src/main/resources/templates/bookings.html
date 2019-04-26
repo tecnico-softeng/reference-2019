@@ -11,7 +11,7 @@
 <body>
 	<div class="container">
 		<h2>
-			Bookings of Room <span th:text="${room.number}">01</span> in Hotel <span th:text="${room.hotelName}">Paris</span>
+			Bookings of Room <span th:text="${room.number}">01</span> (<span th:text="${room.type}">SINGLE</span>) in Hotel <span th:text="${room.hotelName}">Paris</span>
 		</h2>
 		<a class="btn btn-default pull-right" th:href="@{/hotels/{number}/rooms(number=${room.hotelCode})}">Rooms</a>
 		<br/>
@@ -35,8 +35,12 @@
  					<th>NIF</th>
 					<th>IBAN</th>
 					<th>Price</th>
+					<th>Adventure</th>
+					<th>InvoiceReference</th>
+					<th>PaymentReference</th>
 					<th>Cancellation</th>
-					<th>Cancellation Date</th>					
+					<th>Cancellation Date</th>
+					<th>Cancel</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -47,8 +51,19 @@
 					<td th:text="${booking.buyerNif}">123456779</td>
 					<td th:text="${booking.buyerIban}">CGD 1235 7487439 8498</td>
 					<td th:text="${booking.price}">49.99</td>
+					<td th:text="${booking.adventureId}">XPTO</td>
+					<td th:text="${booking.invoiceReference}">XPTO</td>
+					<td th:text="${booking.paymentReference}">XPTO</td>
 					<td th:text="${booking.cancellation}">xpto3456CANCEL</td>
 					<td th:text="${booking.cancellationDate}">07/12/2016</td>
+					<td>
+						<form th:if="${booking.getCancellation() == null}" class="form-inline"
+							  th:action="@{/hotels/{code}/rooms/{number}/bookings/{reference}/cancel
+                                (code=${code},number=${number},reference=${booking.reference})}"
+							  method="post">
+							<input class="btn btn-primary" type="submit" value="Cancel"/>
+						</form>
+					</td>
 				</tr>
 			</tbody>
 		</table>
