@@ -60,8 +60,8 @@ class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractCl
 
         then:
         offer.hasVacancy()
-        1 * taxInterface.cancelInvoice(_)
-        1 * bankInterface.cancelPayment(_)
+        0 * taxInterface.cancelInvoice(_)
+        0 * bankInterface.cancelPayment(_)
     }
 
     def 'has cancelled bookings but full'() {
@@ -80,7 +80,9 @@ class ActivityOfferHasVacancyMethodSpockTest extends SpockRollbackTestAbstractCl
 
         then:
         !offer.hasVacancy()
-        1 * taxInterface.cancelInvoice(_)
-        1 * bankInterface.cancelPayment(_)
+        1 * taxInterface.submitInvoice(_)
+        1 * bankInterface.processPayment(_)
+        0 * taxInterface.cancelInvoice(_)
+        0 * bankInterface.cancelPayment(_)
     }
 }

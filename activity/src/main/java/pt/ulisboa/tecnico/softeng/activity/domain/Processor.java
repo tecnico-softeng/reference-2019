@@ -64,7 +64,7 @@ public class Processor extends Processor_Base {
                         booking.setCancelledPaymentReference(
                                 getBankInterface().cancelPayment(booking.getPaymentReference()));
                     }
-                    if (!booking.getCancelledInvoice() && booking.getInvoiceReference() != null) {
+                    if (booking.getInvoiceReference() != null) {
                         getTaxInterface().cancelInvoice(booking.getInvoiceReference());
                         booking.setCancelledInvoice(true);
                     }
