@@ -68,10 +68,8 @@ public class Processor extends Processor_Base {
                         renting.setCancelledPaymentReference(
                                 getBankInterface().cancelPayment(renting.getPaymentReference()));
                     }
-                    if (!renting.getCancelledInvoice() && renting.getInvoiceReference() != null) {
-                        getTaxInterface().cancelInvoice(renting.getInvoiceReference());
-                        renting.setCancelledInvoice(true);
-                    }
+                    getTaxInterface().cancelInvoice(renting.getInvoiceReference());
+                    renting.setCancelledInvoice(true);
                 } catch (BankException | TaxException | RemoteAccessException ex) {
                     failedToProcess.add(renting);
                 }

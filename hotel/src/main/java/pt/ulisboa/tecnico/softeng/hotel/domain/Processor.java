@@ -67,11 +67,9 @@ public class Processor extends Processor_Base {
                     }
                     getTaxInterface().cancelInvoice(booking.getInvoiceReference());
                     booking.setCancelledInvoice(true);
-
                 } catch (BankException | TaxException | RemoteAccessException ex) {
                     failedToProcess.add(booking);
                 }
-
             }
         }
 
