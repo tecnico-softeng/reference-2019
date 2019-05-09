@@ -62,12 +62,14 @@
             <th>Vehicle</th>
             <th>Amount</th>
             <th>State</th>
-            <th>Payment Confirmation</th>
-            <th>Payment Cancellation</th>
-            <th>Room Confirmation</th>
-            <th>Room Cancellation</th>
             <th>Activity Confirmation</th>
             <th>Activity Cancellation</th>
+            <th>Room Confirmation</th>
+            <th>Room Cancellation</th>
+            <th>Renting Confirmation</th>
+            <th>Renting Cancellation</th>
+            <th>Payment Confirmation</th>
+            <th>Payment Cancellation</th>
             <th>Process</th>
         </tr>
         </thead>
@@ -81,16 +83,18 @@
             <td th:text="${adventure.rentVehicle}">CAR</td>
             <td th:text="${adventure.amount}">amount</td>
             <td th:text="${adventure.state}">state</td>
+            <td th:text="${adventure.activityConfirmation}">Activity Confirmation</td>
+            <td th:text="${adventure.activityCancellation}">Activity Cancellation</td>
+            <td th:text="${adventure.roomConfirmation}">Room Confirmation</td>
+            <td th:text="${adventure.roomCancellation}">Room Cancellation</td>
+            <td th:text="${adventure.rentingConfirmation}">Room Confirmation</td>
+            <td th:text="${adventure.rentingCancellation}">Room Cancellation</td>
             <td th:text="${adventure.paymentConfirmation}">Payment
                 Confirmation
             </td>
             <td th:text="${adventure.paymentCancellation}">Payment
                 Cancellation
             </td>
-            <td th:text="${adventure.roomConfirmation}">Room Confirmation</td>
-            <td th:text="${adventure.roomCancellation}">Room Cancellation</td>
-            <td th:text="${adventure.activityConfirmation}">Activity Confirmation</td>
-            <td th:text="${adventure.activityCancellation}">Activity Cancellation</td>
             <td>
                 <form class="form-inline"
                       th:action="@{/brokers/{brokerCode}/clients/{clientNif}/adventures/{id}/process(brokerCode=${client.brokerCode},clientNif=${client.nif},id=${adventure.id})}"

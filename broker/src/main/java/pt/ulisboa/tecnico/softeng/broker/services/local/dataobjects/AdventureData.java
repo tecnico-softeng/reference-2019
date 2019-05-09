@@ -25,6 +25,9 @@ public class AdventureData {
     private String roomCancellation;
     private String activityConfirmation;
     private String activityCancellation;
+    private String rentingConfirmation;
+    private String rentingCancellation;
+
 
     public AdventureData() {
     }
@@ -47,6 +50,8 @@ public class AdventureData {
         this.roomCancellation = adventure.getRoomCancellation();
         this.activityConfirmation = adventure.getActivityConfirmation();
         this.activityCancellation = adventure.getActivityCancellation();
+        this.rentingConfirmation = adventure.getRentingConfirmation();
+        this.rentingCancellation = adventure.getRentingCancellation();
     }
 
     public String getId() {
@@ -155,6 +160,22 @@ public class AdventureData {
 
     public void setActivityCancellation(String activityCancellation) {
         this.activityCancellation = activityCancellation;
+    }
+
+    public String getRentingConfirmation() {
+        return this.rentingConfirmation;
+    }
+
+    public void setRentingConfirmation(String rentingConfirmation) {
+        this.rentingConfirmation = rentingConfirmation;
+    }
+
+    public String getRentingCancellation() {
+        return this.rentingCancellation;
+    }
+
+    public void setRentingCancellation(String rentingCancellation) {
+        this.rentingCancellation = rentingCancellation;
     }
 
     public Double getMargin() {
