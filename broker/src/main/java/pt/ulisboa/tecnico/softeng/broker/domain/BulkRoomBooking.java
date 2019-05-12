@@ -20,7 +20,6 @@ public class BulkRoomBooking extends BulkRoomBooking_Base {
         setNumber(number);
         setArrival(arrival);
         setDeparture(departure);
-
         setBroker(broker);
     }
 

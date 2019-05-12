@@ -17,9 +17,7 @@ public class Invoice extends Invoice_Base {
         setSeller(seller);
         setBuyer(buyer);
         setTime(time);
-
         setIva(Math.round((value * itemType.getTax()) / 100.0));
-
         setIrs(getSeller().getIrs());
     }
 

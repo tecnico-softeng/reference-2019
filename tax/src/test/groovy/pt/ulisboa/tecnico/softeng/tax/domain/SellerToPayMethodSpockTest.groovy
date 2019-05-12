@@ -44,7 +44,7 @@ class SellerToPayMethodSpockTest extends SpockRollbackTestAbstractClass {
     def 'no invoices'() {
         expect:
         def value = seller.toPay(2018)
-        0.00f == value
+        0 == value
     }
 
     def 'before 1970'() {

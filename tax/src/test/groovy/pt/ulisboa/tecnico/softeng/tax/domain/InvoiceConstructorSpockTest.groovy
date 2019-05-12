@@ -63,6 +63,7 @@ class InvoiceConstructorSpockTest extends SpockRollbackTestAbstractClass {
         VALUE           | null                        | true  | 'S'  | 'B'  | 'null date'
         VALUE           | new LocalDate(1969, 12, 31) | true  | 'S'  | 'B'  | 'incorrect date'
         VALUE           | date                        | true  | 'S'  | 'S'  | 'taxPayerTwo equal to taxPayerOne'
+
     }
 
     def getTaxPayer(type) {

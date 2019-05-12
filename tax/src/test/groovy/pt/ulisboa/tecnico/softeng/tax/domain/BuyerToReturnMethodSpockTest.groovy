@@ -48,7 +48,7 @@ class BuyerToReturnMethodSpockTest extends SpockRollbackTestAbstractClass {
         def value = buyer.taxReturn(2018)
 
         then:
-        0.00f == value
+        0 == value
     }
 
     def 'before 1970'() {
