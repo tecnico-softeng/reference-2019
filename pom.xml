@@ -24,7 +24,7 @@
         <gmaven-plugin.version>1.6</gmaven-plugin.version>
         <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
         <version.spock>1.2-groovy-2.4</version.spock>
-        <version.groovy>2.4.15</version.groovy>
+        <version.groovy>2.4.21</version.groovy>
         <org.jgroups.version>4.0.17.Final</org.jgroups.version>
         <org.objenesis.version>2.6</org.objenesis.version>
         <net.bytebuddy.version>1.8.21</net.bytebuddy.version>
